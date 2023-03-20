@@ -10,8 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A9A9F2AF-B44F-42BA-89FB-3FEE2F6C2B18}"
 	ProjectSection(SolutionItems) = preProject
 		Fases.txt = Fases.txt
-		Estructura.txt = Estructura.txt
+		EstructuraMemoria.txt = EstructuraMemoria.txt
 		Cosas.txt = Cosas.txt
+		Presentación.txt = Presentación.txt
 	EndProjectSection
 EndProject
 Global

@@ -1,10 +1,15 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<ITestServices, TestServices>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7011/");
+});
 
 
 var app = builder.Build();
