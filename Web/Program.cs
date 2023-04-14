@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
-builder.Services.AddHttpClient<ITestServices, TestServices>(client =>
+builder.Services.AddHttpClient<IOrganizacionServices, OrganizacionServices>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7011/");
 });

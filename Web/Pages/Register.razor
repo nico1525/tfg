@@ -1,0 +1,104 @@
+﻿@using API.Models;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@page "/register"
+<PageTitle>Register</PageTitle>
+
+<style>
+    #navbar{
+        margin-bottom:6%;
+    }
+    #reglabel{
+        font-size:35px;
+    }
+    #text{
+        text-align: center;
+    }
+
+    hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+        width: 100%;
+    }
+
+    .registerbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+    a {
+        color: dodgerblue;
+    }
+    .registerbtn:hover {
+        opacity: 1;
+    }
+    .signin {
+        text-align: center;
+    }
+
+    .input{
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    .input:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+    .container{
+        margin: 0% 20% 0% 20%;
+    }
+</style>
+
+<body>
+    <div id="navbar"> <NavBarNotLogged /></div>
+
+    <div id="text"> <label id="reglabel">Registrarse</label></div>
+
+    <div class="container">
+        <form id="form">
+            <hr>
+            <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <label for="name"><b>Nombre de la Organización</b></label>
+                <InputText class="input" id="name" placeholder="Nombre de la organización" @bind-Value="org.NombreOrg" />
+
+                <label for="email"><b>Email</b></label>
+                <InputText class="input"  id="email" placeholder="Email" @bind-Value="org.Email" />
+
+                <label for="dir"><b>Dirección</b></label>
+                <InputText class="input" id="dir" placeholder="Dirección" @bind-Value="org.Direccion" />
+            <hr>
+            <button class="registerbtn" type="submit">Registrarse</button>
+            </EditForm>
+            <p>Ya tienes una cuenta? Inicia Sesión.</p>
+        </form>
+    </div>
+
+</body>
+
+
+
+
+@code {
+    private Organizacion org = new Organizacion();
+    [Inject]
+    public IOrganizacionServices OrganizacionServices { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        await OrganizacionServices.PostOrganizacion(org);
+    }
+         
+}

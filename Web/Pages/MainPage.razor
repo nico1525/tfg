@@ -1,0 +1,26 @@
+﻿@using API.Models;
+@using Web.Services;
+@page "/"
+<PageTitle>Energia</PageTitle>
+
+<div> <NavBarNotLogged /></div>
+
+
+<!-- <button id="testbutton" type="button" @onclick="post">Click Me!</button>
+    <label id="labeltest">@InputValue</label> -->
+    
+
+
+
+@code{
+    private string InputValue { get; set; }
+    List<Organizacion> listhojas = new List<Organizacion>();
+    [Inject]
+    public IOrganizacionServices TestService { get; set; }
+    public async Task post()
+    {
+        listhojas = (await TestService.GetAllOrgs()).ToList();
+        //InputValue = listhojas[0].Name;
+    }
+
+}

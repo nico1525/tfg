@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A9A9F2AF-B44F-42BA-89FB-3FEE2F6C2B18}"
 	ProjectSection(SolutionItems) = preProject
-		Fases.txt = Fases.txt
-		EstructuraMemoria.txt = EstructuraMemoria.txt
 		Cosas.txt = Cosas.txt
+		EstructuraMemoria.txt = EstructuraMemoria.txt
+		Fases.txt = Fases.txt
 		Presentación.txt = Presentación.txt
 	EndProjectSection
 EndProject

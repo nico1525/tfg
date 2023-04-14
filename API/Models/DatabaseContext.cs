@@ -10,7 +10,7 @@ namespace API.Models
         }
 
         public DbSet<TestItem> ItemTest { get; set; } = null!;
-        public DbSet<Hoja> Hoja { get; set; } = null!;
+        public DbSet<Organizacion> Organizacion { get; set; } = null!;
 
     }
 }
