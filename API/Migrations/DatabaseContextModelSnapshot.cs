@@ -29,13 +29,17 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Contraseña")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Direccion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("NombreOrg")
                         .IsRequired()
@@ -43,27 +47,9 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Email");
+
                     b.ToTable("Organizacion");
-                });
-
-            modelBuilder.Entity("API.Models.TestItem", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<bool>("IsComplete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ItemTest");
                 });
 #pragma warning restore 612, 618
         }

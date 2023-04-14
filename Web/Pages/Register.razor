@@ -31,7 +31,7 @@
         width: 100%;
         opacity: 0.9;
     }
-    a {
+    a:hover {
         color: dodgerblue;
     }
     .registerbtn:hover {
@@ -55,7 +55,15 @@
         outline: none;
     }
     .container{
-        margin: 0% 20% 0% 20%;
+        margin: 0% 20% 20px 20%;
+    }
+    .errormsg{
+        color:red;
+        margin-top:-20px;
+        margin-bottom: 25px;
+    }
+    .login{
+        margin: 0 40% 0 40%;
     }
 </style>
 
@@ -65,29 +73,37 @@
     <div id="text"> <label id="reglabel">Registrarse</label></div>
 
     <div class="container">
-        <form id="form">
             <hr>
             <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
                 <DataAnnotationsValidator />
-                <ValidationSummary />
 
                 <label for="name"><b>Nombre de la Organización</b></label>
                 <InputText class="input" id="name" placeholder="Nombre de la organización" @bind-Value="org.NombreOrg" />
-
+                <ValidationMessage For="@(() => org.NombreOrg)" class="errormsg" />
+           
                 <label for="email"><b>Email</b></label>
                 <InputText class="input"  id="email" placeholder="Email" @bind-Value="org.Email" />
+                    <ValidationMessage For="@(() => org.Email)" class="errormsg" />
 
                 <label for="dir"><b>Dirección</b></label>
-                <InputText class="input" id="dir" placeholder="Dirección" @bind-Value="org.Direccion" />
+                <InputText class="input" id="dir" placeholder="Dirección" @bind-Value="org.Direccion"/>
+                <ValidationMessage For="@(() => org.Direccion)" class="errormsg" />
+
+                <label for="password"><b>Contraseña</b></label>
+                <InputText class="input" id="password" placeholder="Contraseña" @bind-Value="org.Contraseña" />
+                <ValidationMessage For="@(() => org.Contraseña)" class="errormsg" />
+         
+
             <hr>
             <button class="registerbtn" type="submit">Registrarse</button>
             </EditForm>
-            <p>Ya tienes una cuenta? Inicia Sesión.</p>
-        </form>
     </div>
+    <div class="login">
+        <a href="">Ya tienes una cuenta? Inicia Sesión.</a>
+    </div>
+   
 
 </body>
-
 
 
 
@@ -100,5 +116,4 @@
     {
         await OrganizacionServices.PostOrganizacion(org);
     }
-         
 }
