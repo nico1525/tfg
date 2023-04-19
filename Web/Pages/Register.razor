@@ -1,4 +1,5 @@
 ﻿@using API.Models;
+@using Microsoft.Data.SqlClient;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
 @page "/register"
@@ -83,7 +84,7 @@
            
                 <label for="email"><b>Email</b></label>
                 <InputText class="input"  id="email" placeholder="Email" @bind-Value="org.Email" />
-                    <ValidationMessage For="@(() => org.Email)" class="errormsg" />
+                <ValidationMessage For="@(() => org.Email)" class="errormsg" />
 
                 <label for="dir"><b>Dirección</b></label>
                 <InputText class="input" id="dir" placeholder="Dirección" @bind-Value="org.Direccion"/>
@@ -98,6 +99,7 @@
             <button class="registerbtn" type="submit">Registrarse</button>
             </EditForm>
     </div>
+    <label>@l</label>
     <div class="login">
         <a href="">Ya tienes una cuenta? Inicia Sesión.</a>
     </div>
@@ -109,11 +111,19 @@
 
 @code {
     private Organizacion org = new Organizacion();
+    string l;
     [Inject]
     public IOrganizacionServices OrganizacionServices { get; set; }
 
     private async Task HandleValidSubmit()
     {
-        await OrganizacionServices.PostOrganizacion(org);
+        try
+        {
+            await OrganizacionServices.PostOrganizacion(org);
+        }
+        catch (Exception e)
+        {
+            l = e.Message;
+        }
     }
 }

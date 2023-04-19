@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using API.Models;
+using API.Models.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string conexion = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=DBTest;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
@@ -9,6 +10,9 @@ builder.Services.AddDbContext<DatabaseContext>(opt =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 

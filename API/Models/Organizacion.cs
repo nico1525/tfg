@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mysqlx.Crud;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mail;
 
@@ -9,19 +11,13 @@ namespace API.Models
     {
         [Key]
         public int Id { get; set; }
-
-        [Required(ErrorMessage = "El campo Nombre de Organización es obligatorio")]
         public string? NombreOrg { get; set; }
-
-        [Required(ErrorMessage = "El campo Email es obligatorio")]
-        [EmailAddress(ErrorMessage = "Debe introducir un Email válido")]
+        [EmailAddress]
         public string? Email { get; set; }
-
-        [Required(ErrorMessage = "El campo Dirección es obligatorio")]
         public string? Direccion { get; set; }
-
-        [Required(ErrorMessage = "El campo Contraseña es obligatorio")]
         public string? Contraseña { get; set; }
+        public bool IsAdmin { get; set; } = false;
             
     }
+
 }

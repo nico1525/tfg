@@ -7,6 +7,8 @@ using API.Models;
 using Mysqlx.Session;
 using MySqlX.XDevAPI;
 using System.Text;
+using API.Models.DTOs.Outcoming;
+using API.Models.DTOs.Incoming;
 
 namespace Web.Services
 {
@@ -21,13 +23,13 @@ namespace Web.Services
         public async Task<IEnumerable<Organizacion>> GetAllOrgs()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<Organizacion>>
-                (await _httpClient.GetStreamAsync($"api/Organizacions"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync($"api/Organizacion"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<Organizacion> GetOrgByID(int orgId)
+        public async Task<OrganizacionDTO> GetOrgByID(int orgId)
         {
-            return await JsonSerializer.DeserializeAsync<Organizacion>
-                (await _httpClient.GetStreamAsync($"api/Organizacions{orgId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            return await JsonSerializer.DeserializeAsync<OrganizacionDTO>
+                (await _httpClient.GetStreamAsync($"api/Organizacion{orgId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<Organizacion?> PostOrganizacion(Organizacion org)
@@ -35,13 +37,44 @@ namespace Web.Services
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacions", orgJson);
+                var response = await _httpClient.PostAsync("api/Organizacion", orgJson);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await JsonSerializer.DeserializeAsync<Organizacion>(await response.Content.ReadAsStreamAsync());
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.Content.ReadAsStringAsync().Result);
+                }
+            
+            return null;
+        }
 
+        public async Task<Organizacion?> DeleteOrganizacion(string id)
+        {
+            var response = await _httpClient.DeleteAsync("api/Organizacion/"+ id);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
             if (response.IsSuccessStatusCode)
             {
                 return await JsonSerializer.DeserializeAsync<Organizacion>(await response.Content.ReadAsStreamAsync());
             }
+            return null;
+        }
 
+        public async Task<Organizacion?> UpdateOrganizacion(string id, Organizacion org)
+        {
+            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/" + id, org);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            if (response.IsSuccessStatusCode)
+            {
+                return await JsonSerializer.DeserializeAsync<Organizacion>(await response.Content.ReadAsStreamAsync());
+            }
             return null;
         }
     }

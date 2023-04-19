@@ -2,7 +2,7 @@
 using System.Reflection.Emit;
 using System.Reflection.Metadata;
 
-namespace API.Models
+namespace API.Models.Context
 {
     public class DatabaseContext : DbContext
     {
@@ -16,10 +16,9 @@ namespace API.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //base.OnModelCreating(builder);
-            //builder.Entity<Organizacion>().HasIndex(u => u.Email).IsUnique();
-            builder.Entity<Organizacion>().HasAlternateKey(c => c.Email);
-            //Crear un mensaje de error en la interfaz
+            builder.Entity<Organizacion>().HasIndex(u => u.Email).IsUnique();
+            builder.Entity<Organizacion>().HasIndex(u => u.NombreOrg).IsUnique();
         }
     }
-    
+
 }
