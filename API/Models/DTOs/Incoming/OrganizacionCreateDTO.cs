@@ -4,9 +4,6 @@ namespace API.Models.DTOs.Incoming
 {
     public class OrganizacionCreateDTO
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "El Nombre de Organización es obligatorio")]
         public string? NombreOrg { get; set; }
 

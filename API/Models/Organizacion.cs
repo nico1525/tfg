@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mysqlx.Crud;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 
 namespace API.Models
@@ -17,6 +18,7 @@ namespace API.Models
         public string? Direccion { get; set; }
         public string? Contraseña { get; set; }
         public bool IsAdmin { get; set; } = false;
+        //public virtual ICollection<Dispositivo> ListaDispositivos { get; set;} 
             
     }
 

@@ -136,7 +136,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteAllOrgs(int id)
+        public async Task<IActionResult> DeleteAllOrgs()
         {
             if (_context.Organizacion == null)
             {
