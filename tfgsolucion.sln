@@ -7,14 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{C642E279-C1AE-4A43-B14A-FFFD39C6353C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A9A9F2AF-B44F-42BA-89FB-3FEE2F6C2B18}"
-	ProjectSection(SolutionItems) = preProject
-		Cosas.txt = Cosas.txt
-		EstructuraMemoria.txt = EstructuraMemoria.txt
-		Fases.txt = Fases.txt
-		Presentación.txt = Presentación.txt
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculoHuellaCarbono", "CalculoHuellaCarbono\CalculoHuellaCarbono.csproj", "{270E7BDE-2E28-4FBC-894E-2A72C9037345}"
 EndProject
 Global

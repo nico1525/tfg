@@ -2,6 +2,7 @@
 using System.Reflection.Emit;
 using API.Models;
 using API.Models.Consumos;
+using API.Models.Master_Tables;
 
 namespace API.Models.Context
 {
@@ -12,9 +13,9 @@ namespace API.Models.Context
         {
         }
         public DbSet<Organizacion> Organizacion { get; set; } = null!;
-        public DbSet<Dispositivo> Dispositivo { get; set; } = null!;
-        public DbSet<Vehiculo> Vehiculo { get; set; } = default!;
-
+        public DbSet<Vehiculo> Vehiculo { get; set; } = null!;
+        public DbSet<VehiculoConsumo> VehiculoConsumo { get; set; } = null!;
+        public DbSet<FactorEmisionVehiculo> FactorEmisionVehiculo { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -23,11 +24,8 @@ namespace API.Models.Context
             builder.Entity<Organizacion>().HasIndex(u => u.Email).IsUnique();
             builder.Entity<Organizacion>().HasIndex(u => u.NombreOrg).IsUnique();
             builder.Entity<Vehiculo>().HasIndex(u => u.Matricula).IsUnique();
+            builder.Entity<FactorEmisionVehiculo>().HasNoKey();
         }
-
-
-
-        public DbSet<API.Models.Consumos.VehiculoConsumo> VehiculoConsumo { get; set; } = default!;
 
     }
 }

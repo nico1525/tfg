@@ -11,7 +11,7 @@ using NuGet.DependencyResolver;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Organizacion/[controller]")]
     [ApiController]
     public class VehiculoController : ControllerBase
     {
@@ -32,21 +32,25 @@ namespace API.Controllers
             return await _context.Vehiculo.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Vehiculo>> GetVehiculo(int id)
+        [HttpGet("{org}")]
+        public async Task<ActionResult<IEnumerable<Vehiculo>>> GetVehiculo(int org)
         {
           if (_context.Vehiculo == null)
           {
               return NotFound();
           }
-            var vehiculo = await _context.Vehiculo.FindAsync(id);
+          List<Vehiculo> listavehiculos = await _context.Vehiculo.ToListAsync();
+          List<Vehiculo> listavehiculosorg = new();
 
-            if (vehiculo == null)
+            foreach (var vehiculo in listavehiculos)
             {
-                return NotFound();
+                if(vehiculo.OrganizacionId == org)
+                {
+                    listavehiculosorg.Add(vehiculo);
+                }
             }
 
-            return vehiculo;
+            return listavehiculosorg;
         }
 
         [HttpPut("{id}")]
@@ -90,9 +94,10 @@ namespace API.Controllers
             {
                 if (vehiculo.OrganizacionId == org.Id)
                 {
+                    vehiculo.OrganizacionRef = org;
                     _context.Vehiculo.Add(vehiculo);
                     await _context.SaveChangesAsync();
-                    return CreatedAtAction("GetDispositivo", new { id = vehiculo.Id }, vehiculo);
+                    return Ok("Vehiculo creado correctamente");
                 }
 
             }
@@ -118,6 +123,24 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllVehiculos()
+        {
+            if (_context.Vehiculo == null)
+            {
+                return NotFound();
+            }
+
+            List<Vehiculo> listvehiculos = await _context.Vehiculo.ToListAsync();
+
+            foreach (var disp in listvehiculos)
+            {
+                _context.Vehiculo.Remove(disp);
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok("Todos los vehiculos eliminados correctamente");
+        }
         private bool VehiculoExists(int id)
         {
             return (_context.Vehiculo?.Any(e => e.Id == id)).GetValueOrDefault();

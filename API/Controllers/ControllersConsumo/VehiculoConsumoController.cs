@@ -12,13 +12,13 @@ using API.Calculos;
 
 namespace API.Controllers.ControllersConsumo
 {
-    [Route("api/[controller]")]
+    [Route("api/Organizacion/Vehiculo/[controller]")]
     [ApiController]
-    public class VehiculoConsumoesController : ControllerBase
+    public class VehiculoConsumoController : ControllerBase
     {
         private readonly DatabaseContext _context;
 
-        public VehiculoConsumoesController(DatabaseContext context)
+        public VehiculoConsumoController(DatabaseContext context)
         {
             _context = context;
         }
@@ -92,10 +92,10 @@ namespace API.Controllers.ControllersConsumo
                 if (vehiculoConsumo.VehiculoId == vehiculo.Id)
                 {
                     vehiculoConsumo.Consumo = Calculo.CalculoConsumoVehiculo(vehiculo, vehiculoConsumo, _context);
-
+                    vehiculoConsumo.VehiculoRef = vehiculo;
                     _context.VehiculoConsumo.Add(vehiculoConsumo);
                     await _context.SaveChangesAsync();
-                    return CreatedAtAction("GetDispositivo", new { id = vehiculoConsumo.Id }, vehiculoConsumo);
+                    return Ok("Consumo Vehiculo creado correctamente");
                 }
 
             }

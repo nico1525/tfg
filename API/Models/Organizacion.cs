@@ -19,7 +19,6 @@ namespace API.Models
         public string? Contraseña { get; set; }
         public bool IsAdmin { get; set; } = false;
         //public virtual ICollection<Dispositivo> ListaDispositivos { get; set;} 
-            
     }
 
 }

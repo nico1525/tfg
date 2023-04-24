@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using API.Enumerables;
-
+using Microsoft.AspNetCore.Components;
 
 namespace API.Models
 {
@@ -15,5 +15,7 @@ namespace API.Models
         public CombustibleVehiculo TipoCombustible { get; set; }
         [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
+        public Organizacion? OrganizacionRef { get; set; }
+
     }
 }

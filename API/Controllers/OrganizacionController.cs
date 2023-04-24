@@ -126,7 +126,7 @@ namespace API.Controllers
             var organizacion = await _context.Organizacion.FindAsync(id);
             if (organizacion == null)
             {
-                return BadRequest("No existe una rutina con este id");
+                return BadRequest("No existe una organización con este id");
             }
 
             _context.Organizacion.Remove(organizacion);
