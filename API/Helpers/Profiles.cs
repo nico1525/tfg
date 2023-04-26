@@ -1,9 +1,10 @@
 ﻿using API.Models;
+using API.Models.Autentificacion;
 using API.Models.DTOs.Incoming;
 using API.Models.DTOs.Outcoming;
 using AutoMapper;
 
-namespace API.Profiles
+namespace API.Helpers
 {
     public class OrganizacionProfile : Profile
     {
@@ -11,6 +12,8 @@ namespace API.Profiles
         {
             CreateMap<Organizacion, OrganizacionDTO>();
             CreateMap<OrganizacionCreateDTO, Organizacion>();
+            CreateMap<LoginRequest, Organizacion>();
+            CreateMap<Organizacion, LoginResponse>();
         }
     }
 }

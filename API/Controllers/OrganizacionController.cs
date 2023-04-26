@@ -14,20 +14,26 @@ using API.Models.DTOs.Outcoming;
 using API.Models.DTOs.Incoming;
 using API.Models.Context;
 using Microsoft.AspNetCore.Authorization;
+using API.Authorization;
+using Org.BouncyCastle.Crypto.Generators;
+using API.Models.Autentificacion;
 
 namespace API.Controllers
 {
+    [Authorization.Authorize(Policy = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class OrganizacionController : ControllerBase
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
+        private IJwtUtils _jwtUtils;
 
-        public OrganizacionController(DatabaseContext context, IMapper mapper)
+        public OrganizacionController(DatabaseContext context, IMapper mapper, IJwtUtils jwtUtils)
         {
             _context = context;
             _mapper = mapper;
+            _jwtUtils = jwtUtils;
         }
 
         // GET: api/Organizacions
@@ -94,14 +100,10 @@ namespace API.Controllers
             return Ok("Organización modificada correctamente");
         }
 
-        
-        [HttpPost]
-        public async Task<ActionResult<Organizacion>> PostOrganizacion(OrganizacionCreateDTO organizacion)
+        [Authorization.AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<ActionResult<Organizacion>> RegistrarOrganizacion(OrganizacionCreateDTO organizacion)
         {
-            if (_context.Organizacion == null)
-            {
-              return Problem("Entity set 'DatabaseContext.Organizacion' is null.");
-            }
             if (_context.Organizacion.Any(o => o.NombreOrg == organizacion.NombreOrg))
                 return StatusCode(400, "Este nombre de esta Organización ya está registrado");
             if (_context.Organizacion.Any(o => o.Email == organizacion.Email))
@@ -113,8 +115,24 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Organización creada correctamente");
-        }      
+        }
 
+        [Authorization.AllowAnonymous]
+        [HttpPost("login")]
+        public ActionResult<Organizacion> LoginOrganizacion(LoginRequest loginData)
+        {
+
+            var org = _context.Organizacion.SingleOrDefault(x => x.Email == loginData.Email);
+
+            // validate
+            if (org == null || loginData.Contraseña != org.Contraseña)
+                return BadRequest("Usuario incorrecto");
+
+            // authentication successful
+            var response = _mapper.Map<LoginResponse>(org);
+            response.Token = _jwtUtils.GenerateToken(org);
+            return Ok(response);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrganizacion(int id)
@@ -153,5 +171,11 @@ namespace API.Controllers
 
             return Ok("Todas las organizaciones eliminadas correctamente");
         }
+
+        //public Organizacion GetOrganizacionById(int id)
+        //{
+        //    var org = _context.Organizacion.Find(id);
+        //    return org;
+        //}
     }
 }
