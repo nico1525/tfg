@@ -1,7 +1,5 @@
 ﻿using API.Models;
 using API.Models.Autentificacion;
-using API.Models.DTOs.Incoming;
-using API.Models.DTOs.Outcoming;
 using AutoMapper;
 
 namespace API.Helpers

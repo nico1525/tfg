@@ -1,26 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Models;
-using System.Net;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Http.HttpResults;
 using AutoMapper;
-using API.Models.DTOs.Outcoming;
-using API.Models.DTOs.Incoming;
 using API.Models.Context;
-using Microsoft.AspNetCore.Authorization;
 using API.Authorization;
-using Org.BouncyCastle.Crypto.Generators;
 using API.Models.Autentificacion;
+using API.Helpers;
 
 namespace API.Controllers
 {
-    [Authorization.Authorize(Policy = "admin")]
+    [Authorization.Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrganizacionController : ControllerBase
@@ -29,6 +18,7 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private IJwtUtils _jwtUtils;
 
+
         public OrganizacionController(DatabaseContext context, IMapper mapper, IJwtUtils jwtUtils)
         {
             _context = context;
@@ -36,33 +26,44 @@ namespace API.Controllers
             _jwtUtils = jwtUtils;
         }
 
-        // GET: api/Organizacions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Organizacion>>> GetAllOrganizaciones()
+        public async Task<ActionResult<IEnumerable<object>>> GetOrganizaciones()
         {
-          if (_context.Organizacion == null)
-          {
-              return NotFound();
-          }
-            return await _context.Organizacion.ToListAsync();
-        }
+            var currentUser = (Organizacion)HttpContext.Items["Organizacion"];
 
+            if (currentUser.Role != Role.Admin)
+            {
+                var org = await _context.Organizacion.FindAsync(currentUser.Id);
+                OrganizacionDTO orgDTO = _mapper.Map<OrganizacionDTO>(org);
+                List<OrganizacionDTO> listorg = new()
+            {
+                    orgDTO
+            };
+                return listorg;
+            }
+            else
+            {
+                return await _context.Organizacion.ToListAsync();
+            }
+
+        }
+        
+        //[Authorization.Authorize(Role.Admin)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrganizacionDTO>> GetOrganizacion(int id)
+        public async Task<ActionResult<Organizacion>> GetOrganizacion(int id)
         {
-          if (_context.Organizacion == null)
-          {
-              return NotFound();
-          }
+            if (_context.Organizacion == null)
+            {
+                return NotFound();
+            }
             var organizacion = await _context.Organizacion.FindAsync(id);
 
             if (organizacion == null)
             {
                 return NotFound("No existe la organización con id " + id);
             }
-            OrganizacionDTO orgDTO = _mapper.Map<OrganizacionDTO>(organizacion);
 
-            return orgDTO;
+            return organizacion;
         }
 
         [HttpPut("{id}")]
@@ -172,10 +173,6 @@ namespace API.Controllers
             return Ok("Todas las organizaciones eliminadas correctamente");
         }
 
-        //public Organizacion GetOrganizacionById(int id)
-        //{
-        //    var org = _context.Organizacion.Find(id);
-        //    return org;
-        //}
+        
     }
 }
