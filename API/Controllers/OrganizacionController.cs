@@ -18,7 +18,6 @@ namespace API.Controllers
         private readonly IMapper _mapper;
         private IJwtUtils _jwtUtils;
 
-
         public OrganizacionController(DatabaseContext context, IMapper mapper, IJwtUtils jwtUtils)
         {
             _context = context;
@@ -186,6 +185,7 @@ namespace API.Controllers
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
+        //[Authorization.Authorize(Role.Admin
         [HttpDelete]
         public async Task<IActionResult> DeleteAllOrgs()
         {
