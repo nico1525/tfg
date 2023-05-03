@@ -9,7 +9,7 @@ using API.Helpers;
 
 namespace API.Controllers
 {
-    [Authorization.Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrganizacionController : ControllerBase
@@ -47,7 +47,8 @@ namespace API.Controllers
             }
 
         }
-        
+
+        [ApiExplorerSettings(IgnoreApi = true)]
         //[Authorization.Authorize(Role.Admin)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Organizacion>> GetOrganizacion(int id)
@@ -66,42 +67,70 @@ namespace API.Controllers
             return organizacion;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrganizacion(int id, Organizacion organizacion)
+        [HttpPut]
+        public async Task<IActionResult> PutOrganizacion(OrganizacionModifyDTO organizacion)
         {
-            if (id != organizacion.Id)
-            {
-                return BadRequest("Este id no pertenece a la organización");
-            }
-            var antiguaorganizacion = await _context.Organizacion.FindAsync(id);
+            var currentOrg = (Organizacion)HttpContext.Items["Organizacion"];
 
-            if (antiguaorganizacion is null) { return NotFound("No existe la organización con id " + id); }
+            var antiguaorganizacion = await _context.Organizacion.FindAsync(currentOrg.Id);
 
-            if(_context.Organizacion.Any(e => e.NombreOrg == organizacion.NombreOrg))
+            if (_context.Organizacion.Any(e => e.NombreOrg == organizacion.NombreOrg && e.Id != currentOrg.Id))
             {
                 return BadRequest("Ya existe una organización con ese nombre");
             }
             else
             {
-                antiguaorganizacion.NombreOrg = organizacion.NombreOrg;
+                if(organizacion.NombreOrg != null) currentOrg.NombreOrg = organizacion.NombreOrg;
             }
-            if (_context.Organizacion.Any(e => e.Email == organizacion.Email))
+            if (_context.Organizacion.Any(e => e.Email == organizacion.Email && e.Id != currentOrg.Id))
             {
                 return BadRequest("Ya existe una organización con ese email");
             }
             else
             {
-                antiguaorganizacion.Email = organizacion.Email;
+                if (organizacion.Email != null) currentOrg.Email = organizacion.Email;
             }
-            antiguaorganizacion.Direccion = organizacion.Direccion;
-            antiguaorganizacion.Contraseña = organizacion.Contraseña;
+            if (organizacion.Direccion != null) currentOrg.Direccion = organizacion.Direccion;
+            if (organizacion.Contraseña != null) currentOrg.Contraseña = organizacion.Contraseña;
 
             await _context.SaveChangesAsync();
 
             return Ok("Organización modificada correctamente");
         }
 
-        [Authorization.AllowAnonymous]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        //[Authorization.Authorize(Role.Admin)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutOrganizacionById(int id, OrganizacionModifyDTO organizacion)
+        {
+            var currentOrg = await _context.Organizacion.FindAsync(id);
+
+            if (_context.Organizacion.Any(e => e.NombreOrg == organizacion.NombreOrg && e.Id != currentOrg.Id))
+            {
+                return BadRequest("Ya existe una organización con ese nombre");
+            }
+            else
+            {
+                if (organizacion.NombreOrg != null) currentOrg.NombreOrg = organizacion.NombreOrg;
+            }
+            if (_context.Organizacion.Any(e => e.Email == organizacion.Email && e.Id != currentOrg.Id))
+            {
+                return BadRequest("Ya existe una organización con ese email");
+            }
+            else
+            {
+                if (organizacion.Email != null) currentOrg.Email = organizacion.Email;
+            }
+            if (organizacion.Direccion != null) currentOrg.Direccion = organizacion.Direccion;
+            if (organizacion.Contraseña != null) currentOrg.Contraseña = organizacion.Contraseña;
+            //currentOrg.Role = organizacion.Role;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Organización modificada correctamente");
+        }
+
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<Organizacion>> RegistrarOrganizacion(OrganizacionCreateDTO organizacion)
         {
@@ -118,7 +147,7 @@ namespace API.Controllers
             return Ok("Organización creada correctamente");
         }
 
-        [Authorization.AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult<Organizacion> LoginOrganizacion(LoginRequest loginData)
         {
@@ -135,6 +164,8 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
+        //[Authorization.Authorize(Role.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrganizacion(int id)
         {
@@ -154,6 +185,7 @@ namespace API.Controllers
             return Ok("Organización eliminada correctamente"); 
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpDelete]
         public async Task<IActionResult> DeleteAllOrgs()
         {

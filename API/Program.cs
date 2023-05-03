@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using API.Models.Context;
 using API.Authorization;
 using API.Helpers;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,18 +19,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddCors();
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(
-        "admin",
-        policy => policy.RequireClaim(ClaimTypes.Role, "admin")
-    );
-    options.AddPolicy(
-       "user",
-       policy => policy.RequireClaim(ClaimTypes.Role, "user")
-   );
-});
 
 var app = builder.Build();
 

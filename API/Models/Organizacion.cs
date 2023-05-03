@@ -1,17 +1,13 @@
 ﻿using API.Helpers;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mysqlx.Crud;
-using System.ComponentModel;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Net.Mail;
 
 namespace API.Models
 {
-    public class Organizacion : IOrganizacion
+    public class Organizacion
     {
         [Key]
+        [JsonIgnore]
         public int Id { get; set; }
         public string? NombreOrg { get; set; }
         [EmailAddress]
@@ -21,13 +17,13 @@ namespace API.Models
         public Role Role { get; set; } = Role.User;
     }
 
-    public class OrganizacionDTO : IOrganizacion
+    public class OrganizacionDTO
     {
         public string? NombreOrg { get; set; }
         public string? Email { get; set; }
     }
 
-    public class OrganizacionCreateDTO : IOrganizacion
+    public class OrganizacionCreateDTO
     {
         [Required(ErrorMessage = "El Nombre de Organización es obligatorio")]
         public string? NombreOrg { get; set; }
@@ -39,11 +35,19 @@ namespace API.Models
         [Required(ErrorMessage = "La Dirección es obligatoria")]
         public string? Direccion { get; set; }
 
-        [Required(ErrorMessage = "El Contraseña es obligatorio")]
+        [Required(ErrorMessage = "La Contraseña es obligatoria")]
         public string? Contraseña { get; set; }
     }
-
-    public interface IOrganizacion
+    public class OrganizacionModifyDTO
     {
+        public string? NombreOrg { get; set; }
+
+        [EmailAddress(ErrorMessage = "Debe introducir un Email válido")]
+        public string? Email { get; set; }
+
+        public string? Direccion { get; set; }
+
+        public string? Contraseña { get; set; }
+        //public Role Role { get; set; }
     }
 }

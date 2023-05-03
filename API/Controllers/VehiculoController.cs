@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Models;
 using API.Models.Context;
 using NuGet.DependencyResolver;
+using API.Helpers;
 
 namespace API.Controllers
 {
@@ -29,28 +30,23 @@ namespace API.Controllers
           {
               return NotFound();
           }
-            return await _context.Vehiculo.ToListAsync();
-        }
+          var currentUser = (Organizacion)HttpContext.Items["Organizacion"];
 
-        [HttpGet("{org}")]
-        public async Task<ActionResult<IEnumerable<Vehiculo>>> GetVehiculo(int org)
-        {
-          if (_context.Vehiculo == null)
-          {
-              return NotFound();
-          }
-          List<Vehiculo> listavehiculos = await _context.Vehiculo.ToListAsync();
+          List<Vehiculo> listatodosvehiculos = await _context.Vehiculo.ToListAsync();
           List<Vehiculo> listavehiculosorg = new();
 
-            foreach (var vehiculo in listavehiculos)
+            foreach (var vehiculo in listatodosvehiculos)
             {
-                if(vehiculo.OrganizacionId == org)
+                if(vehiculo.OrganizacionId == currentUser.Id)
                 {
                     listavehiculosorg.Add(vehiculo);
                 }
             }
 
-            return listavehiculosorg;
+            if (currentUser.Role != Role.Admin) { return listavehiculosorg; } 
+            else{ return listatodosvehiculos; }
+
+
         }
 
         [HttpPut("{id}")]

@@ -1,10 +1,8 @@
 ﻿namespace API.Authorization;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using API.Models;
-using System.Security.Claims;
 using API.Helpers;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]

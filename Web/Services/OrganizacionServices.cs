@@ -7,8 +7,6 @@ using API.Models;
 using Mysqlx.Session;
 using MySqlX.XDevAPI;
 using System.Text;
-using API.Models.DTOs.Outcoming;
-using API.Models.DTOs.Incoming;
 
 namespace Web.Services
 {
