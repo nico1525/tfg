@@ -16,11 +16,13 @@ namespace API.Models.Context
         public DbSet<Vehiculo> Vehiculo { get; set; } = null!;
         public DbSet<VehiculoConsumo> VehiculoConsumo { get; set; } = null!;
         public DbSet<FactorEmisionVehiculo> FactorEmisionVehiculo { get; set; } = null!;
+        public DbSet<Usuario> Usuario { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //base.OnModelCreating(builder);
+            builder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
             builder.Entity<Organizacion>().HasIndex(u => u.Email).IsUnique();
             builder.Entity<Organizacion>().HasIndex(u => u.NombreOrg).IsUnique();
             builder.Entity<Vehiculo>().HasIndex(u => u.Matricula).IsUnique();

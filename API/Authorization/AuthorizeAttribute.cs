@@ -23,7 +23,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
             return;
 
         // authorization
-        var user = (Organizacion)context.HttpContext.Items["Organizacion"];
+        var user = (Usuario)context.HttpContext.Items["Usuario"];
         if (user == null)
         {
             // not logged in or role not authorized
@@ -31,7 +31,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         }
         if(_roles.Any() && !_roles.Contains(user.Role))
         {
-            context.Result = new JsonResult(new { message = "Debes ser Administrador para acceder" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            context.Result = new JsonResult(new { message = "No tienes el rol necesario para acceder" }) { StatusCode = StatusCodes.Status401Unauthorized };
 
         }
     }

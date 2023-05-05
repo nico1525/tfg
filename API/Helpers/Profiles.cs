@@ -10,8 +10,11 @@ namespace API.Helpers
         {
             CreateMap<Organizacion, OrganizacionDTO>();
             CreateMap<OrganizacionCreateDTO, Organizacion>();
-            CreateMap<LoginRequest, Organizacion>();
-            CreateMap<Organizacion, LoginResponse>();
+
+            CreateMap<Usuario, UsuarioDTO>();
+            CreateMap<UsuarioCreateDTO, Usuario>();
+            CreateMap<LoginRequest, Usuario>();
+            CreateMap<Usuario, LoginUserResponse>();
         }
     }
 }

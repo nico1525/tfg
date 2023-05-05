@@ -6,33 +6,32 @@ using API.Models.Context;
 using API.Authorization;
 using API.Models.Autentificacion;
 using API.Helpers;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrganizacionController : ControllerBase
     {
         private readonly DatabaseContext _context;
         private readonly IMapper _mapper;
-        private IJwtUtils _jwtUtils;
 
-        public OrganizacionController(DatabaseContext context, IMapper mapper, IJwtUtils jwtUtils)
+        public OrganizacionController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _jwtUtils = jwtUtils;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetOrganizaciones()
         {
-            var currentUser = (Organizacion)HttpContext.Items["Organizacion"];
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-            if (currentUser.Role != Role.Admin)
+            if (currentUser.Role == Role.OrgAdmin || currentUser.Role == Role.User)
             {
-                var org = await _context.Organizacion.FindAsync(currentUser.Id);
+                var org = await _context.Organizacion.FindAsync(currentUser.OrganizacionId);
                 OrganizacionDTO orgDTO = _mapper.Map<OrganizacionDTO>(org);
                 List<OrganizacionDTO> listorg = new()
             {
@@ -47,29 +46,14 @@ namespace API.Controllers
 
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
-        //[Authorization.Authorize(Role.Admin)]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Organizacion>> GetOrganizacion(int id)
-        {
-            if (_context.Organizacion == null)
-            {
-                return NotFound();
-            }
-            var organizacion = await _context.Organizacion.FindAsync(id);
-
-            if (organizacion == null)
-            {
-                return NotFound("No existe la organización con id " + id);
-            }
-
-            return organizacion;
-        }
-
+       
+        [Authorize(Role.OrgAdmin)]
         [HttpPut]
         public async Task<IActionResult> PutOrganizacion(OrganizacionModifyDTO organizacion)
         {
-            var currentOrg = (Organizacion)HttpContext.Items["Organizacion"];
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+
+            var currentOrg = currentUser.OrganizacionRef;
 
             var antiguaorganizacion = await _context.Organizacion.FindAsync(currentOrg.Id);
 
@@ -97,103 +81,53 @@ namespace API.Controllers
             return Ok("Organización modificada correctamente");
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
-        //[Authorization.Authorize(Role.Admin)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrganizacionById(int id, OrganizacionModifyDTO organizacion)
-        {
-            var currentOrg = await _context.Organizacion.FindAsync(id);
-
-            if (_context.Organizacion.Any(e => e.NombreOrg == organizacion.NombreOrg && e.Id != currentOrg.Id))
-            {
-                return BadRequest("Ya existe una organización con ese nombre");
-            }
-            else
-            {
-                if (organizacion.NombreOrg != null) currentOrg.NombreOrg = organizacion.NombreOrg;
-            }
-            if (_context.Organizacion.Any(e => e.Email == organizacion.Email && e.Id != currentOrg.Id))
-            {
-                return BadRequest("Ya existe una organización con ese email");
-            }
-            else
-            {
-                if (organizacion.Email != null) currentOrg.Email = organizacion.Email;
-            }
-            if (organizacion.Direccion != null) currentOrg.Direccion = organizacion.Direccion;
-            if (organizacion.Contraseña != null) currentOrg.Contraseña = organizacion.Contraseña;
-            //currentOrg.Role = organizacion.Role;
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Organización modificada correctamente");
-        }
-
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<Organizacion>> RegistrarOrganizacion(OrganizacionCreateDTO organizacion)
         {
+
             if (_context.Organizacion.Any(o => o.NombreOrg == organizacion.NombreOrg))
                 return StatusCode(400, "Este nombre de esta Organización ya está registrado");
             if (_context.Organizacion.Any(o => o.Email == organizacion.Email))
-                return StatusCode(400, "Este email ya está registrado");
+                return StatusCode(400, "Este email de Organización ya está registrado");
 
             Organizacion org = _mapper.Map<Organizacion>(organizacion);
 
+            Usuario usuario = new() {
+                NombreApellidos = "admin",
+                Email = org.Email,
+                Contraseña = org.Contraseña,
+                OrganizacionId = org.Id,
+                OrganizacionRef = org,
+                Role = Role.OrgAdmin
+           };
+
             _context.Organizacion.Add(org);
+            _context.Usuario.Add(usuario);
             await _context.SaveChangesAsync();
 
             return Ok("Organización creada correctamente");
         }
 
-        [AllowAnonymous]
-        [HttpPost("login")]
-        public ActionResult<Organizacion> LoginOrganizacion(LoginRequest loginData)
+        [Authorize(Role.OrgAdmin)]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOrganizacion()
         {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-            var org = _context.Organizacion.SingleOrDefault(x => x.Email == loginData.Email);
+            var currentOrg = currentUser.OrganizacionRef;
 
-            // validate
-            if (org == null || loginData.Contraseña != org.Contraseña)
-                return BadRequest("Usuario incorrecto");
-
-            // authentication successful
-            var response = _mapper.Map<LoginResponse>(org);
-            response.Token = _jwtUtils.GenerateToken(org);
-            return Ok(response);
-        }
-
-        [ApiExplorerSettings(IgnoreApi = true)]
-        //[Authorization.Authorize(Role.Admin)]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrganizacion(int id)
-        {
-            if (_context.Organizacion == null)
-            {
-                return NotFound();
-            }
-            var organizacion = await _context.Organizacion.FindAsync(id);
-            if (organizacion == null)
-            {
-                return BadRequest("No existe una organización con este id");
-            }
-
-            _context.Organizacion.Remove(organizacion);
+            _context.Organizacion.Remove(currentOrg);
             await _context.SaveChangesAsync();
 
             return Ok("Organización eliminada correctamente"); 
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
-        //[Authorization.Authorize(Role.Admin
-        [HttpDelete]
+        [Authorize(Role.SuperAdmin)]
+        [HttpDelete("all")]
         public async Task<IActionResult> DeleteAllOrgs()
         {
-            if (_context.Organizacion == null)
-            {
-                return NotFound();
-            }
-
             List<Organizacion> listorgs =  await _context.Organizacion.ToListAsync();
 
             foreach (var org in listorgs)
@@ -205,6 +139,25 @@ namespace API.Controllers
             return Ok("Todas las organizaciones eliminadas correctamente");
         }
 
-        
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Authorize(Role.SuperAdmin)]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Organizacion>> GetOrganizacionById(int id)
+        {
+            if (_context.Organizacion == null)
+            {
+                return NotFound();
+            }
+            var organizacion = await _context.Organizacion.FindAsync(id);
+
+            if (organizacion == null)
+            {
+                return NotFound("No existe la organización con id " + id);
+            }
+
+            return organizacion;
+        }
+
+
     }
 }

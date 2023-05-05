@@ -4,48 +4,48 @@ using System.Text.Json.Serialization;
 
 namespace API.Models
 {
-    public class Organizacion
+    public class Usuario
     {
         [Key]
         [JsonIgnore]
         public int Id { get; set; }
-        public string? NombreOrg { get; set; }
+        public string? NombreApellidos { get; set; }
         [EmailAddress]
         public string? Email { get; set; }
-        public string? Direccion { get; set; }
         public string? Contraseña { get; set; }
+        public int OrganizacionId { get; set; }
+        [JsonIgnore]
+        public Organizacion? OrganizacionRef { get; set; }
+        public Role Role { get; set; } = Role.User;
     }
 
-    public class OrganizacionDTO
+    public class UsuarioDTO
     {
-        public string? NombreOrg { get; set; }
+        public int Id { get; set; }
+        public string? NombreApellidos { get; set; }
         public string? Email { get; set; }
-        public string? Direccion { get; set; }
+        public string? Contraseña { get; set; }
+
     }
 
-    public class OrganizacionCreateDTO
+    public class UsuarioCreateDTO
     {
-        [Required(ErrorMessage = "El Nombre de Organización es obligatorio")]
-        public string? NombreOrg { get; set; }
+        [Required(ErrorMessage = "El Nombre y apellidos son obligatorios")]
+        public string? NombreApellidos { get; set; }
 
         [Required(ErrorMessage = "El Email es obligatorio")]
         [EmailAddress(ErrorMessage = "Debe introducir un Email válido")]
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = "La Dirección es obligatoria")]
-        public string? Direccion { get; set; }
-
         [Required(ErrorMessage = "La Contraseña es obligatoria")]
         public string? Contraseña { get; set; }
     }
-    public class OrganizacionModifyDTO
+    public class UsuarioModifyDTO
     {
-        public string? NombreOrg { get; set; }
+        public string? NombreApellidos { get; set; }
 
         [EmailAddress(ErrorMessage = "Debe introducir un Email válido")]
         public string? Email { get; set; }
-
-        public string? Direccion { get; set; }
 
         public string? Contraseña { get; set; }
     }

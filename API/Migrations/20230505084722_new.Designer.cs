@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230503101909_new")]
+    [Migration("20230505084722_new")]
     partial class @new
     {
         /// <inheritdoc />
@@ -99,9 +99,6 @@ namespace API.Migrations
                     b.Property<string>("NombreOrg")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -113,6 +110,40 @@ namespace API.Migrations
                         .HasFilter("[NombreOrg] IS NOT NULL");
 
                     b.ToTable("Organizacion");
+                });
+
+            modelBuilder.Entity("API.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Contraseña")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NombreApellidos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrganizacionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("OrganizacionId");
+
+                    b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("API.Models.Vehiculo", b =>
@@ -158,6 +189,17 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("VehiculoRef");
+                });
+
+            modelBuilder.Entity("API.Models.Usuario", b =>
+                {
+                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
+                        .WithMany()
+                        .HasForeignKey("OrganizacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrganizacionRef");
                 });
 
             modelBuilder.Entity("API.Models.Vehiculo", b =>

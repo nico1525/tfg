@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Models;
 using API.Models.Context;
-using NuGet.DependencyResolver;
 using API.Helpers;
+using API.Authorization;
 
 namespace API.Controllers
 {
@@ -23,6 +23,7 @@ namespace API.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Vehiculo>>> GetVehiculo()
         {
@@ -30,21 +31,21 @@ namespace API.Controllers
           {
               return NotFound();
           }
-          var currentUser = (Organizacion)HttpContext.Items["Organizacion"];
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-          List<Vehiculo> listatodosvehiculos = await _context.Vehiculo.ToListAsync();
+            List<Vehiculo> listatodosvehiculos = await _context.Vehiculo.ToListAsync();
           List<Vehiculo> listavehiculosorg = new();
 
-            foreach (var vehiculo in listatodosvehiculos)
+        foreach (var vehiculo in listatodosvehiculos)
+        {
+            if(vehiculo.OrganizacionId == currentUser.Id)
             {
-                if(vehiculo.OrganizacionId == currentUser.Id)
-                {
-                    listavehiculosorg.Add(vehiculo);
-                }
+                listavehiculosorg.Add(vehiculo);
             }
+        }
 
-            if (currentUser.Role != Role.Admin) { return listavehiculosorg; } 
-            else{ return listatodosvehiculos; }
+        if (currentUser.Role != Role.SuperAdmin) { return listavehiculosorg; } 
+        else{ return listatodosvehiculos; }
 
 
         }
@@ -81,23 +82,12 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Vehiculo>> PostVehiculo(Vehiculo vehiculo)
         {
-          if (_context.Vehiculo == null)
-          {
-              return Problem("Entity set 'DatabaseContext.Vehiculo'  is null.");
-          }
-            List<Organizacion> listorgs = await _context.Organizacion.ToListAsync();
-            foreach (var org in listorgs)
-            {
-                if (vehiculo.OrganizacionId == org.Id)
-                {
-                    vehiculo.OrganizacionRef = org;
-                    _context.Vehiculo.Add(vehiculo);
-                    await _context.SaveChangesAsync();
-                    return Ok("Vehiculo creado correctamente");
-                }
-
-            }
-            return BadRequest("No puedes agregar un vehiculo a una organizacion que no existe");
+            var currentOrg = (Organizacion)HttpContext.Items["Organizacion"];
+            vehiculo.OrganizacionId = currentOrg.Id;
+            vehiculo.OrganizacionRef = currentOrg;
+            _context.Vehiculo.Add(vehiculo);
+            await _context.SaveChangesAsync();
+            return Ok("Vehiculo creado correctamente");
         }
 
         [HttpDelete("{id}")]

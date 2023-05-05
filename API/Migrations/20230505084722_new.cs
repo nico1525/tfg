@@ -34,12 +34,34 @@ namespace API.Migrations
                     NombreOrg = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Role = table.Column<int>(type: "int", nullable: false)
+                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Organizacion", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreApellidos = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrganizacionId = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Usuario_Organizacion_OrganizacionId",
+                        column: x => x.OrganizacionId,
+                        principalTable: "Organizacion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,6 +126,18 @@ namespace API.Migrations
                 filter: "[NombreOrg] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Usuario_Email",
+                table: "Usuario",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuario_OrganizacionId",
+                table: "Usuario",
+                column: "OrganizacionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Vehiculo_Matricula",
                 table: "Vehiculo",
                 column: "Matricula",
@@ -126,6 +160,9 @@ namespace API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "FactorEmisionVehiculo");
+
+            migrationBuilder.DropTable(
+                name: "Usuario");
 
             migrationBuilder.DropTable(
                 name: "VehiculoConsumo");
