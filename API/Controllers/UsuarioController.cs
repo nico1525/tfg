@@ -192,7 +192,7 @@ namespace API.Controllers
             }
             await _context.SaveChangesAsync();
 
-            return Ok("Todos los usuarios eliminadas correctamente");
+            return Ok("Todos los usuarios eliminados correctamente");
         }
 
     }

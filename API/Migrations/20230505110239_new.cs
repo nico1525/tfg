@@ -72,8 +72,8 @@ namespace API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Edificio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Matricula = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CategoriaVehiculo = table.Column<int>(type: "int", nullable: false),
-                    TipoCombustible = table.Column<int>(type: "int", nullable: false),
+                    CategoriaVehiculo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TipoCombustible = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrganizacionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

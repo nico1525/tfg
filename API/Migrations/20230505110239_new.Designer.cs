@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230505084722_new")]
+    [Migration("20230505110239_new")]
     partial class @new
     {
         /// <inheritdoc />
@@ -154,8 +154,8 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoriaVehiculo")
-                        .HasColumnType("int");
+                    b.Property<string>("CategoriaVehiculo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Edificio")
                         .HasColumnType("nvarchar(max)");
@@ -166,8 +166,8 @@ namespace API.Migrations
                     b.Property<int>("OrganizacionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipoCombustible")
-                        .HasColumnType("int");
+                    b.Property<string>("TipoCombustible")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

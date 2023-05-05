@@ -15,6 +15,9 @@ namespace API.Helpers
             CreateMap<UsuarioCreateDTO, Usuario>();
             CreateMap<LoginRequest, Usuario>();
             CreateMap<Usuario, LoginUserResponse>();
+
+            CreateMap<Vehiculo, VehiculoDTO>();
+            CreateMap<VehiculoCreateDTO, Vehiculo>();
         }
     }
 }

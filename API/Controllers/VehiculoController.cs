@@ -9,127 +9,117 @@ using API.Models;
 using API.Models.Context;
 using API.Helpers;
 using API.Authorization;
+using AutoMapper;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/Organizacion/[controller]")]
     [ApiController]
     public class VehiculoController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public VehiculoController(DatabaseContext context)
+        public VehiculoController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        [Authorize]
+        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Vehiculo>>> GetVehiculo()
+        public async Task<ActionResult<IEnumerable<object>>> GetVehiculo()
         {
-          if (_context.Vehiculo == null)
-          {
-              return NotFound();
-          }
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             List<Vehiculo> listatodosvehiculos = await _context.Vehiculo.ToListAsync();
-          List<Vehiculo> listavehiculosorg = new();
+            List<VehiculoDTO> listavehiculosorg = new();
 
-        foreach (var vehiculo in listatodosvehiculos)
-        {
-            if(vehiculo.OrganizacionId == currentUser.Id)
+            foreach (var vehiculo in listatodosvehiculos)
             {
-                listavehiculosorg.Add(vehiculo);
+                if(vehiculo.OrganizacionId == currentUser.OrganizacionId)
+                {
+                    VehiculoDTO vehiculoDTO = _mapper.Map<VehiculoDTO>(vehiculo);
+                    listavehiculosorg.Add(vehiculoDTO);
+                }
             }
-        }
 
-        if (currentUser.Role != Role.SuperAdmin) { return listavehiculosorg; } 
-        else{ return listatodosvehiculos; }
-
+            if (currentUser.Role != Role.SuperAdmin) { return listavehiculosorg; } 
+            else{ return listatodosvehiculos; }
 
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutVehiculo(int id, Vehiculo vehiculo)
+        public async Task<IActionResult> PutVehiculo(int id, VehiculoModifyDTO vehiculo)
         {
-            if (id != vehiculo.Id)
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var vehiculoChange = await _context.Vehiculo.FindAsync(id);
+            if (currentUser.OrganizacionId != vehiculoChange.OrganizacionId)
             {
-                return BadRequest();
+                return BadRequest("Este vehículo no existe o no pertenece a esta organización");
             }
-
-            _context.Entry(vehiculo).State = EntityState.Modified;
-
-            try
+            if (_context.Vehiculo.Any(e => e.Matricula == vehiculo.Matricula && e.Id != vehiculoChange.Id))
             {
-                await _context.SaveChangesAsync();
+                return BadRequest("Ya existe un usuario con ese email");
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!VehiculoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (vehiculo.Matricula != null) vehiculoChange.Matricula = vehiculo.Matricula;
             }
+            if (vehiculo.Edificio != null) vehiculoChange.Edificio = vehiculo.Edificio;
+            await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Vehículo modificado correctamente");
         }
 
         [HttpPost]
-        public async Task<ActionResult<Vehiculo>> PostVehiculo(Vehiculo vehiculo)
+        public async Task<ActionResult<Vehiculo>> PostVehiculo(VehiculoCreateDTO vehiculoDTO)
         {
-            var currentOrg = (Organizacion)HttpContext.Items["Organizacion"];
-            vehiculo.OrganizacionId = currentOrg.Id;
-            vehiculo.OrganizacionRef = currentOrg;
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+
+            if (_context.Vehiculo.Any(e => e.Matricula == vehiculoDTO.Matricula))
+            {
+                return BadRequest("Ya existe un vehículo con esa matrícula");
+            }
+            Vehiculo vehiculo = _mapper.Map<Vehiculo>(vehiculoDTO);
+
+            vehiculo.OrganizacionId = currentUser.OrganizacionId;
+            vehiculo.OrganizacionRef = currentUser.OrganizacionRef;
             _context.Vehiculo.Add(vehiculo);
             await _context.SaveChangesAsync();
             return Ok("Vehiculo creado correctamente");
         }
 
+        [Authorize(Role.OrgAdmin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehiculo(int id)
         {
-            if (_context.Vehiculo == null)
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var vehiculoDelete = await _context.Vehiculo.FindAsync(id);
+            if (currentUser.OrganizacionId != vehiculoDelete.OrganizacionId)
             {
-                return NotFound();
+                return BadRequest("Este vehiculo no existe o no pertenece a esta organización");
             }
-            var vehiculo = await _context.Vehiculo.FindAsync(id);
-            if (vehiculo == null)
-            {
-                return NotFound();
-            }
-
-            _context.Vehiculo.Remove(vehiculo);
+            _context.Vehiculo.Remove(vehiculoDelete);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Vehículo eliminado correctamente");
         }
-
-        [HttpDelete]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Authorize(Role.SuperAdmin)]
+        [HttpDelete("all")]
         public async Task<IActionResult> DeleteAllVehiculos()
         {
-            if (_context.Vehiculo == null)
-            {
-                return NotFound();
-            }
+            List<Vehiculo> vehiculolist = await _context.Vehiculo.ToListAsync();
 
-            List<Vehiculo> listvehiculos = await _context.Vehiculo.ToListAsync();
-
-            foreach (var disp in listvehiculos)
+            foreach (var vehiculo in vehiculolist)
             {
-                _context.Vehiculo.Remove(disp);
+                _context.Vehiculo.Remove(vehiculo);
             }
             await _context.SaveChangesAsync();
 
             return Ok("Todos los vehiculos eliminados correctamente");
-        }
-        private bool VehiculoExists(int id)
-        {
-            return (_context.Vehiculo?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

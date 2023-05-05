@@ -39,8 +39,4 @@
     <None Include="C:\Users\nicolas.juan\source\repos\tfgsolucion\API\.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CalculoHuellaCarbono\CalculoHuellaCarbono.csproj" />
-  </ItemGroup>
-
 </Project>

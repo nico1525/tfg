@@ -9,9 +9,11 @@ using API.Models.Consumos;
 using API.Models.Context;
 using API.Models;
 using API.Calculos;
+using API.Authorization;
 
 namespace API.Controllers.ControllersConsumo
 {
+    [Authorize]
     [Route("api/Organizacion/Vehiculo/[controller]")]
     [ApiController]
     public class VehiculoConsumoController : ControllerBase
@@ -82,17 +84,14 @@ namespace API.Controllers.ControllersConsumo
         [HttpPost]
         public async Task<ActionResult<VehiculoConsumo>> PostVehiculoConsumo(VehiculoConsumo vehiculoConsumo)
         {
-          if (_context.VehiculoConsumo == null)
-          {
-              return Problem("Entity set 'DatabaseContext.VehiculoConsumo'  is null.");
-          }
             List<Vehiculo> listvehiculos = await _context.Vehiculo.ToListAsync();
             foreach (var vehiculo in listvehiculos)
             {
-                if (vehiculoConsumo.VehiculoId == vehiculo.Id)
+                if (vehiculoConsumo.VehiculoId == vehiculo.Id)//cambiar esto y poner currentUser
                 {
                     vehiculoConsumo.Consumo = Calculo.CalculoConsumoVehiculo(vehiculo, vehiculoConsumo, _context);
                     vehiculoConsumo.VehiculoRef = vehiculo;
+                    vehiculoConsumo.VehiculoId = vehiculo.Id;
                     _context.VehiculoConsumo.Add(vehiculoConsumo);
                     await _context.SaveChangesAsync();
                     return Ok("Consumo Vehiculo creado correctamente");
