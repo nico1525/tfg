@@ -144,10 +144,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Organizacion>> GetOrganizacionById(int id)
         {
-            if (_context.Organizacion == null)
-            {
-                return NotFound();
-            }
+            try { 
             var organizacion = await _context.Organizacion.FindAsync(id);
 
             if (organizacion == null)
@@ -156,6 +153,11 @@ namespace API.Controllers
             }
 
             return organizacion;
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest("El id no corresponde a ninguna organización");
+            }
         }
 
 

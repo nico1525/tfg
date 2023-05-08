@@ -20,4 +20,33 @@ namespace API.Models.Consumos
         public Vehiculo? VehiculoRef { get; set; }
 
     }
+    public class VehiculoConsumoCreateDTO
+    { 
+        public string? Edificio { get; set; }
+        [Required(ErrorMessage = "La cantidad de combustible es obligatoria")]
+        public int CantidadCombustible { get; set; }
+        [Required(ErrorMessage = "La fecha de inicio es obligatoria")]
+        public DateTime FechaInicio { get; set; }
+        [Required(ErrorMessage = "La fecha de fin es obligatoria")]
+        public DateTime FechaFin { get; set; }
+        [Required(ErrorMessage = "El Id del vehiculo al que asignarle un consumo es obligatorio")]
+        public int VehiculoId { get; set; }
+    }
+    public class VehiculoConsumoDTO
+    {
+        public int Id { get; set; }
+        public string? Edificio { get; set; }
+        public int CantidadCombustible { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
+        public float Consumo { get; set; }
+        public int VehiculoId { get; set; }
+    }
+    public class VehiculoConsumoModifyDTO
+    {
+        public string? Edificio { get; set; }
+        public int CantidadCombustible { get; set; }
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
+    }
 }

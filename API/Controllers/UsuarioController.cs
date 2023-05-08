@@ -102,10 +102,11 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuarioById(int id, UsuarioModifyDTO usuario)
         {
+            try { 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
             var userChange = await _context.Usuario.FindAsync(id);
             if (currentUser.OrganizacionId != userChange.OrganizacionId) {
-                return BadRequest("Este usuario no existe o no pertenece a esta organización");
+                return BadRequest("Este usuario no pertenece a esta organización");
             }
             if (_context.Usuario.Any(e => e.Email == usuario.Email && e.Id != userChange.Id))
             {
@@ -121,6 +122,11 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Usuario modificado correctamente");
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest("El id no corresponde a ningún usuario");
+            }
         }
 
         [Authorize(Role.OrgAdmin)]
@@ -162,11 +168,12 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuarioById(int id)
         {
+            try { 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
             var userDelete = await _context.Usuario.FindAsync(id);
             if (currentUser.OrganizacionId != userDelete.OrganizacionId)
             {
-                return BadRequest("Este usuario no existe o no pertenece a esta organización");
+                return BadRequest("Este usuario no pertenece a esta organización");
             }
             if(userDelete.Role != Role.User)
             {
@@ -177,6 +184,11 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Organización eliminada correctamente");
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest("El id no corresponde a ningún usuario");
+            }
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]

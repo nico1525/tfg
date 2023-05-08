@@ -1,5 +1,6 @@
 ﻿using API.Models;
 using API.Models.Autentificacion;
+using API.Models.Consumos;
 using AutoMapper;
 
 namespace API.Helpers
@@ -18,6 +19,9 @@ namespace API.Helpers
 
             CreateMap<Vehiculo, VehiculoDTO>();
             CreateMap<VehiculoCreateDTO, Vehiculo>();
+
+            CreateMap<VehiculoConsumo, VehiculoConsumoDTO>();
+            CreateMap<VehiculoConsumoCreateDTO, VehiculoConsumo>();
         }
     }
 }

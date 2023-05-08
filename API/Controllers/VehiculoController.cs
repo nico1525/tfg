@@ -54,6 +54,7 @@ namespace API.Controllers
         public async Task<IActionResult> PutVehiculo(int id, VehiculoModifyDTO vehiculo)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            try {
             var vehiculoChange = await _context.Vehiculo.FindAsync(id);
             if (currentUser.OrganizacionId != vehiculoChange.OrganizacionId)
             {
@@ -71,6 +72,11 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Vehículo modificado correctamente");
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest("El id no corresponde a ningún vehiculo");
+            }
         }
 
         [HttpPost]
@@ -96,6 +102,7 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteVehiculo(int id)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            try { 
             var vehiculoDelete = await _context.Vehiculo.FindAsync(id);
             if (currentUser.OrganizacionId != vehiculoDelete.OrganizacionId)
             {
@@ -105,7 +112,13 @@ namespace API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Vehículo eliminado correctamente");
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest("El id no corresponde a ningún vehiculo");
+            }
         }
+
         [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Role.SuperAdmin)]
         [HttpDelete("all")]
