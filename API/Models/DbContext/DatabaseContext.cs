@@ -15,7 +15,10 @@ namespace API.Models.Context
         public DbSet<Organizacion> Organizacion { get; set; } = null!;
         public DbSet<Vehiculo> Vehiculo { get; set; } = null!;
         public DbSet<VehiculoConsumo> VehiculoConsumo { get; set; } = null!;
+        public DbSet<Transporte> Transporte { get; set; } = null!;
+        public DbSet<TransporteConsumo> TransporteConsumo { get; set; } = null!;
         public DbSet<FactorEmisionVehiculo> FactorEmisionVehiculo { get; set; } = null!;
+        public DbSet<FactorEmisionTransporte> FactorEmisionTransporte { get; set; } = null!;
         public DbSet<Usuario> Usuario { get; set; } = null!;
 
 
@@ -27,6 +30,8 @@ namespace API.Models.Context
             builder.Entity<Organizacion>().HasIndex(u => u.NombreOrg).IsUnique();
             builder.Entity<Vehiculo>().HasIndex(u => u.Matricula).IsUnique();
             builder.Entity<FactorEmisionVehiculo>().HasNoKey();
+            builder.Entity<FactorEmisionTransporte>().HasNoKey();
+
         }
 
     }

@@ -99,6 +99,7 @@ namespace API.Controllers.ControllersConsumo
                 return BadRequest("La fecha final debe ser superior a la fecha inicial");
             }
             if (vehiculoConsumo.Edificio != null) vehiculoChange.Edificio = vehiculoConsumo.Edificio;
+            if (vehiculoConsumo.TipoCombustible != null) vehiculoChange.TipoCombustible = vehiculoConsumo.TipoCombustible;
             if (vehiculoConsumo.CantidadCombustible > 0) vehiculoChange.CantidadCombustible = vehiculoConsumo.CantidadCombustible;
             if (vehiculoConsumo.FechaInicio != test) vehiculoChange.FechaInicio = vehiculoConsumo.FechaInicio;
             if (vehiculoConsumo.FechaFin != test) vehiculoChange.FechaFin = vehiculoConsumo.FechaFin;
@@ -107,6 +108,8 @@ namespace API.Controllers.ControllersConsumo
             {
                 return BadRequest("La fecha final debe ser superior a la fecha inicial");
             }
+            vehiculoChange.Consumo = CalculoVehiculo.CalculoConsumoVehiculo(vehiculo, vehiculoChange, _context);
+
             await _context.SaveChangesAsync();
 
             return Ok("Consumo del Vehículo con Id: " + vehiculo.Id + " modificado correctamente");
@@ -131,9 +134,32 @@ namespace API.Controllers.ControllersConsumo
             {
                 if (vehiculoConsumoDTO.VehiculoId == vehiculo.Id && vehiculo.OrganizacionId == currentUser.OrganizacionId)
                 {
+                    string? combustible = vehiculoConsumoDTO.TipoCombustible;
+                    string? categoria = vehiculo.CategoriaVehiculo;
+                    switch (categoria) {
+                        case "N1": if(combustible.Equals("LPG") || combustible.Equals("CNG")) { 
+                                return BadRequest("Los combustibles LPG y CNG no están permitidos para los vehículos de categoría N1"); }
+                            break;
+                        case "N2":
+                        case "N3":
+                        case "M2":
+                        case "M3":
+                            if (combustible.Equals("LPG") || combustible.Equals("CNG"))
+                            {
+                                return BadRequest("El combustible LPG no está permitido para los vehículos de categoría N2, N3, M2 o M3");
+                            }
+                            break;
+                        case "L":
+                            if(!combustible.Equals("E5") || !combustible.Equals("E10") || !combustible.Equals("E85") || !combustible.Equals("E100"))
+                            {
+                                return BadRequest("Para los vehículos de categoría L solo están permitidos los combustibles E5, E10, E85 y E100");
+                            }
+                            break;
+                    }
+
                     VehiculoConsumo vehiculoConsumo = _mapper.Map<VehiculoConsumo>(vehiculoConsumoDTO);
 
-                    vehiculoConsumo.Consumo = Calculo.CalculoConsumoVehiculo(vehiculo, vehiculoConsumo, _context);
+                    vehiculoConsumo.Consumo = CalculoVehiculo.CalculoConsumoVehiculo(vehiculo, vehiculoConsumo, _context);
                     vehiculoConsumo.VehiculoRef = vehiculo;
                     vehiculoConsumo.VehiculoId = vehiculo.Id;
 

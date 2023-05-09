@@ -5,11 +5,11 @@ using API.Enumerables;
 
 namespace API.Calculos
 {
-    public class Calculo
+    public class CalculoVehiculo
     {
         public static float CalculoConsumoVehiculo(Vehiculo vehiculo, VehiculoConsumo consumoVehiculo, DatabaseContext context)
         {
-            string? tipo = vehiculo.TipoCombustible;
+            string? tipo = consumoVehiculo.TipoCombustible;
             float cantidad = consumoVehiculo.CantidadCombustible;
             string? sfactor = "0";
 
