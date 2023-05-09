@@ -1,5 +1,4 @@
-﻿using API.Enumerables;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models.Master_Tables

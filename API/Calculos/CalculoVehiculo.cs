@@ -1,8 +1,6 @@
 ﻿using API.Models;
 using API.Models.Consumos;
 using API.Models.Context;
-using API.Enumerables;
-
 namespace API.Calculos
 {
     public class CalculoVehiculo

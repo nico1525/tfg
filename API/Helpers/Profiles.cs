@@ -22,13 +22,18 @@ namespace API.Helpers
 
             CreateMap<VehiculoConsumo, VehiculoConsumoDTO>();
             CreateMap<VehiculoConsumoCreateDTO, VehiculoConsumo>();
-            CreateMap<VehiculoConsumoModifyDTO, VehiculoConsumo>();
 
             CreateMap<Transporte, TransporteDTO>();
             CreateMap<TransporteCreateDTO, Transporte>();
 
             CreateMap<TransporteConsumo, TransporteConsumoDTO>();
             CreateMap<TransporteConsumoCreateDTO, TransporteConsumo>();
+
+            CreateMap<EmisionesFugitivas, EmisionesFugitivasDTO>();
+            CreateMap<EmisionesFugitivasDTO, EmisionesFugitivas>();
+
+            CreateMap<EmisionesFugitivas, EmisionesFugitivasDTO>();
+            CreateMap<EmisionesFugitivasDTO, EmisionesFugitivas>();
         }
     }
 }
