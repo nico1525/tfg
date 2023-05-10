@@ -5,9 +5,9 @@ using AutoMapper;
 
 namespace API.Helpers
 {
-    public class OrganizacionProfile : Profile
+    public class AllProfiles : Profile
     {
-        public OrganizacionProfile()
+        public AllProfiles()
         {
             CreateMap<Organizacion, OrganizacionDTO>();
             CreateMap<OrganizacionCreateDTO, Organizacion>();
@@ -40,6 +40,12 @@ namespace API.Helpers
 
             CreateMap<MaquinariaConsumo, MaquinariaConsumoDTO>();
             CreateMap<MaquinariaConsumoCreateDTO, MaquinariaConsumo>();
+
+            CreateMap<InstalacionesFijas, InstalacionesFijasDTO>();
+            CreateMap<InstalacionesFijasCreateDTO, InstalacionesFijas>();
+
+            CreateMap<InstalacionesFijasConsumo, InstalacionesFijasConsumoDTO>();
+            CreateMap<InstalacionesFijasConsumoCreateDTO, InstalacionesFijasConsumo>();
         }
     }
 }

@@ -27,13 +27,18 @@ namespace API.Models.Context
         public DbSet<EmisionesFugitivas> EmisionesFugitivas { get; set; } = null!;
         public DbSet<EmisionesFugitivasConsumo> EmisionesFugitivasConsumo { get; set; } = null!;
 
+        public DbSet<InstalacionesFijas> InstalacionesFijas { get; set; } = null!;
+        public DbSet<InstalacionesFijasConsumo> InstalacionesFijasConsumo { get; set; } = null!;
+
+
+
 
 
         public DbSet<FactorEmisionVehiculo> FactorEmisionVehiculo { get; set; } = null!;
         public DbSet<FactorEmisionTransporte> FactorEmisionTransporte { get; set; } = null!;
         public DbSet<FactorEmisionesFugitivas> FactorEmisionesFugitivas { get; set; } = null!;
         public DbSet<FactorEmisionMaquinaria> FactorEmisionMaquinaria { get; set; } = null!;
-
+        public DbSet<FactorInstalacionesFijas> FactorInstalacionesFijas { get; set; } = null!;
 
 
 
@@ -48,6 +53,7 @@ namespace API.Models.Context
             builder.Entity<FactorEmisionTransporte>().HasNoKey();
             builder.Entity<FactorEmisionesFugitivas>().HasNoKey();
             builder.Entity<FactorEmisionMaquinaria>().HasNoKey();
+            builder.Entity<FactorInstalacionesFijas>().HasNoKey();
         }
 
     }

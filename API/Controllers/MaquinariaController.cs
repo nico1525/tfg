@@ -63,7 +63,7 @@ namespace API.Controllers
                 }
 
                 if (maquinaria.Edificio != null) maquinariaChange.Edificio = maquinaria.Edificio;
-                if (maquinaria.NombreMaquinaria != null) maquinariaChange.NombreMaquinaria = maquinaria.NombreMaquinaria;
+                if (maquinaria.Nombre != null) maquinariaChange.Nombre = maquinaria.Nombre;
 
                 await _context.SaveChangesAsync();
 

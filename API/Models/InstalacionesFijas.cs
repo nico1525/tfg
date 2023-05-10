@@ -1,39 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Models
 {
-    public class Maquinaria
+    public class InstalacionesFijas
     {
         [Key]
         public int Id { get; set; }
         public string? Edificio { get; set; }
         public string? Nombre { get; set; }
-        public string? TipoMaquinaria { get; set; }
         [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
         public Organizacion? OrganizacionRef { get; set; }
     }
 
-    public class MaquinariaDTO
+    public class InstalacionesFijasDTO
     {
         public int Id { get; set; }
         public string? Edificio { get; set; }
         public string? Nombre { get; set; }
-        public string? TipoMaquinaria { get; set; }
     }
 
-    public class MaquinariaCreateDTO
+    public class InstalacionesFijasCreateDTO
     {
         public string? Edificio { get; set; }
-        public string? Nombre { get; set; }
 
-        [Required(ErrorMessage = "El tipo de maquinaria es obligatorio")]
-        [RegularExpression("agricola|forestal|industrial", ErrorMessage = "El tipo de maquinaria es incorrecto")]
-        public string? TipoMaquinaria { get; set; }
+        [Required(ErrorMessage = "Debes poner un nombre a la instalación fija que vas a añadir")]
+        public string? Nombre { get; set; }
     }
 
-    public class MaquinariaModifyDTO
+    public class InstalacionesFijasModifyDTO
     {
         public string? Edificio { get; set; }
         public string? Nombre { get; set; }
