@@ -105,8 +105,15 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("La fecha final debe ser superior a la fecha inicial");
                 }
-                instalacionesFijaChange.Consumo = CalculoInstalacionesFijas.CalculoConsumoInstalacionesFijas(instalacionesFijaChange, _context);
 
+                try
+                {
+                    instalacionesFijaChange.Consumo = CalculoInstalacionesFijas.CalculoConsumoInstalacionesFijas(instalacionesFijaChange, _context);
+                }
+                catch (NullReferenceException ex)
+                {
+                    return BadRequest("Este Tipo de combustible no es válido");
+                }
                 await _context.SaveChangesAsync();
 
                 return Ok("Consumo de instalación fija con Id: " + instalacionesFija.Id + " modificado correctamente");
@@ -132,14 +139,19 @@ namespace API.Controllers.ControllersConsumo
                 if (instalacionesFijaConsumoDTO.InstalacionesFijasId == instalacionesFija.Id && instalacionesFija.OrganizacionId == currentUser.OrganizacionId)
                 {
                     InstalacionesFijasConsumo instalacionesFijaConsumo = _mapper.Map<InstalacionesFijasConsumo>(instalacionesFijaConsumoDTO);
-
-                    instalacionesFijaConsumo.Consumo = CalculoInstalacionesFijas.CalculoConsumoInstalacionesFijas(instalacionesFijaConsumo, _context);
+                    try { 
+                        instalacionesFijaConsumo.Consumo = CalculoInstalacionesFijas.CalculoConsumoInstalacionesFijas(instalacionesFijaConsumo, _context);
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        return BadRequest("Este Tipo de combustible no es válido");
+                    }
                     instalacionesFijaConsumo.InstalacionesFijasRef = instalacionesFija;
                     instalacionesFijaConsumo.InstalacionesFijasId = instalacionesFija.Id;
 
                     _context.InstalacionesFijasConsumo.Add(instalacionesFijaConsumo);
                     await _context.SaveChangesAsync();
-                    return Ok("Consumo para instalación fija con Id: " + instalacionesFija.Id + "creado correctamente");
+                    return Ok("Consumo para instalación fija con Id: " + instalacionesFija.Id + " creado correctamente");
                 }
 
             }

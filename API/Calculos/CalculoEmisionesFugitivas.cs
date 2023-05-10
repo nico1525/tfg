@@ -12,7 +12,7 @@ namespace API.Calculos
             string? sfactor = "0";
 
             sfactor = context.FactorEmisionesFugitivas.Where(q => q.Nombre == tipo || q.FormulaQuimica == tipo).FirstOrDefault().PCA;     
-            //capturar aquí error de nombre o formula del gas
+
             float factor = float.Parse(sfactor);
 
             float res = factor * cantidad;

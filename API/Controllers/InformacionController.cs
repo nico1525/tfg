@@ -49,6 +49,45 @@ namespace API.Controllers
             };
             return transporte;
         }
+
+        [HttpGet("combustibleinstalacionesfijas")]
+        public CombustibleFijas GetTipoCombustibleInstalacionesFijas()
+        {
+            CombustibleFijas tr = new()
+            {
+                tipo = "Instalaciones Fijas",
+                TipoCombustible = new List<string?>() { "gasoleoc",
+                                                        "gasoleob",
+                                                        "gasnatural",
+                                                        "fueloleo",
+                                                        "LPG",
+                                                        "queroseno",
+                                                        "gaspropano",
+                                                        "gasbutano",
+                                                        "gasmanufacturado",
+                                                        "biogas",
+                                                       "biomasamadera",
+                                                        "biomasapellets",
+                                                        "biomasaastillas",
+                                                        "biomasaserrinesvirutas",
+                                                        "biomasacascaraf.secos",
+                                                        "biomasahuesoaceituna",
+                                                        "carbonvegetal",
+                                                        "coquedepetroleo",
+                                                        "coquedecarbon",
+                                                        "hullayantracita",
+                                                        "hullassubituminosas"}
+            };
+            return tr;
+
+        }
+    }
+
+    public class CombustibleFijas
+    {
+        public string? tipo { get; set; }
+        public List<string?>? TipoCombustible { get; set; }
+
     }
 
     public class TipoTransporte {

@@ -100,8 +100,15 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("La fecha final debe ser superior a la fecha inicial");
                 }
-                emisionesChange.Consumo = CalculoEmisionesFugitivas.CalculoConsumoEmisionesFugitivas(emisionesChange, _context);
 
+                try
+                {
+                    emisionesChange.Consumo = CalculoEmisionesFugitivas.CalculoConsumoEmisionesFugitivas(emisionesChange, _context);
+                }
+                catch (NullReferenceException ex)
+                {
+                    return BadRequest("Este Tipo de Gas no es válido");
+                }
                 await _context.SaveChangesAsync();
 
                 return Ok("Consumo del equipo o fuga con Id: " + emisiones.Id + " modificado correctamente");
@@ -127,8 +134,14 @@ namespace API.Controllers.ControllersConsumo
                 if (emisionesConsumoDTO.EmisionesFugitivasId == emisiones.Id && emisiones.OrganizacionId == currentUser.OrganizacionId)
                 {
                     EmisionesFugitivasConsumo emisionesConsumo = _mapper.Map<EmisionesFugitivasConsumo>(emisionesConsumoDTO);
-
-                    emisionesConsumo.Consumo = CalculoEmisionesFugitivas.CalculoConsumoEmisionesFugitivas(emisionesConsumo, _context);
+                    try
+                    {
+                        emisionesConsumo.Consumo = CalculoEmisionesFugitivas.CalculoConsumoEmisionesFugitivas(emisionesConsumo, _context);
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        return BadRequest("Este Tipo de Gas no es válido");
+                    }
                     emisionesConsumo.EmisionesFugitivasRef = emisiones;
                     emisionesConsumo.EmisionesFugitivasId = emisiones.Id;
 

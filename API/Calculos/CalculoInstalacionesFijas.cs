@@ -13,7 +13,7 @@ namespace API.Calculos
             string? sfactor = "0";
 
             sfactor = context.FactorInstalacionesFijas.Where(q => q.Tipo == tipo).FirstOrDefault().factor;
-            //capturar error aquí
+
             float factor = float.Parse(sfactor);
 
             float res = factor * cantidad;
