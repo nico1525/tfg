@@ -34,13 +34,13 @@ namespace API.Controllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             List<Vehiculo> listatodosvehiculos = await _context.Vehiculo.ToListAsync();
-            List<TransporteDTO> listavehiculosorg = new();
+            List<VehiculoDTO> listavehiculosorg = new();
 
             foreach (var vehiculo in listatodosvehiculos)
             {
                 if(vehiculo.OrganizacionId == currentUser.OrganizacionId)
                 {
-                    TransporteDTO vehiculoDTO = _mapper.Map<TransporteDTO>(vehiculo);
+                    VehiculoDTO vehiculoDTO = _mapper.Map<VehiculoDTO>(vehiculo);
                     listavehiculosorg.Add(vehiculoDTO);
                 }
             }

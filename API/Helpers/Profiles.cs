@@ -17,23 +17,29 @@ namespace API.Helpers
             CreateMap<LoginRequest, Usuario>();
             CreateMap<Usuario, LoginUserResponse>();
 
-            CreateMap<Vehiculo, TransporteDTO>();
+            CreateMap<Vehiculo, VehiculoDTO>();
             CreateMap<VehiculoCreateDTO, Vehiculo>();
 
             CreateMap<VehiculoConsumo, VehiculoConsumoDTO>();
             CreateMap<VehiculoConsumoCreateDTO, VehiculoConsumo>();
 
-            CreateMap<Transporte, TransporteDTO>();
+            CreateMap<Transporte, VehiculoDTO>();
             CreateMap<TransporteCreateDTO, Transporte>();
 
             CreateMap<TransporteConsumo, TransporteConsumoDTO>();
             CreateMap<TransporteConsumoCreateDTO, TransporteConsumo>();
 
             CreateMap<EmisionesFugitivas, EmisionesFugitivasDTO>();
-            CreateMap<EmisionesFugitivasDTO, EmisionesFugitivas>();
+            CreateMap<EmisionesFugitivasCreateDTO, EmisionesFugitivas>();
 
-            CreateMap<EmisionesFugitivas, EmisionesFugitivasDTO>();
-            CreateMap<EmisionesFugitivasDTO, EmisionesFugitivas>();
+            CreateMap<EmisionesFugitivasConsumo, EmisionesFugitivasConsumoDTO>();
+            CreateMap<EmisionesFugitivasConsumoCreateDTO, EmisionesFugitivasConsumo>();
+
+            CreateMap<Maquinaria, MaquinariaDTO>();
+            CreateMap<MaquinariaCreateDTO, Maquinaria>();
+
+            CreateMap<MaquinariaConsumo, MaquinariaConsumoDTO>();
+            CreateMap<MaquinariaConsumoCreateDTO, MaquinariaConsumo>();
         }
     }
 }

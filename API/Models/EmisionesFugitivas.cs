@@ -19,7 +19,7 @@ namespace API.Models
     {
         public string? Edificio { get; set; }
 
-        [Required(ErrorMessage = "El nombre del equipo de refrigeración/climatización es obligatorio")]
+        [Required(ErrorMessage = "El nombre del equipo de refrigeración/climatización o fuga es obligatorio")]
         public string? NombreEquipo { get; set; }
     }
 

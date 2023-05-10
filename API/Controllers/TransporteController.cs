@@ -14,7 +14,7 @@ using API.Authorization;
 namespace API.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/Organizacion/[controller]")]
     [ApiController]
     public class TransporteController : ControllerBase
     {

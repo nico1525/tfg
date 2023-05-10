@@ -1,9 +1,4 @@
-﻿using API.Authorization;
-using API.Helpers;
-using API.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -40,11 +35,32 @@ namespace API.Controllers
             };
             return transporte;
         }
+
+        [HttpGet("combustiblemaquinaria")]
+        public List<TipoMaquinaria> GetTipoCombustibleMaquinaria()
+        {
+            TipoMaquinaria tr = new() { TipoCombustible = new List<string?>() { "gasoleoB", "B7", "B10", "B20", "B30", "B100" }, Maquinaria = "agricola" };
+            TipoMaquinaria tr1 = new() { TipoCombustible = new List<string?>() { "gasoleoB", "E5", "E10", "E85", "E100", "B7", "B10", "B20", "B30", "B100" }, Maquinaria = "forestal" };
+            TipoMaquinaria tr2 = new() { TipoCombustible = new List<string?>() { "gasoleoB", "E5", "E10", "E85", "E100", "B7", "B10", "B20", "B30", "B100" }, Maquinaria = "industrial" };
+            List<TipoMaquinaria> transporte = new() {
+                tr,
+                tr1,
+                tr2
+            };
+            return transporte;
+        }
     }
 
     public class TipoTransporte {
         public string? Transporte { get; set; }
         public List<string?>? TipoCombustible { get; set; }
        
+    }
+
+    public class TipoMaquinaria
+    {
+        public string? Maquinaria { get; set; }
+        public List<string?>? TipoCombustible { get; set; }
+
     }
 }

@@ -15,7 +15,7 @@ using API.Authorization;
 namespace API.Controllers.ControllersConsumo
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/Organizacion/Transporte/Consumo")]
     [ApiController]
     public class TransporteConsumoController : ControllerBase
     {
@@ -94,10 +94,6 @@ namespace API.Controllers.ControllersConsumo
                 if (currentUser.OrganizacionId != transporte.OrganizacionId)
                 {
                     return BadRequest("Este consumo de transporte no pertenece a esta organización");
-                }
-                if (DateTime.Compare(transporteConsumo.FechaInicio, transporteConsumo.FechaFin) > 0)
-                {
-                    return BadRequest("La fecha final debe ser superior a la fecha inicial");
                 }
                 if (transporteConsumo.Edificio != null) transporteChange.Edificio = transporteConsumo.Edificio;
                 if (transporteConsumo.CantidadCombustible > 0) transporteChange.CantidadCombustible = transporteConsumo.CantidadCombustible;

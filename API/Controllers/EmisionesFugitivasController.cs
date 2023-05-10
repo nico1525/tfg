@@ -2,118 +2,124 @@
 using Microsoft.EntityFrameworkCore;
 using API.Models;
 using API.Models.Context;
+using API.Helpers;
+using AutoMapper;
+using API.Authorization;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/Organizacion/[controller]")]
     [ApiController]
     public class EmisionesFugitivasController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public EmisionesFugitivasController(DatabaseContext context)
+        public EmisionesFugitivasController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: api/EmisionesFugitivas
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmisionesFugitivas>>> GetEmisionesFugitivas()
+        public async Task<ActionResult<IEnumerable<object>>> GetEmisionesFugitivas()
         {
-          if (_context.EmisionesFugitivas == null)
-          {
-              return NotFound();
-          }
-            return await _context.EmisionesFugitivas.ToListAsync();
-        }
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-        // GET: api/EmisionesFugitivas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EmisionesFugitivas>> GetEmisionesFugitivas(int id)
-        {
-          if (_context.EmisionesFugitivas == null)
-          {
-              return NotFound();
-          }
-            var emisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(id);
+            List<EmisionesFugitivas> listatodosemisioness = await _context.EmisionesFugitivas.ToListAsync();
+            List<EmisionesFugitivasDTO> listaemisionessorg = new();
 
-            if (emisionesFugitivas == null)
+            foreach (var emisiones in listatodosemisioness)
             {
-                return NotFound();
+                if (emisiones.OrganizacionId == currentUser.OrganizacionId)
+                {
+                    EmisionesFugitivasDTO emisionesDTO = _mapper.Map<EmisionesFugitivasDTO>(emisiones);
+                    listaemisionessorg.Add(emisionesDTO);
+                }
             }
 
-            return emisionesFugitivas;
+            if (currentUser.Role != Role.SuperAdmin) { return listaemisionessorg; }
+            else { return listatodosemisioness; }
+
         }
 
-        // PUT: api/EmisionesFugitivas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmisionesFugitivas(int id, EmisionesFugitivas emisionesFugitivas)
+        public async Task<IActionResult> PutEmisionesFugitivas(int id, EmisionesFugitivasModifyDTO emisiones)
         {
-            if (id != emisionesFugitivas.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(emisionesFugitivas).State = EntityState.Modified;
-
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
             try
             {
+                var emisionesChange = await _context.EmisionesFugitivas.FindAsync(id);
+                if (currentUser.OrganizacionId != emisionesChange.OrganizacionId)
+                {
+                    return BadRequest("Este equipo o fuga no existe o no pertenece a esta organización");
+                }
+                if (emisiones.Edificio != null) emisionesChange.Edificio = emisiones.Edificio;
+                if (emisiones.NombreEquipo != null) emisionesChange.NombreEquipo = emisiones.NombreEquipo;
+
                 await _context.SaveChangesAsync();
+
+                return Ok("Equipo o fuga modificado correctamente");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (NullReferenceException ex)
             {
-                if (!EmisionesFugitivasExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest("El id no corresponde a ningún equipo o fuga");
             }
-
-            return NoContent();
         }
 
-        // POST: api/EmisionesFugitivas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<EmisionesFugitivas>> PostEmisionesFugitivas(EmisionesFugitivas emisionesFugitivas)
+        public async Task<ActionResult<EmisionesFugitivas>> PostEmisionesFugitivas(EmisionesFugitivasCreateDTO emisionesDTO)
         {
-          if (_context.EmisionesFugitivas == null)
-          {
-              return Problem("Entity set 'DatabaseContext.EmisionesFugitivas'  is null.");
-          }
-            _context.EmisionesFugitivas.Add(emisionesFugitivas);
-            await _context.SaveChangesAsync();
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-            return CreatedAtAction("GetEmisionesFugitivas", new { id = emisionesFugitivas.Id }, emisionesFugitivas);
+            EmisionesFugitivas emisiones = _mapper.Map<EmisionesFugitivas>(emisionesDTO);
+
+            emisiones.OrganizacionId = currentUser.OrganizacionId;
+            emisiones.OrganizacionRef = currentUser.OrganizacionRef;
+            _context.EmisionesFugitivas.Add(emisiones);
+            await _context.SaveChangesAsync();
+            return Ok("Equipo de refrigeración/climatización o fuga de gas añadido creado correctamente");
         }
 
-        // DELETE: api/EmisionesFugitivas/5
+        [Authorize(Role.OrgAdmin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmisionesFugitivas(int id)
         {
-            if (_context.EmisionesFugitivas == null)
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            try
             {
-                return NotFound();
+                var emisionesDelete = await _context.EmisionesFugitivas.FindAsync(id);
+                if (currentUser.OrganizacionId != emisionesDelete.OrganizacionId)
+                {
+                    return BadRequest("Este equipo o fuga no existe o no pertenece a esta organización");
+                }
+                _context.EmisionesFugitivas.Remove(emisionesDelete);
+                await _context.SaveChangesAsync();
+
+                return Ok("Equipo o fuga eliminado correctamente");
             }
-            var emisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(id);
-            if (emisionesFugitivas == null)
+            catch (NullReferenceException ex)
             {
-                return NotFound();
+                return BadRequest("El id no corresponde a ningún equipo o fuga");
             }
-
-            _context.EmisionesFugitivas.Remove(emisionesFugitivas);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
-        private bool EmisionesFugitivasExists(int id)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [Authorize(Role.SuperAdmin)]
+        [HttpDelete("all")]
+        public async Task<IActionResult> DeleteAllEmisionesFugitivass()
         {
-            return (_context.EmisionesFugitivas?.Any(e => e.Id == id)).GetValueOrDefault();
+            List<EmisionesFugitivas> emisioneslist = await _context.EmisionesFugitivas.ToListAsync();
+
+            foreach (var emisiones in emisioneslist)
+            {
+                _context.EmisionesFugitivas.Remove(emisiones);
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok("Todos los equipos o fugas eliminados correctamente");
         }
     }
 }

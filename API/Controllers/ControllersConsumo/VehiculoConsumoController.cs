@@ -89,10 +89,6 @@ namespace API.Controllers.ControllersConsumo
             {
                 return BadRequest("Este consumo de vehiculo no pertenece a esta organización");
             }
-            if (DateTime.Compare(vehiculoConsumo.FechaInicio, vehiculoConsumo.FechaFin) > 0)
-            {
-                return BadRequest("La fecha final debe ser superior a la fecha inicial");
-            }
             if (vehiculoConsumo.Edificio != null) vehiculoChange.Edificio = vehiculoConsumo.Edificio;
             if (vehiculoConsumo.TipoCombustible != null) vehiculoChange.TipoCombustible = vehiculoConsumo.TipoCombustible;
             if (vehiculoConsumo.CantidadCombustible > 0) vehiculoChange.CantidadCombustible = vehiculoConsumo.CantidadCombustible;

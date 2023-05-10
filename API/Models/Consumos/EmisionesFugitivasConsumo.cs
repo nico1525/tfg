@@ -17,14 +17,14 @@ namespace API.Models.Consumos
         [ForeignKey("EmisionesFugitivas")]
         public int EmisionesFugitivasId { get; set; }
         [JsonIgnore]
-        public Transporte? EmisionesFugitivasRef { get; set; }
+        public EmisionesFugitivas? EmisionesFugitivasRef { get; set; }
     }
 
     public class EmisionesFugitivasConsumoCreateDTO
     {
         public string? Edificio { get; set; }
 
-        [RegularExpression("E5|qq", ErrorMessage = "El Tipo de Gas es incorrecto")] ///////////////////////////////////////////////////////////////////////////////////
+        [Required(ErrorMessage = "El nombre o fórmula del gas es obligatorio")]
         public string? Gas { get; set; }
 
         [Required(ErrorMessage = "La cantidad de recarga o uso del gas es obligatorio")]
@@ -36,7 +36,7 @@ namespace API.Models.Consumos
         [Required(ErrorMessage = "La fecha de fin es obligatoria")]
         public DateTime FechaFin { get; set; }
 
-        [Required(ErrorMessage = "El Id del equipo al que asignarle un consumo es obligatorio")]
+        [Required(ErrorMessage = "El Id del equipo o fuga al que asignarle un consumo es obligatorio")]
         public int EmisionesFugitivasId { get; set; }
     }
 
@@ -56,8 +56,6 @@ namespace API.Models.Consumos
     {
         public string? Edificio { get; set; }
         public int Recarga { get; set; }
-
-        [RegularExpression("E5|qq", ErrorMessage = "El Tipo de Gas es incorrecto")] ///////////////////////////////////////////////////////////////////////////////////
         public string? Gas { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }

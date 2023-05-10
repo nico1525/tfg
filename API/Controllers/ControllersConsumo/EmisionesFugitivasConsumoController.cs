@@ -2,118 +2,165 @@
 using Microsoft.EntityFrameworkCore;
 using API.Models.Consumos;
 using API.Models.Context;
+using API.Authorization;
+using API.Calculos;
+using API.Models;
+using AutoMapper;
 
 namespace API.Controllers.ControllersConsumo
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/Organizacion/EmisionesFugitivas/Consumo")]
     [ApiController]
     public class EmisionesFugitivasConsumoController : ControllerBase
     {
         private readonly DatabaseContext _context;
+        private readonly IMapper _mapper;
 
-        public EmisionesFugitivasConsumoController(DatabaseContext context)
+        public EmisionesFugitivasConsumoController(DatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        // GET: api/EmisionesFugitivasConsumoes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmisionesFugitivasConsumo>>> GetEmisionesFugitivasConsumo()
+        public async Task<ActionResult<IEnumerable<EmisionesFugitivasConsumoDTO>>> GetEmisionesFugitivasConsumo()
         {
-          if (_context.EmisionesFugitivasConsumo == null)
-          {
-              return NotFound();
-          }
-            return await _context.EmisionesFugitivasConsumo.ToListAsync();
+            //Devuelve todos los consumos de emisiones de la empresa
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var listconsumos = await _context.EmisionesFugitivasConsumo.ToListAsync();
+            List<EmisionesFugitivasConsumoDTO> orgConsumoList = new();
+            foreach (var item in listconsumos)
+            {
+                var emisiones = await _context.EmisionesFugitivas.FindAsync(item.EmisionesFugitivasId);
+
+                if (emisiones.OrganizacionId == currentUser.OrganizacionId)
+                {
+                    EmisionesFugitivasConsumoDTO emisionesConsumo = _mapper.Map<EmisionesFugitivasConsumoDTO>(item);
+                    orgConsumoList.Add(emisionesConsumo);
+                }
+            }
+            return orgConsumoList;
         }
 
-        // GET: api/EmisionesFugitivasConsumoes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EmisionesFugitivasConsumo>> GetEmisionesFugitivasConsumo(int id)
+        [HttpGet("{emisionesid}")]
+        public async Task<ActionResult<IEnumerable<EmisionesFugitivasConsumoDTO>>> GetEmisionesFugitivasConsumo(int id)
         {
-          if (_context.EmisionesFugitivasConsumo == null)
-          {
-              return NotFound();
-          }
-            var emisionesFugitivasConsumo = await _context.EmisionesFugitivasConsumo.FindAsync(id);
-
-            if (emisionesFugitivasConsumo == null)
-            {
-                return NotFound();
-            }
-
-            return emisionesFugitivasConsumo;
-        }
-
-        // PUT: api/EmisionesFugitivasConsumoes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmisionesFugitivasConsumo(int id, EmisionesFugitivasConsumo emisionesFugitivasConsumo)
-        {
-            if (id != emisionesFugitivasConsumo.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(emisionesFugitivasConsumo).State = EntityState.Modified;
-
+            //Devuelve todos los consumos de un emisiones
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
             try
             {
-                await _context.SaveChangesAsync();
+                var emisiones = await _context.EmisionesFugitivas.FindAsync(id);
+                var listconsumos = await _context.EmisionesFugitivasConsumo.ToListAsync();
+
+                if (currentUser.OrganizacionId != emisiones.OrganizacionId)
+                {
+                    return BadRequest("Este equipo o fuga no pertenece a esta organización");
+                }
+                List<EmisionesFugitivasConsumoDTO> orgConsumoList = new();
+
+                foreach (var item in listconsumos)
+                {
+                    var emisionesref = await _context.EmisionesFugitivas.FindAsync(item.EmisionesFugitivasId);
+                    if (emisionesref.Id == id)
+                    {
+                        EmisionesFugitivasConsumoDTO emisionesConsumo = _mapper.Map<EmisionesFugitivasConsumoDTO>(item);
+                        orgConsumoList.Add(emisionesConsumo);
+                    }
+                }
+                return orgConsumoList;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (NullReferenceException ex)
             {
-                if (!EmisionesFugitivasConsumoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest("El id no corresponde a ningún equipo o fuga");
             }
-
-            return NoContent();
         }
 
-        // POST: api/EmisionesFugitivasConsumoes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<EmisionesFugitivasConsumo>> PostEmisionesFugitivasConsumo(EmisionesFugitivasConsumo emisionesFugitivasConsumo)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutEmisionesFugitivasConsumo(int id, EmisionesFugitivasConsumoModifyDTO emisionesConsumo)
         {
-          if (_context.EmisionesFugitivasConsumo == null)
-          {
-              return Problem("Entity set 'DatabaseContext.EmisionesFugitivasConsumo'  is null.");
-          }
-            _context.EmisionesFugitivasConsumo.Add(emisionesFugitivasConsumo);
-            await _context.SaveChangesAsync();
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            try
+            {
+                var emisionesChange = await _context.EmisionesFugitivasConsumo.FindAsync(id);
 
-            return CreatedAtAction("GetEmisionesFugitivasConsumo", new { id = emisionesFugitivasConsumo.Id }, emisionesFugitivasConsumo);
+                var emisiones = await _context.EmisionesFugitivas.FindAsync(emisionesChange.EmisionesFugitivasId);
+                DateTime test = new DateTime(1, 1, 1, 0, 0, 0, 0);
+                if (currentUser.OrganizacionId != emisiones.OrganizacionId)
+                {
+                    return BadRequest("Este consumo de equipo o fuga no pertenece a esta organización");
+                }
+                if (emisionesConsumo.Edificio != null) emisionesChange.Edificio = emisionesConsumo.Edificio;
+                if (emisionesConsumo.Gas != null) emisionesChange.Gas = emisionesConsumo.Gas;
+                if (emisionesConsumo.Recarga > 0) emisionesChange.Recarga = emisionesConsumo.Recarga;
+                if (emisionesConsumo.FechaInicio != test) emisionesChange.FechaInicio = emisionesConsumo.FechaInicio;
+                if (emisionesConsumo.FechaFin != test) emisionesChange.FechaFin = emisionesConsumo.FechaFin;
+
+                if (DateTime.Compare(emisionesChange.FechaInicio, emisionesChange.FechaFin) > 0)
+                {
+                    return BadRequest("La fecha final debe ser superior a la fecha inicial");
+                }
+                emisionesChange.Consumo = CalculoEmisionesFugitivas.CalculoConsumoEmisionesFugitivas(emisionesChange, _context);
+
+                await _context.SaveChangesAsync();
+
+                return Ok("Consumo del equipo o fuga con Id: " + emisiones.Id + " modificado correctamente");
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest("El id no corresponde a ningún consumo de equipo o fuga");
+            }
         }
 
-        // DELETE: api/EmisionesFugitivasConsumoes/5
+        [HttpPost]
+        public async Task<ActionResult<EmisionesFugitivasConsumo>> PostEmisionesFugitivasConsumo(EmisionesFugitivasConsumoCreateDTO emisionesConsumoDTO)
+        {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+
+            if (DateTime.Compare(emisionesConsumoDTO.FechaInicio, emisionesConsumoDTO.FechaFin) > 0)
+            {
+                return BadRequest("La fecha final debe ser superior a la fecha inicial");
+            }
+            List<EmisionesFugitivas> listemisioness = await _context.EmisionesFugitivas.ToListAsync();
+            foreach (var emisiones in listemisioness)
+            {
+                if (emisionesConsumoDTO.EmisionesFugitivasId == emisiones.Id && emisiones.OrganizacionId == currentUser.OrganizacionId)
+                {
+                    EmisionesFugitivasConsumo emisionesConsumo = _mapper.Map<EmisionesFugitivasConsumo>(emisionesConsumoDTO);
+
+                    emisionesConsumo.Consumo = CalculoEmisionesFugitivas.CalculoConsumoEmisionesFugitivas(emisionesConsumo, _context);
+                    emisionesConsumo.EmisionesFugitivasRef = emisiones;
+                    emisionesConsumo.EmisionesFugitivasId = emisiones.Id;
+
+                    _context.EmisionesFugitivasConsumo.Add(emisionesConsumo);
+                    await _context.SaveChangesAsync();
+                    return Ok("Consumo de equipo o fuga creado correctamente");
+                }
+
+            }
+            return BadRequest("No existe un equipo o fuga con este id registrado en tu empresa");
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmisionesFugitivasConsumo(int id)
         {
-            if (_context.EmisionesFugitivasConsumo == null)
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            try
             {
-                return NotFound();
+                var emisionesDelete = await _context.EmisionesFugitivasConsumo.FindAsync(id);
+                if (currentUser.OrganizacionId != emisionesDelete.EmisionesFugitivasRef.OrganizacionId)
+                {
+                    return BadRequest("Este consumo de equipo o fuga no existe o no pertenece a esta organización");
+                }
+                _context.EmisionesFugitivasConsumo.Remove(emisionesDelete);
+                await _context.SaveChangesAsync();
+
+                return Ok("Consumo de equipo o fuga eliminado correctamente");
             }
-            var emisionesFugitivasConsumo = await _context.EmisionesFugitivasConsumo.FindAsync(id);
-            if (emisionesFugitivasConsumo == null)
+            catch (NullReferenceException ex)
             {
-                return NotFound();
+                return BadRequest("El id no corresponde a ningún consumo de equipo o fuga");
             }
-
-            _context.EmisionesFugitivasConsumo.Remove(emisionesFugitivasConsumo);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool EmisionesFugitivasConsumoExists(int id)
-        {
-            return (_context.EmisionesFugitivasConsumo?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
