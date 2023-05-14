@@ -30,6 +30,8 @@ namespace API.Models.Context
         public DbSet<InstalacionesFijas> InstalacionesFijas { get; set; } = null!;
         public DbSet<InstalacionesFijasConsumo> InstalacionesFijasConsumo { get; set; } = null!;
 
+        public DbSet<OtrosConsumos> OtrosConsumos { get; set; } = null!;
+
 
 
 

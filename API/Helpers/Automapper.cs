@@ -46,6 +46,10 @@ namespace API.Helpers
 
             CreateMap<InstalacionesFijasConsumo, InstalacionesFijasConsumoDTO>();
             CreateMap<InstalacionesFijasConsumoCreateDTO, InstalacionesFijasConsumo>();
+
+            CreateMap<OtrosConsumos, OtrosConsumosDTO>();
+            CreateMap<OtrosConsumosCreateDTO, OtrosConsumos>();
+
         }
     }
 }
