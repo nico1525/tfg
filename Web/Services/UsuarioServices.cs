@@ -10,11 +10,11 @@ namespace Web.Services
     {
         public Task<IEnumerable<UsuarioDTO>?> GetUsuario();
         public Task<IEnumerable<UsuarioDTO>?> GetAllUsuario();
-        public Task<ActionResult<Usuario>> RegistrarUsuario(UsuarioCreateDTO org);
+        public Task<string> RegistrarUsuario(UsuarioCreateDTO org);
         public Task<LoginUserResponse?> LoginUsuario(LoginRequest org);
-        public Task<IActionResult> DeleteUsuario(string id);
-        public Task<IActionResult?> UpdateUsuarioActual(UsuarioModifyDTO org);
-        public Task<IActionResult> UpdateUsuarioPorId(string id, UsuarioModifyDTO org);
+        public Task<string> DeleteUsuario(string id);
+        public Task<string?> UpdateUsuarioActual(UsuarioModifyDTO org);
+        public Task<string> UpdateUsuarioPorId(string id, UsuarioModifyDTO org);
     }
 
     public class UsuarioServices : IUsuarioServices
@@ -36,7 +36,7 @@ namespace Web.Services
                 (await _httpClient.GetStreamAsync($"api/Organizacion/Usuario/all"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<ActionResult<Usuario>?> RegistrarUsuario(UsuarioCreateDTO org)
+        public async Task<string> RegistrarUsuario(UsuarioCreateDTO org)
         {
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
@@ -44,7 +44,7 @@ namespace Web.Services
             var response = await _httpClient.PostAsync("api/Organizacion/Usuario/register", orgJson);
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<ActionResult<Usuario>>(await response.Content.ReadAsStreamAsync());
+                return response.Content.ReadAsStringAsync().Result;
             }
             if (!response.IsSuccessStatusCode)
             {
@@ -71,7 +71,7 @@ namespace Web.Services
             return null;
         }
 
-        public async Task<IActionResult> DeleteUsuario(string id)
+        public async Task<string> DeleteUsuario(string id)
         {
             var response = await _httpClient.DeleteAsync("api/Organizacion/Usuario/" + id);
             if (!response.IsSuccessStatusCode)
@@ -80,12 +80,12 @@ namespace Web.Services
             }
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<IActionResult>(await response.Content.ReadAsStreamAsync());
+                return response.Content.ReadAsStringAsync().Result;
             }
             return null;
         }
 
-        public async Task<IActionResult?> UpdateUsuarioActual(UsuarioModifyDTO org)
+        public async Task<string?> UpdateUsuarioActual(UsuarioModifyDTO org)
         {
             var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Usuario", org);
             if (!response.IsSuccessStatusCode)
@@ -94,11 +94,11 @@ namespace Web.Services
             }
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<IActionResult>(await response.Content.ReadAsStreamAsync());
+                return response.Content.ReadAsStringAsync().Result;
             }
             return null;
         }
-        public async Task<IActionResult> UpdateUsuarioPorId(string id, UsuarioModifyDTO org)
+        public async Task<string> UpdateUsuarioPorId(string id, UsuarioModifyDTO org)
         {
             var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Usuario/" + id, org);
             if (!response.IsSuccessStatusCode)
@@ -107,7 +107,7 @@ namespace Web.Services
             }
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<IActionResult>(await response.Content.ReadAsStreamAsync());
+                return response.Content.ReadAsStringAsync().Result;
             }
             return null;
         }

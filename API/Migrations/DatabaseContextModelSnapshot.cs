@@ -130,6 +130,48 @@ namespace API.Migrations
                     b.ToTable("MaquinariaConsumo");
                 });
 
+            modelBuilder.Entity("API.Models.Consumos.OtrosConsumos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CantidadConsumo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CategoriaActividad")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Consumo")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Edificio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("FactorEmision")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrganizacionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizacionId");
+
+                    b.ToTable("OtrosConsumos");
+                });
+
             modelBuilder.Entity("API.Models.Consumos.TransporteConsumo", b =>
                 {
                     b.Property<int>("Id")
@@ -513,6 +555,17 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("MaquinariaRef");
+                });
+
+            modelBuilder.Entity("API.Models.Consumos.OtrosConsumos", b =>
+                {
+                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
+                        .WithMany()
+                        .HasForeignKey("OrganizacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrganizacionRef");
                 });
 
             modelBuilder.Entity("API.Models.Consumos.TransporteConsumo", b =>

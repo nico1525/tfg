@@ -155,6 +155,33 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OtrosConsumos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Edificio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoriaActividad = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CantidadConsumo = table.Column<int>(type: "int", nullable: false),
+                    FactorEmision = table.Column<float>(type: "real", nullable: false),
+                    FechaInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaFin = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Consumo = table.Column<float>(type: "real", nullable: false),
+                    OrganizacionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OtrosConsumos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OtrosConsumos_Organizacion_OrganizacionId",
+                        column: x => x.OrganizacionId,
+                        principalTable: "Organizacion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Transporte",
                 columns: table => new
                 {
@@ -390,6 +417,11 @@ namespace API.Migrations
                 filter: "[NombreOrg] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OtrosConsumos_OrganizacionId",
+                table: "OtrosConsumos",
+                column: "OrganizacionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transporte_OrganizacionId",
                 table: "Transporte",
                 column: "OrganizacionId");
@@ -455,6 +487,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "MaquinariaConsumo");
+
+            migrationBuilder.DropTable(
+                name: "OtrosConsumos");
 
             migrationBuilder.DropTable(
                 name: "TransporteConsumo");

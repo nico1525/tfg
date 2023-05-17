@@ -5,7 +5,8 @@ using API.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string conexion = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=DBTest;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+//string conexion = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=DBTest;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+string conexion = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=tfgLocalDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DatabaseContext>(opt =>
     opt.UseSqlServer(conexion));

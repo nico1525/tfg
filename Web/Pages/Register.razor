@@ -2,6 +2,8 @@
 @using Microsoft.Data.SqlClient;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@inject NavigationManager Navigation
 @page "/registerorg"
 <PageTitle>RegisterOrg</PageTitle>
 
@@ -99,7 +101,6 @@
             <button class="registerbtn" type="submit">Registrarse</button>
             </EditForm>
     </div>
-    <label>@l</label>
     <div class="login">
         <a class="link" href="login">Ya tienes una cuenta? Inicia Sesión.</a>
     </div>
@@ -111,7 +112,7 @@
 
 @code {
     private OrganizacionCreateDTO org = new OrganizacionCreateDTO();
-    string l;
+    string result;
     [Inject]
     public IOrganizacionServices OrganizacionServices { get; set; }
 
@@ -119,11 +120,14 @@
     {
         try
         {
-            await OrganizacionServices.PostOrganizacion(org);
+            result = await OrganizacionServices.PostOrganizacion(org);
         }
         catch (Exception e)
         {
-            l = e.Message;
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
         }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("login");
     }
 }

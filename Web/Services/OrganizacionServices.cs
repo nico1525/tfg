@@ -15,9 +15,9 @@ namespace Web.Services
     public interface IOrganizacionServices
     {
         Task<IEnumerable<OrganizacionDTO>> GetOrg();
-        Task<ActionResult<Organizacion>> PostOrganizacion(OrganizacionCreateDTO org);
-        Task<IActionResult?> DeleteOrganizacion();
-        Task<IActionResult> UpdateOrganizacion(OrganizacionModifyDTO org);
+        Task<string> PostOrganizacion(OrganizacionCreateDTO org);
+        Task<string?> DeleteOrganizacion();
+        Task<string> UpdateOrganizacion(OrganizacionModifyDTO org);
     }
 
     public class OrganizacionServices : IOrganizacionServices
@@ -34,7 +34,7 @@ namespace Web.Services
                 (await _httpClient.GetStreamAsync($"api/Organizacion"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<ActionResult<Organizacion>> PostOrganizacion(OrganizacionCreateDTO org)
+        public async Task<string> PostOrganizacion(OrganizacionCreateDTO org)
         {
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
@@ -42,7 +42,7 @@ namespace Web.Services
                 var response = await _httpClient.PostAsync("api/Organizacion/register", orgJson);
                 if (response.IsSuccessStatusCode)
                 {
-                    return await JsonSerializer.DeserializeAsync<ActionResult<Organizacion>>(await response.Content.ReadAsStreamAsync());
+                return response.Content.ReadAsStringAsync().Result;
                 }
                 if (!response.IsSuccessStatusCode)
                 {
@@ -52,7 +52,7 @@ namespace Web.Services
             return null;
         }
 
-        public async Task<IActionResult> DeleteOrganizacion()
+        public async Task<string> DeleteOrganizacion()
         {
             var response = await _httpClient.DeleteAsync("api/Organizacion");
             if (!response.IsSuccessStatusCode)
@@ -61,12 +61,12 @@ namespace Web.Services
             }
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<IActionResult>(await response.Content.ReadAsStreamAsync());
+                return response.Content.ReadAsStringAsync().Result;
             }
             return null;
         }
 
-        public async Task<IActionResult> UpdateOrganizacion(OrganizacionModifyDTO org)
+        public async Task<string> UpdateOrganizacion(OrganizacionModifyDTO org)
         {
             var response = await _httpClient.PutAsJsonAsync("$api/Organizacion", org);
             if (!response.IsSuccessStatusCode)
@@ -75,7 +75,7 @@ namespace Web.Services
             }
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<IActionResult>(await response.Content.ReadAsStreamAsync());
+                return response.Content.ReadAsStringAsync().Result;
             }
             return null;
         }
