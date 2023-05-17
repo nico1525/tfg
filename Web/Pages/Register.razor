@@ -2,8 +2,8 @@
 @using Microsoft.Data.SqlClient;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
-@page "/register"
-<PageTitle>Register</PageTitle>
+@page "/registerorg"
+<PageTitle>RegisterOrg</PageTitle>
 
 <style>
     #navbar{
@@ -26,13 +26,13 @@
         background-color: #ec8f2f;
         color: white;
         padding: 16px 20px;
-        margin: 8px 0;
+        margin: 10px 0;
         border: none;
         cursor: pointer;
         width: 100%;
         opacity: 0.9;
     }
-    a:hover {
+    .link:hover {
         color: dodgerblue;
     }
     .registerbtn:hover {
@@ -45,7 +45,7 @@
     .input{
         width: 100%;
         padding: 15px;
-        margin: 5px 0 22px 0;
+        margin: 5px 0 22px 0px;
         display: inline-block;
         border: none;
         background: #f1f1f1;
@@ -64,14 +64,14 @@
         margin-bottom: 25px;
     }
     .login{
-        margin: 0 40% 0 40%;
+        margin: 0 35% 0 35%;
     }
 </style>
 
 <body>
     <div id="navbar"> <NavBarNotLogged /></div>
 
-    <div id="text"> <label id="reglabel">Registrarse</label></div>
+    <div id="text"> <label id="reglabel">Registrar Empresa</label></div>
 
     <div class="container">
             <hr>
@@ -101,7 +101,7 @@
     </div>
     <label>@l</label>
     <div class="login">
-        <a href="">Ya tienes una cuenta? Inicia Sesión.</a>
+        <a class="link" href="login">Ya tienes una cuenta? Inicia Sesión.</a>
     </div>
    
 
@@ -110,7 +110,7 @@
 
 
 @code {
-    private Organizacion org = new Organizacion();
+    private OrganizacionCreateDTO org = new OrganizacionCreateDTO();
     string l;
     [Inject]
     public IOrganizacionServices OrganizacionServices { get; set; }

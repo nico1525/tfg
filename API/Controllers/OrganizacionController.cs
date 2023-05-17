@@ -142,7 +142,7 @@ namespace API.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Role.SuperAdmin)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Organizacion>> GetOrganizacionById(int id)
+        public async Task<ActionResult<Organizacion>> DeleteOrganizacionById(int id)
         {
             try { 
             var organizacion = await _context.Organizacion.FindAsync(id);

@@ -7,9 +7,19 @@ using API.Models;
 using Mysqlx.Session;
 using MySqlX.XDevAPI;
 using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Web.Services
 {
+    public interface IOrganizacionServices
+    {
+        Task<IEnumerable<OrganizacionDTO>> GetOrg();
+        Task<ActionResult<Organizacion>> PostOrganizacion(OrganizacionCreateDTO org);
+        Task<IActionResult?> DeleteOrganizacion();
+        Task<IActionResult> UpdateOrganizacion(OrganizacionModifyDTO org);
+    }
+
     public class OrganizacionServices : IOrganizacionServices
     {
         private readonly HttpClient _httpClient;
@@ -18,27 +28,21 @@ namespace Web.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<IEnumerable<Organizacion>> GetAllOrgs()
+        public async Task<IEnumerable<OrganizacionDTO>?> GetOrg()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<Organizacion>>
+            return await JsonSerializer.DeserializeAsync<IEnumerable<OrganizacionDTO>>
                 (await _httpClient.GetStreamAsync($"api/Organizacion"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<OrganizacionDTO> GetOrgByID(int orgId)
-        {
-            return await JsonSerializer.DeserializeAsync<OrganizacionDTO>
-                (await _httpClient.GetStreamAsync($"api/Organizacion{orgId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-        }
-
-        public async Task<Organizacion?> PostOrganizacion(Organizacion org)
+        public async Task<ActionResult<Organizacion>> PostOrganizacion(OrganizacionCreateDTO org)
         {
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PostAsync("api/Organizacion", orgJson);
+                var response = await _httpClient.PostAsync("api/Organizacion/register", orgJson);
                 if (response.IsSuccessStatusCode)
                 {
-                    return await JsonSerializer.DeserializeAsync<Organizacion>(await response.Content.ReadAsStreamAsync());
+                    return await JsonSerializer.DeserializeAsync<ActionResult<Organizacion>>(await response.Content.ReadAsStreamAsync());
                 }
                 if (!response.IsSuccessStatusCode)
                 {
@@ -48,30 +52,30 @@ namespace Web.Services
             return null;
         }
 
-        public async Task<Organizacion?> DeleteOrganizacion(string id)
+        public async Task<IActionResult> DeleteOrganizacion()
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/"+ id);
+            var response = await _httpClient.DeleteAsync("api/Organizacion");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
             }
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<Organizacion>(await response.Content.ReadAsStreamAsync());
+                return await JsonSerializer.DeserializeAsync<IActionResult>(await response.Content.ReadAsStreamAsync());
             }
             return null;
         }
 
-        public async Task<Organizacion?> UpdateOrganizacion(string id, Organizacion org)
+        public async Task<IActionResult> UpdateOrganizacion(OrganizacionModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion", org);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
             }
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<Organizacion>(await response.Content.ReadAsStreamAsync());
+                return await JsonSerializer.DeserializeAsync<IActionResult>(await response.Content.ReadAsStreamAsync());
             }
             return null;
         }
