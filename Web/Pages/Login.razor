@@ -1,16 +1,126 @@
 ﻿@using API.Models;
+@using API.Models.Autentificacion;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
 @page "/login"
 <PageTitle>Login</PageTitle>
 
+<style>
+    #navbar {
+        margin-bottom: 6%;
+    }
+
+    #reglabel {
+        font-size: 35px;
+    }
+
+    #text {
+        text-align: center;
+    }
+
+    hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+        width: 100%;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    .link:hover {
+        color: dodgerblue;
+    }
+
+    .iniciarbtn:hover {
+        opacity: 1;
+    }
+
+    .signin {
+        text-align: center;
+    }
+
+    .input {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0px;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .container {
+        margin: 0% 20% 20px 20%;
+    }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
 <body>
     <div id="navbar"> <NavBarNotLogged /></div>
+    <div id="text"> <label id="reglabel">Iniciar Sesión</label></div>
 
+    <div class="container">
+        <hr>
+        <EditForm Model="@login" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="email"><b>Email</b></label>
+            <InputText class="input" id="email" placeholder="Email" @bind-Value="login.Email" />
+            <ValidationMessage For="@(() => login.Email)" class="errormsg" />
+
+            <label for="password"><b>Contraseña</b></label>
+            <InputText class="input" id="password" placeholder="Contraseña" @bind-Value="login.Contraseña" />
+            <ValidationMessage For="@(() => login.Contraseña)" class="errormsg" />
+
+            <hr>
+            <button class="iniciarbtn" type="submit">Registrarse</button>
+        </EditForm>
+    </div>
 
 </body>
 
 
 @code {
+    private LoginRequest login = new LoginRequest();
+    private LoginUserResponse response = new LoginUserResponse();
 
+    string result;
+    [Inject]
+    public IUsuarioServices usuarioServices { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            response = await usuarioServices.LoginUsuario(login);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
 }
