@@ -2,7 +2,10 @@
 @using API.Models.Autentificacion;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage BrowserStorage
 @inject IJSRuntime JsRuntime
+@inject NavigationManager Navigation
 @page "/login"
 <PageTitle>Login</PageTitle>
 
@@ -36,9 +39,6 @@
         opacity: 0.9;
     }
 
-    .link:hover {
-        color: dodgerblue;
-    }
 
     .iniciarbtn:hover {
         opacity: 1;
@@ -57,10 +57,10 @@
         background: #f1f1f1;
     }
 
-        .input:focus {
-            background-color: #ddd;
-            outline: none;
-        }
+    .input:focus {
+        background-color: #ddd;
+        outline: none;
+    }
 
     .container {
         margin: 0% 20% 20px 20%;
@@ -95,7 +95,7 @@
             <ValidationMessage For="@(() => login.Contraseña)" class="errormsg" />
 
             <hr>
-            <button class="iniciarbtn" type="submit">Registrarse</button>
+            <button class="iniciarbtn" type="submit">Iniciar Sesión</button>
         </EditForm>
     </div>
 
@@ -106,21 +106,23 @@
     private LoginRequest login = new LoginRequest();
     private LoginUserResponse response = new LoginUserResponse();
 
-    string result;
     [Inject]
-    public IUsuarioServices usuarioServices { get; set; }
+    public IUsuarioServices UsuarioServices { get; set; }
 
     private async Task HandleValidSubmit()
     {
         try
         {
-            response = await usuarioServices.LoginUsuario(login);
+            response = await UsuarioServices.LoginUsuario(login);
         }
         catch (Exception e)
         {
             await JsRuntime.InvokeVoidAsync("alert", e.Message);
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", result);
+        await JsRuntime.InvokeVoidAsync("alert", "Bienvenido " + response.NombreApellidos);
+        await BrowserStorage.SetAsync("token", response.Token);
+        Navigation.NavigateTo("/");
+        
     }
 }

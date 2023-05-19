@@ -162,7 +162,7 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpGet("consumos")]
         public async Task<IEnumerable<float>> GetConsumosbyDate(DateTime ini, DateTime fin)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
