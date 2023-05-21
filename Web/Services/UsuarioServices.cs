@@ -14,9 +14,9 @@ namespace Web.Services
         public Task<IEnumerable<UsuarioDTO>?> GetAllUsuario();
         public Task<string> RegistrarUsuario(UsuarioCreateDTO org);
         public Task<LoginUserResponse?> LoginUsuario(LoginRequest org);
-        public Task<string> DeleteUsuario(string id);
+        public Task<string> DeleteUsuario(int id);
         public Task<string?> UpdateUsuarioActual(UsuarioModifyDTO org);
-        public Task<string> UpdateUsuarioPorId(string id, UsuarioModifyDTO org);
+        public Task<string> UpdateUsuarioPorId(int id, UsuarioModifyDTO org);
     }
 
     public class UsuarioServices : IUsuarioServices
@@ -78,7 +78,7 @@ namespace Web.Services
             return null;
         }
 
-        public async Task<string> DeleteUsuario(string id)
+        public async Task<string> DeleteUsuario(int id)
         {
             var response = await _httpClient.DeleteAsync("api/Organizacion/Usuario/" + id);
             if (!response.IsSuccessStatusCode)
@@ -105,7 +105,7 @@ namespace Web.Services
             }
             return null;
         }
-        public async Task<string> UpdateUsuarioPorId(string id, UsuarioModifyDTO org)
+        public async Task<string> UpdateUsuarioPorId(int id, UsuarioModifyDTO org)
         {
             var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Usuario/" + id, org);
             if (!response.IsSuccessStatusCode)
