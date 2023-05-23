@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Components.Web;
+using Web.Helpers;
 using Web.Services;
+using Web.Services.ConsumoServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
@@ -9,7 +12,21 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IOrganizacionServices, OrganizacionServices>();
 builder.Services.AddScoped<IUsuarioServices, UsuarioServices>();
+builder.Services.AddScoped<IVehiculoServices, VehiculoServices>();
+builder.Services.AddScoped<ITransporteServices, TransporteServices>();
+builder.Services.AddScoped<IMaquinariaServices, MaquinariaServices>();
+builder.Services.AddScoped<IInstalacionesFijasServices, InstalacionesFijasServices>();
+builder.Services.AddScoped<IEmisionesFugitivasServices, EmisionesFugitivasServices>();
+
+builder.Services.AddScoped<IOtrosConsumosServices, OtrosConsumosServices>();
+builder.Services.AddScoped<IVehiculoConsumoServices, VehiculoConsumoServices>();
+builder.Services.AddScoped<ITransporteConsumoServices, TransporteConsumoServices>();
+builder.Services.AddScoped<IMaquinariaConsumoServices, MaquinariaConsumoServices>();
+builder.Services.AddScoped<IInstalacionesFijasConsumoServices, InstalacionesFijasConsumoServices>();
+builder.Services.AddScoped<IEmisionesFugitivasConsumoServices, EmisionesFugitivasConsumoServices>();
+
 builder.Services.AddScoped<ProtectedLocalStorage>();
+builder.Services.AddSingleton<Token>();
 
 //builder.Services.AddHttpClient<IOrganizacionServices, OrganizacionServices>(client =>
 //{

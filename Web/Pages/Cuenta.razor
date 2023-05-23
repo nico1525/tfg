@@ -1,0 +1,42 @@
+﻿@page "/cuenta"
+@inject IJSRuntime JsRuntime
+@using Web.Services;
+
+
+<PageTitle>Login</PageTitle>
+
+<style>
+    #inilabel {
+       font-size: 35px;
+    }
+
+    #navbar {
+        margin-bottom: 2%;
+    }
+    #text {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div id="navbar">
+        <NavBarLogged>
+        </NavBarLogged>
+    </div>
+    <div id="text"> <label id="inilabel">Información del Usuario</label></div>
+</body>
+
+
+@code {
+    [Inject]
+    public IUsuarioServices UsuarioServices { get; set; }
+    async void SomeStartupTask()
+    {
+        //await UsuarioServices.GetUsuario();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1);
+        SomeStartupTask();
+    }
+}

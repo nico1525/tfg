@@ -4,7 +4,8 @@ using System.Text;
 using API.Models.Autentificacion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-
+using Microsoft.AspNetCore.Identity;
+using Web.Helpers;
 
 namespace Web.Services
 {
@@ -22,15 +23,14 @@ namespace Web.Services
     public class UsuarioServices : IUsuarioServices
     {
         private readonly HttpClient _httpClient;
+        //private readonly HttpClient _httpClientAnonymous;
+
 
         public UsuarioServices(HttpClient httpClient)
-        {
-            //var result = await BrowserStorage.GetAsync<string>("token");
-            //currentInputValue = result.Success ? result.Value : "";
+        { 
             _httpClient = httpClient;
-            //if (llamada es a un método que requiere autorizacion)
-            //_httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenstring}");
-
+            //_httpClientAnonymous = httpClient;  Por si para las llamadas anonimas no se tuviera que enviar token
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<UsuarioDTO>?> GetUsuario()
         {

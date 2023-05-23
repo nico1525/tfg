@@ -1,0 +1,150 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<style>
+    body {
+        margin: 0;
+        background-color: #7b7b7b;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #ffd966;
+        border-bottom: 1px solid #000;
+        top: 0;
+        width: 100%;
+    }
+
+    li {
+        float: left;
+    }
+
+    #appname {
+        background-color: #ffd966;
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 20px 50px 0px 20px;
+        text-decoration: none;
+        font-size: 24px;
+    }
+
+    a {
+        display: block;
+        font-size: 20px;
+        color: black;
+        text-align: center;
+        padding: 20px 35px;
+        text-decoration: none;
+    }
+
+    
+    .dropdown {
+        float: left;
+        display: block;
+        overflow: hidden;
+        text-align: center;
+        text-decoration: none;
+        padding: 6px 35px;
+    }
+
+    .dropdown .dropbtn {
+        font-size: 20px;
+        border: none;
+        outline: none;
+        color: black;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+    }
+
+    .dropdown:hover {
+        background-color: cornflowerblue;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #ddd;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    li a:hover {
+        background-color: cornflowerblue;
+    }
+    li a:active{
+        background-color: royalblue;
+    }
+
+
+
+</style>
+<body>
+    <ul>
+        <li><label id="appname">Web Cálculo Huella de Carbono</label></li>
+        <li><a href="inicio" >Inicio</a></li>
+        <li><a @onclick="navigate">Dar dispositivo de Alta</a></li>
+        <li>
+            <div class="dropdown">
+                <a href="gestion" class="dropbtn">
+                    Gestión de Dispositivos
+                    <i class="fa fa-caret-down"></i>
+                </a>
+                <div class="dropdown-content">
+                    <a href="#">Ver Dispositivos</a>
+                    <a href="#">Eliminar Dispositivos</a>
+                    <a href="#">Dar dispositivo de Alta</a>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="dropdown">
+                <a href="/" class="dropbtn">
+                    Informes
+                    <i class="fa fa-caret-down"></i>
+                </a>
+                <div class="dropdown-content">
+                    <a href="#">Generar Informe</a>
+                    <a href="#">Gráficas</a>
+                    <a href="#">Historial informes</a>
+                </div>
+            </div>
+        </li>
+        <li><a id="idcuenta" href="cuenta">Cuenta</a></li>
+
+        <li><a href="">Cerrar Sesión</a></li>
+
+    </ul>
+    @Body
+</body>
+
+@code {
+    public void navigate()
+    {
+        Navigation.NavigateTo("inicio");
+        Navigation.NavigateTo("agregar");
+    }
+}

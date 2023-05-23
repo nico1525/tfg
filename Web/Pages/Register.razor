@@ -9,7 +9,7 @@
 
 <style>
     #navbar{
-        margin-bottom:6%;
+        margin-bottom:3%;
     }
     #reglabel{
         font-size:35px;
@@ -46,7 +46,7 @@
 
     .input{
         width: 100%;
-        padding: 15px;
+        padding: 15px 0px;
         margin: 5px 0 22px 0px;
         display: inline-block;
         border: none;
@@ -81,19 +81,19 @@
                 <DataAnnotationsValidator />
 
                 <label for="name"><b>Nombre de la Organización</b></label>
-                <InputText class="input" id="name" placeholder="Nombre de la organización" @bind-Value="org.NombreOrg" />
+                <InputText class="input" id="name" placeholder="  Nombre de la organización" @bind-Value="org.NombreOrg" />
                 <ValidationMessage For="@(() => org.NombreOrg)" class="errormsg" />
            
                 <label for="email"><b>Email</b></label>
-                <InputText class="input"  id="email" placeholder="Email" @bind-Value="org.Email" />
+                <InputText class="input"  id="email" placeholder="  Email" @bind-Value="org.Email" />
                 <ValidationMessage For="@(() => org.Email)" class="errormsg" />
 
                 <label for="dir"><b>Dirección</b></label>
-                <InputText class="input" id="dir" placeholder="Dirección" @bind-Value="org.Direccion"/>
+                <InputText class="input" id="dir" placeholder="  Dirección" @bind-Value="org.Direccion"/>
                 <ValidationMessage For="@(() => org.Direccion)" class="errormsg" />
 
                 <label for="password"><b>Contraseña</b></label>
-                <InputText class="input" id="password" placeholder="Contraseña" @bind-Value="org.Contraseña" />
+                <InputText class="input" id="password" placeholder="  Contraseña" @bind-Value="org.Contraseña" />
                 <ValidationMessage For="@(() => org.Contraseña)" class="errormsg" />
          
 

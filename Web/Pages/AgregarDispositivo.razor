@@ -1,0 +1,67 @@
+﻿@inject NavigationManager Navigation
+@page "/agregar"
+@layout NavBarLogged
+@inherits LayoutComponentBase
+
+<PageTitle>Agregar Dispositivo</PageTitle>
+
+<style>
+    #inilabel {
+       font-size: 35px;
+    }
+    #tipolabel {
+       font-size: 22px;
+       margin-left: 1%;
+       float: left;
+    }
+    #text {
+        text-align: center;
+    }
+    #navbar {
+        margin-bottom: 2%;
+    }
+    #form{
+        float: left;
+    }
+    #button{
+        font-size: 18px;
+        margin-left: 30px;
+    }
+    #select{
+        font-size: 18px;
+        margin-left: 30px;
+    }
+
+    #dispositivo {
+        margin: 3% 20% 0 20%;
+    }
+</style>
+<body>
+    
+    <div id="navbar"></div>
+    <div id="text"> <label id="inilabel"><b>Dar dispositivo de alta</b></label></div>
+        <label id="tipolabel"><b>Tipo de dispositivo:</b></label>
+    <div id="form">
+            <select @bind="dispositivo" id="select">
+                <option value="vehiculo">Vehiculo</option>
+                <option value="transporte">Transporte</option>
+                <option value="maquinaria">Maquinaria</option>
+                <option value="gases">Emisiones Fugitivas</option>
+                <option value="instalacionesfijas">Instalaciones Fijas</option>
+    
+            </select>
+    </div>
+    <button id="button" @onclick="SelectDispositivo">Elegir tipo Dispositivo</button>
+    <div id="dispositivo">
+        @Body
+    </div>
+
+</body>
+
+@code {
+    private string? dispositivo = "vehiculo";
+    public void SelectDispositivo()
+    {
+        Navigation.NavigateTo("agregar/" + dispositivo);
+    }
+}

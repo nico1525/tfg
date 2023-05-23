@@ -1,5 +1,6 @@
 ﻿@using API.Models;
 @using API.Models.Autentificacion;
+@using Web.Helpers;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
@@ -108,7 +109,6 @@
 
     [Inject]
     public IUsuarioServices UsuarioServices { get; set; }
-
     private async Task HandleValidSubmit()
     {
         try
@@ -122,7 +122,11 @@
         }
         await JsRuntime.InvokeVoidAsync("alert", "Bienvenido " + response.NombreApellidos);
         await BrowserStorage.SetAsync("token", response.Token);
-        Navigation.NavigateTo("/");
+        var result = await BrowserStorage.GetAsync<string>("token");
+        var currentInputValue = result.Success ? result.Value : "";
+        Token.token = currentInputValue;
+
+        Navigation.NavigateTo("inicio");
         
     }
 }

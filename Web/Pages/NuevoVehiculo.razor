@@ -1,0 +1,111 @@
+﻿@inject NavigationManager Navigation
+@page "/agregar/vehiculo"
+@using API.Models;
+@using Web.Services;
+@layout AgregarDispositivo
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Agregar Vehiculo</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float:left;
+    }
+
+    #labelnew {
+        font-size: 24px;
+        margin-bottom:3%;
+        
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+    .iniciarbtn:hover {
+        opacity: 1;
+    }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    .input:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="labelnew"><label><b>Nuevo Vehículo:</b></label></div>
+    <div id="container">
+    <EditForm Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+
+        <label for="edificio"><b>Edificio/Sede</b></label>
+        <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="vehiculo.Edificio" />
+        <ValidationMessage For="@(() => vehiculo.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Matrícula</b></label>
+        <InputText class="input" id="matricula" placeholder="  Matricula" @bind-Value="vehiculo.Matricula" />
+        <ValidationMessage For="@(() => vehiculo.Matricula)" class="errormsg" />
+        <label for="categoria"><b>Categoría del Vehiculo</b></label>
+            <InputSelect class="input" id="categoria" @bind-Value="vehiculo.CategoriaVehiculo">
+                <option value="M1">Categoría M1</option>
+                <option value="M2">Categoría M2</option>
+                <option value="M3">Categoría M3</option>
+                <option value="N1">Categoría N1</option>
+                <option value="N2">Categoría N2</option>
+                <option value="N3">Categoría N3</option>
+                <option value="L">Categoría L</option>
+        </InputSelect>
+        <ValidationMessage For="@(() => vehiculo.CategoriaVehiculo)" class="errormsg" />
+
+        <button class="iniciarbtn" type="submit">Añadir Vehículo</button>
+    </EditForm>
+    </div>
+</body>
+
+@code {
+    private VehiculoCreateDTO vehiculo = new VehiculoCreateDTO() { CategoriaVehiculo = "M1"};
+    string result;
+    [Inject]
+    public IVehiculoServices VehiculoServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await VehiculoServices.PostVehiculo(vehiculo);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+}
