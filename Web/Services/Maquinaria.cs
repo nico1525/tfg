@@ -16,6 +16,7 @@ namespace Web.Services
     public class MaquinariaServices : IMaquinariaServices
     {
         private readonly HttpClient _httpClient;
+        private static readonly string baseUrl = "https://localhost:7011/";
 
         public MaquinariaServices(HttpClient httpClient)
         {
@@ -24,7 +25,7 @@ namespace Web.Services
         public async Task<IEnumerable<MaquinariaDTO>?> GetMaquinaria()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<MaquinariaDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/Maquinaria"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/Maquinaria"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<string> PostMaquinaria(MaquinariaCreateDTO org)
@@ -32,7 +33,7 @@ namespace Web.Services
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/Maquinaria", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/Maquinaria", orgJson);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -47,7 +48,7 @@ namespace Web.Services
 
         public async Task<string> DeleteMaquinaria(int id)
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/Maquinaria/" + id);
+            var response = await _httpClient.DeleteAsync(baseUrl + "api/Organizacion/Maquinaria/" + id);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -60,7 +61,7 @@ namespace Web.Services
         }
         public async Task<string> UpdateMaquinariaPorId(int id, MaquinariaModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Maquinaria/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/Maquinaria/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;

@@ -17,6 +17,8 @@ namespace Web.Services.ConsumoServices
     public class OtrosConsumosServices : IOtrosConsumosServices
     {
         private readonly HttpClient _httpClient;
+        private static readonly string baseUrl = "https://localhost:7011/";
+
 
         public OtrosConsumosServices(HttpClient httpClient)
         {
@@ -25,19 +27,19 @@ namespace Web.Services.ConsumoServices
         public async Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumos()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<OtrosConsumosDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/OtrosConsumos"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/OtrosConsumos"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         public async Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumosByID(int id)
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<OtrosConsumosDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/OtrosConsumos/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/OtrosConsumos/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         public async Task<string> PostOtrosConsumos(OtrosConsumosCreateDTO org)
         {
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/OtrosConsumos", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/OtrosConsumos", orgJson);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -52,7 +54,7 @@ namespace Web.Services.ConsumoServices
 
         public async Task<string> DeleteOtrosConsumos(int id)
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/OtrosConsumos/" + id);
+            var response = await _httpClient.DeleteAsync(baseUrl + "api/Organizacion/OtrosConsumos/" + id);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -65,7 +67,7 @@ namespace Web.Services.ConsumoServices
         }
         public async Task<string> UpdateOtrosConsumosPorId(int id, OtrosConsumosModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/OtrosConsumos/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/OtrosConsumos/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;

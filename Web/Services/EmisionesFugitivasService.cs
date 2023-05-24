@@ -16,6 +16,7 @@ namespace Web.Services
     public class EmisionesFugitivasServices : IEmisionesFugitivasServices
     {
         private readonly HttpClient _httpClient;
+        private static readonly string baseUrl = "https://localhost:7011/";
 
         public EmisionesFugitivasServices(HttpClient httpClient)
         {
@@ -24,7 +25,7 @@ namespace Web.Services
         public async Task<IEnumerable<EmisionesFugitivasDTO>?> GetEmisionesFugitivas()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<EmisionesFugitivasDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/EmisionesFugitivas"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/EmisionesFugitivas"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<string> PostEmisionesFugitivas(EmisionesFugitivasCreateDTO org)
@@ -32,7 +33,7 @@ namespace Web.Services
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/EmisionesFugitivas", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/EmisionesFugitivas", orgJson);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -47,7 +48,7 @@ namespace Web.Services
 
         public async Task<string> DeleteEmisionesFugitivas(int id)
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/EmisionesFugitivas/" + id);
+            var response = await _httpClient.DeleteAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/" + id);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -60,7 +61,7 @@ namespace Web.Services
         }
         public async Task<string> UpdateEmisionesFugitivasPorId(int id, EmisionesFugitivasModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/EmisionesFugitivas/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "$api/Organizacion/EmisionesFugitivas/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;

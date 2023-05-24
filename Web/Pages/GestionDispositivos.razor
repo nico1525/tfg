@@ -1,0 +1,72 @@
+﻿@inject NavigationManager Navigation
+@page "/gestion"
+@layout NavBarLogged
+@inherits LayoutComponentBase
+
+<PageTitle>Gestión de dispositivos</PageTitle>
+
+
+<style>
+    #tipolabel {
+        font-size: 22px;
+        margin-left: 1%;
+        float: left;
+    }
+
+    #text {
+        text-align: center;
+    }
+
+    #navbar {
+        margin-bottom: 2%;
+    }
+
+    #form {
+        float: left;
+    }
+
+    #button {
+        font-size: 18px;
+        margin-left: 30px;
+    }
+
+    #select {
+        font-size: 18px;
+        margin-left: 30px;
+    }
+
+    #dispositivo {
+        margin: 3% 20% 0 20%;
+    }
+
+    #inilabel {
+        font-size: 35px;
+    }
+</style>
+
+<body>
+    <div id="navbar"></div>
+    <div id="text"> <label id="inilabel"><b>Gestión de Dispositivos</b></label></div>
+    <label id="tipolabel"><b>Tipo de dispositivo:</b></label>
+    <div id="form">
+        <select @bind="dispositivo" id="select">
+            <option value="vehiculo">Vehiculo</option>
+            <option value="transporte">Transporte</option>
+            <option value="maquinaria">Maquinaria</option>
+            <option value="gases">Emisiones Fugitivas</option>
+            <option value="instalacionesfijas">Instalaciones Fijas</option>
+
+        </select>
+    </div>
+    <button id="button" @onclick="SelectDispositivo">Elegir tipo Dispositivo</button>
+    @Body
+</body>
+
+@code {
+    private string? dispositivo = "vehiculo";
+
+    public void SelectDispositivo()
+    {
+        Navigation.NavigateTo("gestion/" + dispositivo);
+    }
+}

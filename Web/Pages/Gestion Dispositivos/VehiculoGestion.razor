@@ -1,0 +1,46 @@
+﻿@inject NavigationManager Navigation
+@page "/gestion/vehiculo"
+@using API.Models;
+@using Microsoft.AspNetCore.Components.Web.Virtualization;
+@using Web.Services;
+@layout GestionDispositivos
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Gestion Vehiculo</PageTitle>
+
+<style>
+
+</style>
+
+<body>
+        <Virtualize Items="@vehiculolista" Context="vehiculo">
+            <em>@vehiculo.Matricula</em>
+        </Virtualize>
+ 
+</body>
+
+@code {
+    List<VehiculoDTO> vehiculolista = new List<VehiculoDTO>();
+
+    [Inject]
+    public IVehiculoServices vehiculoServices { get; set; }
+
+    async void SomeStartupTask()
+    {
+        try
+        {
+            vehiculolista = await vehiculoServices.GetVehiculo();
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+    }
+    protected override async Task OnInitializedAsync(){
+        await Task.Delay(1);
+        SomeStartupTask();
+        
+    }
+}

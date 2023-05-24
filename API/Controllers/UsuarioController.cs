@@ -28,7 +28,7 @@ namespace API.Controllers
             _jwtUtils = jwtUtils;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetUsuarios()
         {

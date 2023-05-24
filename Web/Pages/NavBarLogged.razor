@@ -91,7 +91,9 @@
     .dropdown:hover .dropdown-content {
         display: block;
     }
-
+    #alta:hover{
+        cursor: pointer;
+    }
     li a:hover {
         background-color: cornflowerblue;
     }
@@ -106,7 +108,7 @@
     <ul>
         <li><label id="appname">Web Cálculo Huella de Carbono</label></li>
         <li><a href="inicio" >Inicio</a></li>
-        <li><a @onclick="navigate">Dar dispositivo de Alta</a></li>
+        <li><a id="alta" @onclick="navigate">Dar dispositivo de Alta</a></li>
         <li>
             <div class="dropdown">
                 <a href="gestion" class="dropbtn">
@@ -114,7 +116,7 @@
                     <i class="fa fa-caret-down"></i>
                 </a>
                 <div class="dropdown-content">
-                    <a href="#">Ver Dispositivos</a>
+                    <a href="gestion">Ver Dispositivos</a>
                     <a href="#">Eliminar Dispositivos</a>
                     <a href="#">Dar dispositivo de Alta</a>
                 </div>

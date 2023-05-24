@@ -1,11 +1,13 @@
 ﻿using API.Models;
-using System.Text.Json;
 using System.Text;
 using API.Models.Autentificacion;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Identity;
 using Web.Helpers;
+using Newtonsoft.Json;
+using Azure;
+
 
 namespace Web.Services
 {
@@ -24,6 +26,7 @@ namespace Web.Services
     {
         private readonly HttpClient _httpClient;
         //private readonly HttpClient _httpClientAnonymous;
+        private static readonly string baseUrl = "https://localhost:7011/";
 
 
         public UsuarioServices(HttpClient httpClient)
@@ -34,21 +37,52 @@ namespace Web.Services
         }
         public async Task<IEnumerable<UsuarioDTO>?> GetUsuario()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<UsuarioDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/Usuario"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Usuario");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<UsuarioDTO>>(resultString);
+                List<UsuarioDTO> lista = new List<UsuarioDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
         public async Task<IEnumerable<UsuarioDTO>?> GetAllUsuario()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<UsuarioDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/Usuario/all"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Usuario/all");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<UsuarioDTO>>(resultString);
+                List<UsuarioDTO> lista = new List<UsuarioDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+
         }
 
         public async Task<string> RegistrarUsuario(UsuarioCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/Usuario/register", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/Usuario/register", orgJson);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -63,12 +97,13 @@ namespace Web.Services
         public async Task<LoginUserResponse?> LoginUsuario(LoginRequest org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/Usuario/login", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/Usuario/login", orgJson);
             if (response.IsSuccessStatusCode)
             {
-                return await JsonSerializer.DeserializeAsync<LoginUserResponse>(await response.Content.ReadAsStreamAsync());
+                var resultString = await response.Content.ReadAsStringAsync();
+               return JsonConvert.DeserializeObject<LoginUserResponse>(resultString);
             }
             if (!response.IsSuccessStatusCode)
             {
@@ -80,7 +115,7 @@ namespace Web.Services
 
         public async Task<string> DeleteUsuario(int id)
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/Usuario/" + id);
+            var response = await _httpClient.DeleteAsync(baseUrl + "api/Organizacion/Usuario/" + id);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
@@ -94,7 +129,7 @@ namespace Web.Services
 
         public async Task<string?> UpdateUsuarioActual(UsuarioModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Usuario", org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/Usuario", org);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.Content.ReadAsStringAsync().Result);
@@ -107,7 +142,7 @@ namespace Web.Services
         }
         public async Task<string> UpdateUsuarioPorId(int id, UsuarioModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Usuario/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/Usuario/" + id, org);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(response.Content.ReadAsStringAsync().Result);

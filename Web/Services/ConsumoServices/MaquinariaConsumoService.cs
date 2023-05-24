@@ -17,6 +17,7 @@ namespace Web.Services.ConsumoServices
     public class MaquinariaConsumoServices : IMaquinariaConsumoServices
     {
         private readonly HttpClient _httpClient;
+        private static readonly string baseUrl = "https://localhost:7011/";
 
         public MaquinariaConsumoServices(HttpClient httpClient)
         {
@@ -25,19 +26,19 @@ namespace Web.Services.ConsumoServices
         public async Task<IEnumerable<MaquinariaConsumoDTO>?> GetMaquinariaConsumo()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<MaquinariaConsumoDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/Maquinaria/Consumo"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         public async Task<IEnumerable<MaquinariaConsumoDTO>?> GetMaquinariaConsumoByID(int id)
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<MaquinariaConsumoDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/Maquinaria/Consumo/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         public async Task<string> PostMaquinariaConsumo(MaquinariaConsumoCreateDTO org)
         {
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/Maquinaria/Consumo", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo", orgJson);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -52,7 +53,7 @@ namespace Web.Services.ConsumoServices
 
         public async Task<string> DeleteMaquinariaConsumo(int id)
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/Maquinaria/Consumo/" + id);
+            var response = await _httpClient.DeleteAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo/" + id);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -65,7 +66,7 @@ namespace Web.Services.ConsumoServices
         }
         public async Task<string> UpdateMaquinariaConsumoPorId(int id, MaquinariaConsumoModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Maquinaria/Consumo/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;

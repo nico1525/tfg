@@ -16,6 +16,7 @@ namespace Web.Services
     public class TransporteServices : ITransporteServices
     {
         private readonly HttpClient _httpClient;
+        private static readonly string baseUrl = "https://localhost:7011/";
 
         public TransporteServices(HttpClient httpClient)
         {
@@ -24,7 +25,7 @@ namespace Web.Services
         public async Task<IEnumerable<TransporteDTO>?> GetTransporte()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<TransporteDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/Transporte"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/Transporte"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<string> PostTransporte(TransporteCreateDTO org)
@@ -32,7 +33,7 @@ namespace Web.Services
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/Transporte", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/Transporte", orgJson);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -47,7 +48,7 @@ namespace Web.Services
 
         public async Task<string> DeleteTransporte(int id)
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/Transporte/" + id);
+            var response = await _httpClient.DeleteAsync(baseUrl + "api/Organizacion/Transporte/" + id);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -60,7 +61,7 @@ namespace Web.Services
         }
         public async Task<string> UpdateTransportePorId(int id, TransporteModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/Transporte/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/Transporte/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;

@@ -17,6 +17,7 @@ namespace Web.Services.ConsumoServices
     public class EmisionesFugitivasConsumoServices : IEmisionesFugitivasConsumoServices
     {
         private readonly HttpClient _httpClient;
+        private static readonly string baseUrl = "https://localhost:7011/";
 
         public EmisionesFugitivasConsumoServices(HttpClient httpClient)
         {
@@ -25,19 +26,19 @@ namespace Web.Services.ConsumoServices
         public async Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumo()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<EmisionesFugitivasConsumoDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/EmisionesFugitivas/Consumo"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         public async Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumoByID(int id)
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<EmisionesFugitivasConsumoDTO>>
-                (await _httpClient.GetStreamAsync($"api/Organizacion/EmisionesFugitivas/Consumo/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         public async Task<string> PostEmisionesFugitivasConsumo(EmisionesFugitivasConsumoCreateDTO org)
         {
             var orgJson =
                 new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/Organizacion/EmisionesFugitivas/Consumo", orgJson);
+            var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo", orgJson);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -52,7 +53,7 @@ namespace Web.Services.ConsumoServices
 
         public async Task<string> DeleteEmisionesFugitivasConsumo(int id)
         {
-            var response = await _httpClient.DeleteAsync("api/Organizacion/EmisionesFugitivas/Consumo/" + id);
+            var response = await _httpClient.DeleteAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo/" + id);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
@@ -65,7 +66,7 @@ namespace Web.Services.ConsumoServices
         }
         public async Task<string> UpdateEmisionesFugitivasConsumoPorId(int id, EmisionesFugitivasConsumoModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync("$api/Organizacion/EmisionesFugitivas/Consumo/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;
