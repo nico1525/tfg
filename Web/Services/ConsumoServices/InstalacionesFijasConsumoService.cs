@@ -1,7 +1,8 @@
 ﻿using API.Models;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Text;
 using API.Models.Consumos;
+using Web.Helpers;
 
 namespace Web.Services.ConsumoServices
 {
@@ -22,21 +23,52 @@ namespace Web.Services.ConsumoServices
         public InstalacionesFijasConsumoServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumo()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<InstalacionesFijasConsumoDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<InstalacionesFijasConsumoDTO>>(resultString);
+                List<InstalacionesFijasConsumoDTO> lista = new List<InstalacionesFijasConsumoDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
         public async Task<IEnumerable<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumoByID(int id)
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<InstalacionesFijasConsumoDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<InstalacionesFijasConsumoDTO>>(resultString);
+                List<InstalacionesFijasConsumoDTO> lista = new List<InstalacionesFijasConsumoDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
         public async Task<string> PostInstalacionesFijasConsumo(InstalacionesFijasConsumoCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo", orgJson);
             if (response.IsSuccessStatusCode)

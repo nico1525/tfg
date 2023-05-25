@@ -1,7 +1,8 @@
 ﻿using API.Models.Autentificacion;
 using API.Models;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Text;
+using Web.Helpers;
 
 namespace Web.Services
 {
@@ -21,17 +22,33 @@ namespace Web.Services
         public TransporteServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<TransporteDTO>?> GetTransporte()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<TransporteDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/Transporte"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Transporte");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<TransporteDTO>>(resultString);
+                List<TransporteDTO> lista = new List<TransporteDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
 
         public async Task<string> PostTransporte(TransporteCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/Transporte", orgJson);
             if (response.IsSuccessStatusCode)

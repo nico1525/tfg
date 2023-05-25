@@ -1,7 +1,8 @@
 ﻿using API.Models.Autentificacion;
 using API.Models;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Text;
+using Web.Helpers;
 
 namespace Web.Services
 {
@@ -21,17 +22,33 @@ namespace Web.Services
         public EmisionesFugitivasServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<EmisionesFugitivasDTO>?> GetEmisionesFugitivas()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<EmisionesFugitivasDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/EmisionesFugitivas"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<EmisionesFugitivasDTO>>(resultString);
+                List<EmisionesFugitivasDTO> lista = new List<EmisionesFugitivasDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
 
         public async Task<string> PostEmisionesFugitivas(EmisionesFugitivasCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/EmisionesFugitivas", orgJson);
             if (response.IsSuccessStatusCode)

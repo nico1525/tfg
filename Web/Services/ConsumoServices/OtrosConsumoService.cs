@@ -1,7 +1,8 @@
 ﻿using API.Models;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Text;
 using API.Models.Consumos;
+using Web.Helpers;
 
 namespace Web.Services.ConsumoServices
 {
@@ -23,21 +24,52 @@ namespace Web.Services.ConsumoServices
         public OtrosConsumosServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumos()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<OtrosConsumosDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/OtrosConsumos"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/OtrosConsumos");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<OtrosConsumosDTO>>(resultString);
+                List<OtrosConsumosDTO> lista = new List<OtrosConsumosDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
         public async Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumosByID(int id)
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<OtrosConsumosDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/OtrosConsumos/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/OtrosConsumos/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<OtrosConsumosDTO>>(resultString);
+                List<OtrosConsumosDTO> lista = new List<OtrosConsumosDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
         public async Task<string> PostOtrosConsumos(OtrosConsumosCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/OtrosConsumos", orgJson);
             if (response.IsSuccessStatusCode)

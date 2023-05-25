@@ -1,7 +1,8 @@
 ﻿using API.Models.Autentificacion;
 using API.Models;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Text;
+using Web.Helpers;
 
 namespace Web.Services
 {
@@ -21,17 +22,33 @@ namespace Web.Services
         public MaquinariaServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<MaquinariaDTO>?> GetMaquinaria()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<MaquinariaDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/Maquinaria"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Maquinaria");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<MaquinariaDTO>>(resultString);
+                List<MaquinariaDTO> lista = new List<MaquinariaDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
 
         public async Task<string> PostMaquinaria(MaquinariaCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/Maquinaria", orgJson);
             if (response.IsSuccessStatusCode)

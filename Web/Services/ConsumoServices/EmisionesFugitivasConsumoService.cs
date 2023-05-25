@@ -1,7 +1,8 @@
 ﻿using API.Models;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Text;
 using API.Models.Consumos;
+using Web.Helpers;
 
 namespace Web.Services.ConsumoServices
 {
@@ -22,21 +23,52 @@ namespace Web.Services.ConsumoServices
         public EmisionesFugitivasConsumoServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumo()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<EmisionesFugitivasConsumoDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<EmisionesFugitivasConsumoDTO>>(resultString);
+                List<EmisionesFugitivasConsumoDTO> lista = new List<EmisionesFugitivasConsumoDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
         public async Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumoByID(int id)
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<EmisionesFugitivasConsumoDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo/" + id), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<EmisionesFugitivasConsumoDTO>>(resultString);
+                List<EmisionesFugitivasConsumoDTO> lista = new List<EmisionesFugitivasConsumoDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
         public async Task<string> PostEmisionesFugitivasConsumo(EmisionesFugitivasConsumoCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo", orgJson);
             if (response.IsSuccessStatusCode)

@@ -1,9 +1,6 @@
 ﻿using API.Models;
 using System.Text;
 using API.Models.Autentificacion;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.AspNetCore.Identity;
 using Web.Helpers;
 using Newtonsoft.Json;
 using Azure;

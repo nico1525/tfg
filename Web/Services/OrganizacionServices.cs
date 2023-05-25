@@ -1,14 +1,11 @@
 ﻿using System.Net.Http;
 using System.Collections.Generic;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Diagnostics.Metrics;
+using Newtonsoft.Json;
 using API.Models;
 using Mysqlx.Session;
 using MySqlX.XDevAPI;
 using System.Text;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Web.Helpers;
 
 namespace Web.Services
 {
@@ -27,17 +24,33 @@ namespace Web.Services
         public OrganizacionServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
         public async Task<IEnumerable<OrganizacionDTO>?> GetOrg()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<OrganizacionDTO>>
-                (await _httpClient.GetStreamAsync(baseUrl + "api/Organizacion"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion");
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var list = JsonConvert.DeserializeObject<IEnumerable<OrganizacionDTO>>(resultString);
+                List<OrganizacionDTO> lista = new List<OrganizacionDTO>();
+                foreach (var veh in lista)
+                {
+                    lista.Add(veh);
+                }
+                return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
         }
 
         public async Task<string> PostOrganizacion(OrganizacionCreateDTO org)
         {
             var orgJson =
-                new StringContent(JsonSerializer.Serialize(org), Encoding.UTF8, "application/json");
+                new StringContent(JsonConvert.SerializeObject(org), Encoding.UTF8, "application/json");
 
                 var response = await _httpClient.PostAsync(baseUrl + "api/Organizacion/register", orgJson);
                 if (response.IsSuccessStatusCode)
