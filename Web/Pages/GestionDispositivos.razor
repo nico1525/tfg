@@ -11,6 +11,7 @@
         font-size: 22px;
         margin-left: 1%;
         float: left;
+        margin-top: 1%;
     }
 
     #text {
@@ -23,11 +24,13 @@
 
     #form {
         float: left;
+        margin-top: 1%;
     }
 
     #button {
         font-size: 18px;
         margin-left: 30px;
+        margin-top: 1%;
     }
 
     #select {
@@ -36,7 +39,8 @@
     }
 
     #dispositivo {
-        margin: 3% 20% 0 20%;
+        margin: 2% 15% 0 15%;
+        height:100%;
     }
 
     #inilabel {
@@ -59,7 +63,9 @@
         </select>
     </div>
     <button id="button" @onclick="SelectDispositivo">Elegir tipo Dispositivo</button>
-    @Body
+    <div id="dispositivo">
+        @Body
+    </div>
 </body>
 
 @code {

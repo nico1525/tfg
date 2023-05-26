@@ -13,7 +13,6 @@
     "https": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "inicio",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "hotReloadProfile": "aspnetcore"

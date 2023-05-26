@@ -121,8 +121,9 @@
             await JsRuntime.InvokeVoidAsync("alert", e.Message);
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", "Bienvenido " + response.NombreApellidos);
+        //await JsRuntime.InvokeVoidAsync("alert", "Bienvenido " + response.NombreApellidos);
         await BrowserStorage.SetAsync("token", response.Token);
+        await Task.Delay(1000);
         var result = await BrowserStorage.GetAsync<string>("token");
         var currentInputValue = result.Success ? result.Value : "";
         Token.token = currentInputValue;

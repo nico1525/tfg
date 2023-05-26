@@ -2,6 +2,7 @@
 @page "/gestion/vehiculo"
 @using API.Models;
 @using Microsoft.AspNetCore.Components.Web.Virtualization;
+@using Web.Helpers;
 @using Web.Services;
 @layout GestionDispositivos
 @inject IJSRuntime JsRuntime
@@ -10,37 +11,195 @@
 <PageTitle>Gestion Vehiculo</PageTitle>
 
 <style>
+    h1{
+  font-size: 30px;
+  color: #000;
+  text-transform: uppercase;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 15px;
+}
+table{
+  width:100%;
+  table-layout: fixed;
+    }
+thead{
+ }
 
+    .tbl-content thead th {
+        position: sticky;
+        background-color: aqua;
+        top: 0px;
+        border-bottom: solid 1px black;
+    }
+.tbl-content{
+  height:600px;
+  overflow-x:auto;
+  margin-top: 0px;
+        border-collapse: collapse;
+    }
+th{
+  padding: 20px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: #000;
+  text-transform: uppercase;
+  border-top: solid 2px black;
+    border-right: solid 1px black;
+    }
+td{
+  padding: 15px;
+  text-align: left;
+  vertical-align:middle;
+  font-weight: 300;
+  font-size: 15px;
+  color: #000;
+        border-right: solid 1px black;
+        text-align: center;
+        background-color: aquamarine;
+    }
+#filtro{
+    width:100%;
+    padding: 10px 0px;
+    background-color: aqua;
+    }
+#input{
+    padding: 2.5px 20px
+}
+.botones{
+    padding: 15% 20%;
+}
+.headerbuttons{
+        padding: 20px 0px;
+        width:7%;
+        text-align: center;
+    }
 </style>
 
 <body>
-        <Virtualize Items="@vehiculolista" Context="vehiculo">
-            <em>@vehiculo.Matricula</em>
+    <h1><b>Lista de Vehculos</b></h1>
+
+    <div id="filtro">
+        <label id="tipolabel"><b>Filtrar:</b></label>
+
+        <select @bind="tipofiltro" id="select">
+            <option value="id">ID</option>
+            <option value="matricula">Matrícula</option>
+            <option value="catvehiculo">Categoría de Vehículo</option>
+            <option value="edificio">Edificio / Sede</option>
+
+        </select>
+        <input id="input" placeholder="Buscar" @bind="filtrocat"/>
+        <button id="button" @onclick="Filtrar">Filtrar</button>
+
+    </div>
+
+
+  <div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+
+            <thead>
+                <tr>
+                    <th>Id Vehículo</th>
+                    <th>Matrícula</th>
+                    <th>Categoría del Vehículo</th>
+                    <th>Edificio</th>
+                    <th class="headerbuttons">Modificar</th>
+                    <th class="headerbuttons">Eliminar</th>
+                    <th class="headerbuttons">Ver Consumos</th>
+
+
+                </tr>
+            </thead>
+        <Virtualize Items="@listashow" Context="vehiculo">
+            <tbody>
+                <tr>
+                    <td>@vehiculo.Id</td>
+                    <td>@vehiculo.Matricula</td>
+                    <td>@vehiculo.CategoriaVehiculo</td>
+                    <td>@vehiculo.Edificio</td>
+                    <td><button class="botones" @onclick="Modificar">M</button></td>
+                    <td><button class="botones" @onclick="Eliminar">X</button></td>
+                    <td><button class="botones" @onclick="VerConsumos">C</button></td>
+                </tr>
+
+            </tbody>
         </Virtualize>
- 
+    </table>
+  </div>
+    
 </body>
 
 @code {
-    List<VehiculoDTO> vehiculolista = new List<VehiculoDTO>();
+    List<VehiculoDTO> lista = new List<VehiculoDTO>();
+    List<VehiculoDTO> listashow = new List<VehiculoDTO>();
+    string tipofiltro = "id";
+    string filtrocat = "";
 
     [Inject]
     public IVehiculoServices vehiculoServices { get; set; }
 
-    async void SomeStartupTask()
+    public void Modificar() { }
+    public void Eliminar() { }
+    public void VerConsumos() { }
+
+    public void Filtrar()
     {
-        try
+        listashow.Clear();
+        if (filtrocat.Equals(""))
         {
-            vehiculolista = await vehiculoServices.GetVehiculo();
-        }
-        catch (Exception e)
-        {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            listashow.AddRange(lista);
             return;
         }
+        foreach(var vehiculo in lista)
+        {
+            switch (tipofiltro)
+            {
+                case "id":
+                    if (vehiculo.Id.ToString().Contains(filtrocat))
+                    {
+                        listashow.Add(vehiculo);
+                    }
+                break;
+                case "matricula":
+                    if (vehiculo.Matricula.Contains(filtrocat))
+                    {
+                        listashow.Add(vehiculo);
+                    }
+                break;
+                case "catvehiculo":
+                    if (vehiculo.CategoriaVehiculo.Contains(filtrocat))
+                    {
+                        listashow.Add(vehiculo);
+                    }
+                break;
+                case "edificio":
+                    if (vehiculo.Edificio is not null && vehiculo.Edificio.Contains(filtrocat))
+                    {
+                        listashow.Add(vehiculo);
+                    }
+                break;
+            }
+            
+        }
+        StateHasChanged();
+    }
+
+    async void GetVehiculoList()
+    {
+        lista = await vehiculoServices.GetVehiculo();
+        listashow.AddRange(lista);
+        
+        StateHasChanged();
     }
     protected override async Task OnInitializedAsync(){
         await Task.Delay(1);
-        SomeStartupTask();
-        
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetVehiculoList();
     }
 }
