@@ -8,8 +8,8 @@ namespace Web.Services.ConsumoServices
 {
     public interface IMaquinariaConsumoServices
     {
-        public Task<IEnumerable<MaquinariaConsumoDTO>?> GetMaquinariaConsumo();
-        public Task<IEnumerable<MaquinariaConsumoDTO>?> GetMaquinariaConsumoByID(int id);
+        public Task<List<MaquinariaConsumoDTO>?> GetMaquinariaConsumo();
+        public Task<List<MaquinariaConsumoDTO>?> GetMaquinariaConsumoByID(int id);
         public Task<string> PostMaquinariaConsumo(MaquinariaConsumoCreateDTO org);
         public Task<string> DeleteMaquinariaConsumo(int id);
         public Task<string> UpdateMaquinariaConsumoPorId(int id, MaquinariaConsumoModifyDTO org);
@@ -25,7 +25,7 @@ namespace Web.Services.ConsumoServices
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<MaquinariaConsumoDTO>?> GetMaquinariaConsumo()
+        public async Task<List<MaquinariaConsumoDTO>?> GetMaquinariaConsumo()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo");
             if (response.IsSuccessStatusCode)
@@ -33,7 +33,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<MaquinariaConsumoDTO>>(resultString);
                 List<MaquinariaConsumoDTO> lista = new List<MaquinariaConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -45,7 +45,7 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<IEnumerable<MaquinariaConsumoDTO>?> GetMaquinariaConsumoByID(int id)
+        public async Task<List<MaquinariaConsumoDTO>?> GetMaquinariaConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo/" + id);
             if (response.IsSuccessStatusCode)
@@ -53,7 +53,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<MaquinariaConsumoDTO>>(resultString);
                 List<MaquinariaConsumoDTO> lista = new List<MaquinariaConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }

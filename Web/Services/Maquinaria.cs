@@ -8,7 +8,8 @@ namespace Web.Services
 {
     public interface IMaquinariaServices
     {
-        public Task<IEnumerable<MaquinariaDTO>?> GetMaquinaria();
+        public Task<List<MaquinariaDTO>?> GetMaquinaria();
+        public Task<MaquinariaDTO?> GetMaquinariaById(int id);
         public Task<string> PostMaquinaria(MaquinariaCreateDTO org);
         public Task<string> DeleteMaquinaria(int id);
         public Task<string> UpdateMaquinariaPorId(int id, MaquinariaModifyDTO org);
@@ -24,7 +25,7 @@ namespace Web.Services
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<MaquinariaDTO>?> GetMaquinaria()
+        public async Task<List<MaquinariaDTO>?> GetMaquinaria()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Maquinaria");
             if (response.IsSuccessStatusCode)
@@ -32,7 +33,7 @@ namespace Web.Services
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<MaquinariaDTO>>(resultString);
                 List<MaquinariaDTO> lista = new List<MaquinariaDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -45,6 +46,22 @@ namespace Web.Services
             return null;
         }
 
+        public async Task<MaquinariaDTO?> GetMaquinariaById(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Maquinaria/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var Maquinaria = JsonConvert.DeserializeObject<MaquinariaDTO>(resultString);
+                return Maquinaria;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
         public async Task<string> PostMaquinaria(MaquinariaCreateDTO org)
         {
             var orgJson =

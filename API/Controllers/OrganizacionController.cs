@@ -94,16 +94,19 @@ namespace API.Controllers
 
             Organizacion org = _mapper.Map<Organizacion>(organizacion);
 
-            Usuario usuario = new() {
+
+            _context.Organizacion.Add(org);
+            await _context.SaveChangesAsync();
+
+            Usuario usuario = new()
+            {
                 NombreApellidos = "admin",
                 Email = org.Email,
                 Contraseña = org.Contraseña,
                 OrganizacionId = org.Id,
                 OrganizacionRef = org,
                 Role = Role.OrgAdmin
-           };
-
-            _context.Organizacion.Add(org);
+            };
             _context.Usuario.Add(usuario);
             await _context.SaveChangesAsync();
 

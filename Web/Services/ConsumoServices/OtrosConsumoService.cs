@@ -8,8 +8,8 @@ namespace Web.Services.ConsumoServices
 {
     public interface IOtrosConsumosServices
     {
-        public Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumos();
-        public Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumosByID(int id);
+        public Task<List<OtrosConsumosDTO>?> GetOtrosConsumos();
+        public Task<List<OtrosConsumosDTO>?> GetOtrosConsumosByID(int id);
         public Task<string> PostOtrosConsumos(OtrosConsumosCreateDTO org);
         public Task<string> DeleteOtrosConsumos(int id);
         public Task<string> UpdateOtrosConsumosPorId(int id, OtrosConsumosModifyDTO org);
@@ -26,7 +26,7 @@ namespace Web.Services.ConsumoServices
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumos()
+        public async Task<List<OtrosConsumosDTO>?> GetOtrosConsumos()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/OtrosConsumos");
             if (response.IsSuccessStatusCode)
@@ -34,7 +34,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<OtrosConsumosDTO>>(resultString);
                 List<OtrosConsumosDTO> lista = new List<OtrosConsumosDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -46,7 +46,7 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<IEnumerable<OtrosConsumosDTO>?> GetOtrosConsumosByID(int id)
+        public async Task<List<OtrosConsumosDTO>?> GetOtrosConsumosByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/OtrosConsumos/" + id);
             if (response.IsSuccessStatusCode)
@@ -54,7 +54,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<OtrosConsumosDTO>>(resultString);
                 List<OtrosConsumosDTO> lista = new List<OtrosConsumosDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }

@@ -1,0 +1,257 @@
+﻿@inject NavigationManager Navigation
+@page "/consumo/vehiculo"
+@page "/consumo/vehiculo/{id}"
+@using API.Models;
+@using API.Models.Consumos;
+@using Microsoft.AspNetCore.Components.Web.Virtualization;
+@using Web.Helpers;
+@using Web.Services;
+@using Web.Services.ConsumoServices;
+@layout Consumos
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Consumo Vehiculo</PageTitle>
+
+<style>
+    h1 {
+        font-size: 30px;
+        color: #000;
+        text-transform: uppercase;
+        font-weight: 300;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    thead {
+    }
+
+    .tbl-content thead th {
+        position: sticky;
+        background-color: aqua;
+        top: 0px;
+        border-bottom: solid 1px black;
+    }
+
+    .tbl-content {
+        height: 600px;
+        overflow-x: auto;
+        margin-top: 0px;
+        border-collapse: collapse;
+    }
+
+    th {
+        padding: 20px 10px;
+        text-align: left;
+        font-weight: 500;
+        font-size: 12px;
+        color: #000;
+        text-transform: uppercase;
+        border-top: solid 2px black;
+        border-right: solid 1px black;
+    }
+
+    td {
+        padding: 15px;
+        text-align: left;
+        vertical-align: middle;
+        font-weight: 300;
+        font-size: 15px;
+        color: #000;
+        border-right: solid 1px black;
+        text-align: center;
+        background-color: aquamarine;
+    }
+
+    #filtro {
+        width: 100%;
+        padding: 10px 0px;
+        background-color: aqua;
+    }
+
+    #input {
+        padding: 2.5px 20px
+    }
+
+    .botones {
+        padding: 15% 20%;
+    }
+
+    .headerbuttons {
+        padding: 20px 0px;
+        width: 7%;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <h1><b>Lista de Consumo de Vehículos</b></h1>
+
+    <div id="filtro">
+        <label id="tipolabel"><b>Filtrar:</b></label>
+
+        <select @bind="tipofiltro" id="select">
+            <option value="id">ID</option>
+            <option value="consumo">Consumo</option>
+            <option value="cantidad">Cantidad de Combustible</option>
+            <option value="edificio">Edificio / Sede</option>
+            <option value="idvehiculo">ID del Vehículo</option>
+
+        </select>
+        <input id="input" placeholder="Buscar" @bind="filtrocat" />
+        <button id="button" @onclick="Filtrar">Filtrar</button>
+
+    </div>
+
+
+    <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+
+            <thead>
+                <tr>
+                    <th>Id Vehículo</th>
+                    <th>Consumo</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Cantidad de Combustible</th>
+                    <th>Edificio/Sede</th>
+                    <th>Id del Vehículo</th>
+                    <th class="headerbuttons">Modificar</th>
+                    <th class="headerbuttons">Eliminar</th>
+
+
+                </tr>
+            </thead>
+            <Virtualize Items="@listashow" Context="consumo">
+                <tbody>
+                    <tr>
+                        <td>@consumo.Id</td>
+                        <td>@consumo.Consumo</td>
+                        <td>@consumo.FechaInicio</td>
+                        <td>@consumo.FechaFin</td>
+                        <td>@consumo.CantidadCombustible</td>
+                        <td>@consumo.Edificio</td>
+                        <td>@consumo.VehiculoId</td>
+                        <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
+                        <td><button class="botones" @onclick="(() => Eliminar(consumo.Id, consumo))">X</button></td>
+                    </tr>
+
+                </tbody>
+            </Virtualize>
+        </table>
+    </div>
+
+</body>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    List<VehiculoConsumoDTO> lista = new List<VehiculoConsumoDTO>();
+    List<VehiculoConsumoDTO> listashow = new List<VehiculoConsumoDTO>();
+    string tipofiltro = "id";
+    string filtrocat = "";
+
+    [Inject]
+    public IVehiculoConsumoServices vehiculoconsumoServices { get; set; }
+
+    public void Modificar(int id)
+    {
+        Navigation.NavigateTo("/modificar/consumo/" + id);
+    }
+
+    public async void Eliminar(int id, VehiculoConsumoDTO consumo)
+    {
+        try
+        {
+            await vehiculoconsumoServices.DeleteVehiculoConsumo(id);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", $"Consumo con id {id} eliminado correctamente");
+        listashow.Remove(consumo);
+        lista.Remove(consumo);
+        StateHasChanged();
+    }
+
+    public void Filtrar()
+    {
+        listashow.Clear();
+        if (filtrocat.Equals(""))
+        {
+            listashow.AddRange(lista);
+            return;
+        }
+        foreach (var consumo in lista)
+        {
+            switch (tipofiltro)
+            {
+                case "id":
+                    if (consumo.Id.ToString().Contains(filtrocat))
+                    {
+                        listashow.Add(consumo);
+                    }
+                    break;
+                case "consumo":
+                    if (consumo.Consumo.ToString().Contains(filtrocat))
+                    {
+                        listashow.Add(consumo);
+                    }
+                    break;
+                case "idvehiculo":
+                    if (consumo.VehiculoId.ToString().Contains(filtrocat))
+                    {
+                        listashow.Add(consumo);
+                    }
+                    break;
+                case "edificio":
+                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat))
+                    {
+                        listashow.Add(consumo);
+                    }
+                    break;
+            }
+
+        }
+        StateHasChanged();
+    }
+
+    async void GetConsumoList()
+    {
+
+        lista = await vehiculoconsumoServices.GetVehiculoConsumo();
+        if (id.Equals("0"))
+        {
+            listashow.AddRange(lista);
+        }
+        else
+        {
+            filtrocat = id;
+            foreach(var consumo in lista)
+            {
+                if (consumo.VehiculoId.ToString() == id)
+                {
+                    listashow.Add(consumo);
+                }
+            }
+        }
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetConsumoList();
+    }
+}

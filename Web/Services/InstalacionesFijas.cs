@@ -8,7 +8,8 @@ namespace Web.Services
 {
     public interface IInstalacionesFijasServices
     {
-        public Task<IEnumerable<InstalacionesFijasDTO>?> GetInstalacionesFijas();
+        public Task<List<InstalacionesFijasDTO>?> GetInstalacionesFijas();
+        public Task<InstalacionesFijasDTO?> GetInstalacionesFijasById(int id);
         public Task<string> PostInstalacionesFijas(InstalacionesFijasCreateDTO org);
         public Task<string> DeleteInstalacionesFijas(int id);
         public Task<string> UpdateInstalacionesFijasPorId(int id, InstalacionesFijasModifyDTO org);
@@ -24,15 +25,15 @@ namespace Web.Services
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<InstalacionesFijasDTO>?> GetInstalacionesFijas()
+        public async Task<List<InstalacionesFijasDTO>?> GetInstalacionesFijas()
         {
-            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas");
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/");
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<InstalacionesFijasDTO>>(resultString);
                 List<InstalacionesFijasDTO> lista = new List<InstalacionesFijasDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -45,6 +46,22 @@ namespace Web.Services
             return null;
         }
 
+        public async Task<InstalacionesFijasDTO?> GetInstalacionesFijasById(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var InstalacionesFijas = JsonConvert.DeserializeObject<InstalacionesFijasDTO>(resultString);
+                return InstalacionesFijas;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
         public async Task<string> PostInstalacionesFijas(InstalacionesFijasCreateDTO org)
         {
             var orgJson =

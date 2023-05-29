@@ -8,7 +8,8 @@ namespace Web.Services
 {
     public interface ITransporteServices
     {
-        public Task<IEnumerable<TransporteDTO>?> GetTransporte();
+        public Task<List<TransporteDTO>?> GetTransporte();
+        public Task<TransporteDTO?> GetTransporteById(int id);
         public Task<string> PostTransporte(TransporteCreateDTO org);
         public Task<string> DeleteTransporte(int id);
         public Task<string> UpdateTransportePorId(int id, TransporteModifyDTO org);
@@ -24,7 +25,7 @@ namespace Web.Services
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<TransporteDTO>?> GetTransporte()
+        public async Task<List<TransporteDTO>?> GetTransporte()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Transporte");
             if (response.IsSuccessStatusCode)
@@ -32,7 +33,7 @@ namespace Web.Services
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<TransporteDTO>>(resultString);
                 List<TransporteDTO> lista = new List<TransporteDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -44,7 +45,22 @@ namespace Web.Services
             }
             return null;
         }
+        public async Task<TransporteDTO?> GetTransporteById(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Transporte/" + id);
 
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var Transporte = JsonConvert.DeserializeObject<TransporteDTO>(resultString);
+                return Transporte;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
         public async Task<string> PostTransporte(TransporteCreateDTO org)
         {
             var orgJson =

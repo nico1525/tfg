@@ -8,8 +8,8 @@ namespace Web.Services.ConsumoServices
 {
     public interface IEmisionesFugitivasConsumoServices
     {
-        public Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumo();
-        public Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumoByID(int id);
+        public Task<List<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumo();
+        public Task<List<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumoByID(int id);
         public Task<string> PostEmisionesFugitivasConsumo(EmisionesFugitivasConsumoCreateDTO org);
         public Task<string> DeleteEmisionesFugitivasConsumo(int id);
         public Task<string> UpdateEmisionesFugitivasConsumoPorId(int id, EmisionesFugitivasConsumoModifyDTO org);
@@ -25,7 +25,7 @@ namespace Web.Services.ConsumoServices
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumo()
+        public async Task<List<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumo()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo");
             if (response.IsSuccessStatusCode)
@@ -33,7 +33,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<EmisionesFugitivasConsumoDTO>>(resultString);
                 List<EmisionesFugitivasConsumoDTO> lista = new List<EmisionesFugitivasConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -45,7 +45,7 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<IEnumerable<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumoByID(int id)
+        public async Task<List<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo/" + id);
             if (response.IsSuccessStatusCode)
@@ -53,7 +53,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<EmisionesFugitivasConsumoDTO>>(resultString);
                 List<EmisionesFugitivasConsumoDTO> lista = new List<EmisionesFugitivasConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }

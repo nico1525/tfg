@@ -50,6 +50,24 @@ namespace API.Controllers
 
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<InstalacionesFijasDTO>> GetInstalacionesFijasById(int id)
+        {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+
+            InstalacionesFijas InstalacionesFijas = await _context.InstalacionesFijas.FindAsync(id);
+            InstalacionesFijasDTO InstalacionesFijasDTO = new();
+            if (InstalacionesFijas.OrganizacionId == currentUser.OrganizacionId)
+            {
+                InstalacionesFijasDTO = _mapper.Map<InstalacionesFijasDTO>(InstalacionesFijas);
+            }
+            else
+            {
+                return BadRequest("Esta Instalación fija no existe o no pertenece a esta organización");
+            }
+            return InstalacionesFijasDTO;
+
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInstalacionesFijas(int id, InstalacionesFijasModifyDTO instalacionesFijas)
         {

@@ -45,6 +45,24 @@ namespace API.Controllers
 
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EmisionesFugitivasDTO>> GetEmisionesFugitivasById(int id)
+        {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+
+            EmisionesFugitivas EmisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(id);
+            EmisionesFugitivasDTO EmisionesFugitivasDTO = new();
+            if (EmisionesFugitivas.OrganizacionId == currentUser.OrganizacionId)
+            {
+                EmisionesFugitivasDTO = _mapper.Map<EmisionesFugitivasDTO>(EmisionesFugitivas);
+            }
+            else
+            {
+                return BadRequest("Esta emisión fugitiva no existe o no pertenece a esta organización");
+            }
+            return EmisionesFugitivasDTO;
+
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEmisionesFugitivas(int id, EmisionesFugitivasModifyDTO emisiones)
         {

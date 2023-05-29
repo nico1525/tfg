@@ -1,0 +1,122 @@
+﻿@inject NavigationManager Navigation
+@page "/modificar/vehiculo/{id}"
+@using API.Models;
+@using Web.Helpers;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@layout Modificar
+
+
+
+<PageTitle>Modificar Vehiculo</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float:left;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+    .iniciarbtn:hover {
+        opacity: 1;
+    }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    .input:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="container">
+    <EditForm Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+
+            <label><b>Id del vehículo</b></label>
+            <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
+
+        <label for="edificio"><b>Edificio/Sede</b></label>
+        <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="vehiculo.Edificio" />
+        <ValidationMessage For="@(() => vehiculo.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Matrícula</b></label>
+        <InputText class="input" id="matricula" placeholder="  Matricula" @bind-Value="vehiculo.Matricula" />
+        <ValidationMessage For="@(() => vehiculo.Matricula)" class="errormsg" />
+
+        <button class="iniciarbtn" type="submit">Modificar Vehículo</button>
+    </EditForm>
+    </div>
+</body>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private VehiculoModifyDTO vehiculo = new VehiculoModifyDTO();
+    private VehiculoDTO originalvehiculo = new VehiculoDTO();
+
+    string result;
+    [Inject]
+    public IVehiculoServices VehiculoServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            int idint = int.Parse(id);
+            result = await VehiculoServices.UpdateVehiculoPorId(idint, vehiculo);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("/gestion/vehiculo");
+    }
+    async void GetVehiculo()
+    {
+        int idint = int.Parse(id);
+        originalvehiculo = await VehiculoServices.GetVehiculoById(idint);
+        vehiculo.Matricula = originalvehiculo.Matricula;
+        vehiculo.Edificio = originalvehiculo.Edificio;
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetVehiculo();
+    }
+}

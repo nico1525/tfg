@@ -78,7 +78,7 @@ td{
 </style>
 
 <body>
-    <h1><b>Lista de Vehculos</b></h1>
+    <h1><b>Lista de Vehículos</b></h1>
 
     <div id="filtro">
         <label id="tipolabel"><b>Filtrar:</b></label>
@@ -112,16 +112,16 @@ td{
 
                 </tr>
             </thead>
-        <Virtualize Items="@listashow" Context="vehiculo">
+            <Virtualize Items="@listashow" Context="vehiculo">
             <tbody>
                 <tr>
                     <td>@vehiculo.Id</td>
                     <td>@vehiculo.Matricula</td>
                     <td>@vehiculo.CategoriaVehiculo</td>
                     <td>@vehiculo.Edificio</td>
-                    <td><button class="botones" @onclick="Modificar">M</button></td>
-                    <td><button class="botones" @onclick="Eliminar">X</button></td>
-                    <td><button class="botones" @onclick="VerConsumos">C</button></td>
+                        <td><button class="botones" @onclick="(() => Modificar(vehiculo.Id))">M</button></td>
+                        <td><button class="botones" @onclick="(() => Eliminar(vehiculo.Id, vehiculo))">X</button></td>
+                        <td><button class="botones" @onclick="(() => VerConsumos(vehiculo.Id))">C</button></td>
                 </tr>
 
             </tbody>
@@ -140,9 +140,31 @@ td{
     [Inject]
     public IVehiculoServices vehiculoServices { get; set; }
 
-    public void Modificar() { }
-    public void Eliminar() { }
-    public void VerConsumos() { }
+    public void Modificar(int id)
+    {    
+        Navigation.NavigateTo("/modificar/vehiculo/" + id);
+    }
+
+    public async void Eliminar(int id, VehiculoDTO vehiculo)
+    {
+        try{
+            await vehiculoServices.DeleteVehiculo(id);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", $"Vehículo con id {id} eliminado correctamente");
+        listashow.Remove(vehiculo);
+        lista.Remove(vehiculo);
+        StateHasChanged();
+    }
+
+    public void VerConsumos(int id)
+    {
+        Navigation.NavigateTo("/consumo/vehiculo/" + id);
+    }
 
     public void Filtrar()
     {
@@ -161,27 +183,27 @@ td{
                     {
                         listashow.Add(vehiculo);
                     }
-                break;
+                    break;
                 case "matricula":
                     if (vehiculo.Matricula.Contains(filtrocat))
                     {
                         listashow.Add(vehiculo);
                     }
-                break;
+                    break;
                 case "catvehiculo":
                     if (vehiculo.CategoriaVehiculo.Contains(filtrocat))
                     {
                         listashow.Add(vehiculo);
                     }
-                break;
+                    break;
                 case "edificio":
                     if (vehiculo.Edificio is not null && vehiculo.Edificio.Contains(filtrocat))
                     {
                         listashow.Add(vehiculo);
                     }
-                break;
+                    break;
             }
-            
+
         }
         StateHasChanged();
     }
@@ -189,12 +211,12 @@ td{
     async void GetVehiculoList()
     {
         lista = await vehiculoServices.GetVehiculo();
+
         listashow.AddRange(lista);
-        
+        //await Task.Delay(1000);
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync(){
-        await Task.Delay(1);
         if (Token.token == null)
         {
             Navigation.NavigateTo("");

@@ -8,8 +8,8 @@ namespace Web.Services.ConsumoServices
 {
     public interface IVehiculoConsumoServices
     {
-        public Task<IEnumerable<VehiculoConsumoDTO>?> GetVehiculoConsumo();
-        public Task<IEnumerable<VehiculoConsumoDTO>?> GetVehiculoConsumoByID(int id);
+        public Task<List<VehiculoConsumoDTO>?> GetVehiculoConsumo();
+        public Task<List<VehiculoConsumoDTO>?> GetVehiculoConsumoByID(int id);
         public Task<string> PostVehiculoConsumo(VehiculoConsumoCreateDTO org);
         public Task<string> DeleteVehiculoConsumo(int id);
         public Task<string> UpdateVehiculoConsumoPorId(int id, VehiculoConsumoModifyDTO org);
@@ -25,7 +25,7 @@ namespace Web.Services.ConsumoServices
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<VehiculoConsumoDTO>?> GetVehiculoConsumo()
+        public async Task<List<VehiculoConsumoDTO>?> GetVehiculoConsumo()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Vehiculo/Consumo");
             if (response.IsSuccessStatusCode)
@@ -33,7 +33,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<VehiculoConsumoDTO>>(resultString);
                 List<VehiculoConsumoDTO> lista = new List<VehiculoConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -45,7 +45,7 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<IEnumerable<VehiculoConsumoDTO>?> GetVehiculoConsumoByID(int id)
+        public async Task<List<VehiculoConsumoDTO>?> GetVehiculoConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Vehiculo/Consumo/" + id);
             if (response.IsSuccessStatusCode)
@@ -53,7 +53,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<VehiculoConsumoDTO>>(resultString);
                 List<VehiculoConsumoDTO> lista = new List<VehiculoConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }

@@ -49,7 +49,24 @@ namespace API.Controllers
             else { return listatodosmaquinarias; }
 
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MaquinariaDTO>> GetMaquinariaById(int id)
+        {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
+            Maquinaria Maquinaria = await _context.Maquinaria.FindAsync(id);
+            MaquinariaDTO MaquinariaDTO = new();
+            if (Maquinaria.OrganizacionId == currentUser.OrganizacionId)
+            {
+                MaquinariaDTO = _mapper.Map<MaquinariaDTO>(Maquinaria);
+            }
+            else
+            {
+                return BadRequest("Esta Maquinaria no existe o no pertenece a esta organización");
+            }
+            return MaquinariaDTO;
+
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMaquinaria(int id, MaquinariaModifyDTO maquinaria)
         {

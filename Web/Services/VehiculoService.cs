@@ -3,12 +3,14 @@ using API.Models;
 using System.Text;
 using Web.Helpers;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Web.Services
 {
     public interface IVehiculoServices
     {
         public Task<List<VehiculoDTO>?> GetVehiculo();
+        public Task<VehiculoDTO?> GetVehiculoById(int id);
         public Task<string> PostVehiculo(VehiculoCreateDTO org);
         public Task<string> DeleteVehiculo(int id);
         public Task<string> UpdateVehiculoPorId(int id, VehiculoModifyDTO org);
@@ -24,11 +26,13 @@ namespace Web.Services
         {
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
-
+            httpClient.Timeout = TimeSpan.FromMinutes(30);
         }
         public async Task<List<VehiculoDTO>?> GetVehiculo()
         {
+            
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Vehiculo");
+           
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
@@ -39,6 +43,22 @@ namespace Web.Services
                     vehiculolista.Add(veh);
                 }
                 return vehiculolista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
+        public async Task<VehiculoDTO?> GetVehiculoById(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Vehiculo/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var vehiculo = JsonConvert.DeserializeObject<VehiculoDTO>(resultString);
+                return vehiculo;
             }
             if (!response.IsSuccessStatusCode)
             {

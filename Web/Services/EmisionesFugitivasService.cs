@@ -8,7 +8,8 @@ namespace Web.Services
 {
     public interface IEmisionesFugitivasServices
     {
-        public Task<IEnumerable<EmisionesFugitivasDTO>?> GetEmisionesFugitivas();
+        public Task<List<EmisionesFugitivasDTO>?> GetEmisionesFugitivas();
+        public Task<EmisionesFugitivasDTO?> GetEmisionesFugitivasById(int id);
         public Task<string> PostEmisionesFugitivas(EmisionesFugitivasCreateDTO org);
         public Task<string> DeleteEmisionesFugitivas(int id);
         public Task<string> UpdateEmisionesFugitivasPorId(int id, EmisionesFugitivasModifyDTO org);
@@ -24,7 +25,7 @@ namespace Web.Services
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<EmisionesFugitivasDTO>?> GetEmisionesFugitivas()
+        public async Task<List<EmisionesFugitivasDTO>?> GetEmisionesFugitivas()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas");
             if (response.IsSuccessStatusCode)
@@ -32,7 +33,7 @@ namespace Web.Services
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<EmisionesFugitivasDTO>>(resultString);
                 List<EmisionesFugitivasDTO> lista = new List<EmisionesFugitivasDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -44,7 +45,22 @@ namespace Web.Services
             }
             return null;
         }
+        public async Task<EmisionesFugitivasDTO?> GetEmisionesFugitivasById(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/" + id);
 
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var EmisionesFugitivas = JsonConvert.DeserializeObject<EmisionesFugitivasDTO>(resultString);
+                return EmisionesFugitivas;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
         public async Task<string> PostEmisionesFugitivas(EmisionesFugitivasCreateDTO org)
         {
             var orgJson =

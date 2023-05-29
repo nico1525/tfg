@@ -1,0 +1,35 @@
+﻿@inject NavigationManager Navigation
+@page "/modificar"
+@layout NavBarLogged
+@inherits LayoutComponentBase
+
+<PageTitle>Agregar Dispositivo</PageTitle>
+
+<style>
+    #inilabel {
+        font-size: 35px;
+    }
+    #text {
+        text-align: center;
+    }
+
+    #navbar {
+        margin-bottom: 2%;
+    }
+
+    #dispositivo {
+        margin: 3% 20% 0 20%;
+    }
+</style>
+<body>
+
+    <div id="navbar"></div>
+    <div id="text"> <label id="inilabel"><b>Modificar Vehículo</b></label></div>
+    <div id="dispositivo">
+        @Body
+    </div>
+
+</body>
+
+@code {
+}

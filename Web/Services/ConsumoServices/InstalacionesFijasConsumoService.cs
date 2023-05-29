@@ -8,8 +8,8 @@ namespace Web.Services.ConsumoServices
 {
     public interface IInstalacionesFijasConsumoServices
     {
-        public Task<IEnumerable<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumo();
-        public Task<IEnumerable<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumoByID(int id);
+        public Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumo();
+        public Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumoByID(int id);
         public Task<string> PostInstalacionesFijasConsumo(InstalacionesFijasConsumoCreateDTO org);
         public Task<string> DeleteInstalacionesFijasConsumo(int id);
         public Task<string> UpdateInstalacionesFijasConsumoPorId(int id, InstalacionesFijasConsumoModifyDTO org);
@@ -25,7 +25,7 @@ namespace Web.Services.ConsumoServices
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumo()
+        public async Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumo()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo");
             if (response.IsSuccessStatusCode)
@@ -33,7 +33,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<InstalacionesFijasConsumoDTO>>(resultString);
                 List<InstalacionesFijasConsumoDTO> lista = new List<InstalacionesFijasConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }
@@ -45,7 +45,7 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<IEnumerable<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumoByID(int id)
+        public async Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo/" + id);
             if (response.IsSuccessStatusCode)
@@ -53,7 +53,7 @@ namespace Web.Services.ConsumoServices
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<InstalacionesFijasConsumoDTO>>(resultString);
                 List<InstalacionesFijasConsumoDTO> lista = new List<InstalacionesFijasConsumoDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }

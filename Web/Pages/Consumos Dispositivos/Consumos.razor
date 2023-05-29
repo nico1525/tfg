@@ -1,0 +1,78 @@
+﻿@inject NavigationManager Navigation
+@page "/consumo"
+@layout NavBarLogged
+@inherits LayoutComponentBase
+
+<PageTitle>Consumo de dispositivos</PageTitle>
+
+
+<style>
+    #tipolabel {
+        font-size: 22px;
+        margin-left: 1%;
+        float: left;
+        margin-top: 1%;
+    }
+
+    #text {
+        text-align: center;
+    }
+
+    #navbar {
+        margin-bottom: 2%;
+    }
+
+    #form {
+        float: left;
+        margin-top: 1%;
+    }
+
+    #button {
+        font-size: 18px;
+        margin-left: 30px;
+        margin-top: 1%;
+    }
+
+    #select {
+        font-size: 18px;
+        margin-left: 30px;
+    }
+
+    #dispositivo {
+        margin: 2% 15% 0 15%;
+        height: 100%;
+    }
+
+    #inilabel {
+        font-size: 35px;
+    }
+</style>
+
+<body>
+    <div id="navbar"></div>
+    <div id="text"> <label id="inilabel"><b>Consumo de Dispositivos</b></label></div>
+    <label id="tipolabel"><b>Tipo de dispositivo:</b></label>
+    <div id="form">
+        <select @bind="dispositivo" id="select">
+            <option value="vehiculo">Vehiculo</option>
+            <option value="transporte">Transporte</option>
+            <option value="maquinaria">Maquinaria</option>
+            <option value="gases">Emisiones Fugitivas</option>
+            <option value="instalacionesfijas">Instalaciones Fijas</option>
+
+        </select>
+    </div>
+    <button id="button" @onclick="SelectDispositivo">Elegir tipo Dispositivo</button>
+    <div id="dispositivo">
+        @Body
+    </div>
+</body>
+
+@code {
+    private string? dispositivo = "vehiculo";
+
+    public void SelectDispositivo()
+    {
+        Navigation.NavigateTo("consumo/" + dispositivo);
+    }
+}

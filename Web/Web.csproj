@@ -20,4 +20,9 @@
     <ProjectReference Include="..\API\API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Modificar consumos\" />
+    <Folder Include="Pages\Crear Consumos\" />
+  </ItemGroup>
+
 </Project>

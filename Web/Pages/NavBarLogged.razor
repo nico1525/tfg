@@ -95,14 +95,16 @@
     #alta:hover{
         cursor: pointer;
     }
+
+    #pointer:hover {
+        cursor: pointer;
+    }
     li a:hover {
         background-color: cornflowerblue;
     }
     li a:active{
         background-color: royalblue;
     }
-
-
 
 </style>
 <body>
@@ -112,7 +114,7 @@
         <li><a id="alta" @onclick="navigate">Dar dispositivo de Alta</a></li>
         <li>
             <div class="dropdown">
-                <a href="gestion" class="dropbtn">
+                <a id="pointer" href="gestion" class="dropbtn">
                     Gestión de Dispositivos
                     <i class="fa fa-caret-down"></i>
                 </a>
@@ -149,5 +151,11 @@
     {
         Navigation.NavigateTo("inicio");
         Navigation.NavigateTo("agregar");
+    }
+
+    public void navigategestion()
+    {
+        Navigation.NavigateTo("inicio");
+        Navigation.NavigateTo("gestion");
     }
 }

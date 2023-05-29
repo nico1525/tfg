@@ -1,4 +1,8 @@
-﻿<style>
+﻿@using Web.Helpers;
+@inject NavigationManager Navigation
+
+
+<style>
     body {
         margin: 0;
     }
@@ -50,7 +54,7 @@
         <li><a href="/">Inicio</a></li>
         <li><a href="login">Iniciar Sesión</a></li>
         <li><a href="registerorg">Registrar Empresa</a></li>
-        <li><a href="inicio"> Login</a></li>
+        <li><a  @onclick="login"> Login</a></li>
 
 
     </ul>
@@ -59,4 +63,11 @@
 
 @code {
 
+    public void login()
+    {
+        Token.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYmYiOjE2ODUzNTcwNTgsImV4cCI6MTY4NTk2MTg1OCwiaWF0IjoxNjg1MzU3MDU4fQ.Qiert5gxJOKNkYTfJasUd1pnbeH26CEDz7_l66sK9n8";
+
+        Navigation.NavigateTo("inicio");
+    }
+    
 }

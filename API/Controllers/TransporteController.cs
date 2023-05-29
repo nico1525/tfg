@@ -49,7 +49,24 @@ namespace API.Controllers
             else { return listatodosransportes; }
 
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TransporteDTO>> GetTransporteById(int id)
+        {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
+            Transporte Transporte = await _context.Transporte.FindAsync(id);
+            TransporteDTO TransporteDTO = new();
+            if (Transporte.OrganizacionId == currentUser.OrganizacionId)
+            {
+                TransporteDTO = _mapper.Map<TransporteDTO>(Transporte);
+            }
+            else
+            {
+                return BadRequest("Este transporte no existe o no pertenece a esta organización");
+            }
+            return TransporteDTO;
+
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransporte(int id, TransporteModifyDTO transporte)
         {

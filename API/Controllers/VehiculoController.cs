@@ -50,6 +50,24 @@ namespace API.Controllers
 
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<VehiculoDTO>> GetVehiculoById(int id)
+        {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+
+            Vehiculo vehiculo = await _context.Vehiculo.FindAsync(id);
+            VehiculoDTO vehiculoDTO = new();
+            if (vehiculo.OrganizacionId == currentUser.OrganizacionId)
+            {
+                vehiculoDTO = _mapper.Map<VehiculoDTO>(vehiculo);
+            }
+            else {
+                return BadRequest("Este vehículo no existe o no pertenece a esta organización");
+            }
+            return vehiculoDTO;
+
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutVehiculo(int id, VehiculoModifyDTO vehiculo)
         {
