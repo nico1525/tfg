@@ -185,5 +185,32 @@ namespace API.Controllers.ControllersConsumo
             }
         }
 
+        [HttpGet("test/{id}")]
+        public async Task<ActionResult<IEnumerable<object>>> Test(int id)
+        {
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+           
+            var joinTables = (from v in _context.Vehiculo
+                         join c in _context.VehiculoConsumo
+                         on v.Id equals c.VehiculoId
+                         select new
+                         {
+                             OrganizaciónId = v.OrganizacionId,
+                             Matricula = v.Matricula,
+                             ConsumoId = c.Id,
+                             VehiculoId = v.Id,
+                             Consumo = c.Consumo
+                         }).Where(r => r.VehiculoId == id).ToList();
+
+            foreach (var t in joinTables)
+            {
+                Console.WriteLine("{0} {1} {2} {3}", t.OrganizaciónId, t.Matricula, t.ConsumoId, t.VehiculoId);
+                return Ok("Id Organizacion "+ t.OrganizaciónId + " Matricula: " + t.Matricula  +" Id del Consumo: " 
+                    + t.ConsumoId+  " Id Vehiculo: " +  t.VehiculoId +" Consumo: "+ t.Consumo);
+            }
+
+            return joinTables;            
+        }
+
     }
 }
