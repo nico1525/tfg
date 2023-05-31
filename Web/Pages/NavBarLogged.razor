@@ -112,9 +112,11 @@
         <li><label id="appname">Web Cálculo Huella de Carbono</label></li>
         <li><a href="inicio" >Inicio</a></li>
         <li><a id="alta" @onclick="navigate">Dar dispositivo de Alta</a></li>
+        <li><a id="alta" @onclick="navigateconsumo">Añadir Nuevo Consumo</a></li>
+
         <li>
             <div class="dropdown">
-                <a id="pointer" href="gestion" class="dropbtn">
+                <a id="pointer" @onclick="navigategestion" class="dropbtn">
                     Gestión de Dispositivos
                     <i class="fa fa-caret-down"></i>
                 </a>
@@ -157,5 +159,11 @@
     {
         Navigation.NavigateTo("inicio");
         Navigation.NavigateTo("gestion");
+    }
+
+    public void navigateconsumo()
+    {
+        Navigation.NavigateTo("inicio");
+        Navigation.NavigateTo("nuevoconsumo");
     }
 }

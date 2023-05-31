@@ -114,7 +114,7 @@
 
             <thead>
                 <tr>
-                    <th>Id Vehículo</th>
+                    <th>Id Consumo</th>
                     <th>Consumo</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha Fin</th>
@@ -162,7 +162,7 @@
 
     public void Modificar(int id)
     {
-        Navigation.NavigateTo("/modificar/consumo/" + id);
+        Navigation.NavigateTo("/modificar/consumovehiculo/" + id);
     }
 
     public async void Eliminar(int id, VehiculoConsumoDTO consumo)

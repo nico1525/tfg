@@ -9,7 +9,7 @@ namespace Web.Services.ConsumoServices
     public interface IMaquinariaConsumoServices
     {
         public Task<List<MaquinariaConsumoDTO>?> GetMaquinariaConsumo();
-        public Task<List<MaquinariaConsumoDTO>?> GetMaquinariaConsumoByID(int id);
+        public Task<MaquinariaConsumoDTO?> GetMaquinariaConsumoByID(int id);
         public Task<string> PostMaquinariaConsumo(MaquinariaConsumoCreateDTO org);
         public Task<string> DeleteMaquinariaConsumo(int id);
         public Task<string> UpdateMaquinariaConsumoPorId(int id, MaquinariaConsumoModifyDTO org);
@@ -45,19 +45,14 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<List<MaquinariaConsumoDTO>?> GetMaquinariaConsumoByID(int id)
+        public async Task<MaquinariaConsumoDTO?> GetMaquinariaConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Maquinaria/Consumo/" + id);
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
-                var list = JsonConvert.DeserializeObject<IEnumerable<MaquinariaConsumoDTO>>(resultString);
-                List<MaquinariaConsumoDTO> lista = new List<MaquinariaConsumoDTO>();
-                foreach (var veh in list)
-                {
-                    lista.Add(veh);
-                }
-                return lista;
+                var list = JsonConvert.DeserializeObject<MaquinariaConsumoDTO>(resultString);
+                return list;
             }
             if (!response.IsSuccessStatusCode)
             {

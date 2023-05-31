@@ -213,7 +213,6 @@ td{
         lista = await vehiculoServices.GetVehiculo();
 
         listashow.AddRange(lista);
-        //await Task.Delay(1000);
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync(){

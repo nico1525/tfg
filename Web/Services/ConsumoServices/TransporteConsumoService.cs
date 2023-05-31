@@ -9,7 +9,7 @@ namespace Web.Services.ConsumoServices
     public interface ITransporteConsumoServices
     {
         public Task<List<TransporteConsumoDTO>?> GetTransporteConsumo();
-        public Task<List<TransporteConsumoDTO>?> GetTransporteConsumoByID(int id);
+        public Task<TransporteConsumoDTO?> GetTransporteConsumoByID(int id);
         public Task<string> PostTransporteConsumo(TransporteConsumoCreateDTO org);
         public Task<string> DeleteTransporteConsumo(int id);
         public Task<string> UpdateTransporteConsumoPorId(int id, TransporteConsumoModifyDTO org);
@@ -45,19 +45,14 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<List<TransporteConsumoDTO>?> GetTransporteConsumoByID(int id)
+        public async Task<TransporteConsumoDTO?> GetTransporteConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Transporte/Consumo/" + id);
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
-                var list = JsonConvert.DeserializeObject<IEnumerable<TransporteConsumoDTO>>(resultString);
-                List<TransporteConsumoDTO> lista = new List<TransporteConsumoDTO>();
-                foreach (var veh in list)
-                {
-                    lista.Add(veh);
-                }
-                return lista;
+                var list = JsonConvert.DeserializeObject<TransporteConsumoDTO>(resultString);
+                return list;
             }
             if (!response.IsSuccessStatusCode)
             {

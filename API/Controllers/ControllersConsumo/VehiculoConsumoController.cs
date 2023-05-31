@@ -141,7 +141,7 @@ namespace API.Controllers.ControllersConsumo
                             }
                             break;
                         case "L":
-                            if(!combustible.Equals("E5") || !combustible.Equals("E10") || !combustible.Equals("E85") || !combustible.Equals("E100"))
+                            if(!combustible.Equals("E5") && !combustible.Equals("E10") && !combustible.Equals("E85") && !combustible.Equals("E100"))
                             {
                                 return BadRequest("Para los vehículos de categoría L solo están permitidos los combustibles E5, E10, E85 y E100");
                             }
@@ -169,7 +169,8 @@ namespace API.Controllers.ControllersConsumo
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
             try { 
             var vehiculoDelete = await _context.VehiculoConsumo.FindAsync(id);
-            if (currentUser.OrganizacionId != vehiculoDelete.VehiculoRef.OrganizacionId)
+            var vehiculo = await _context.Vehiculo.FindAsync(id);
+            if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
             {
                 return BadRequest("Este consumo de vehiculo no existe o no pertenece a esta organización");
             }

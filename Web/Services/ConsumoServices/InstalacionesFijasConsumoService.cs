@@ -9,7 +9,7 @@ namespace Web.Services.ConsumoServices
     public interface IInstalacionesFijasConsumoServices
     {
         public Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumo();
-        public Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumoByID(int id);
+        public Task<InstalacionesFijasConsumoDTO?> GetInstalacionesFijasConsumoByID(int id);
         public Task<string> PostInstalacionesFijasConsumo(InstalacionesFijasConsumoCreateDTO org);
         public Task<string> DeleteInstalacionesFijasConsumo(int id);
         public Task<string> UpdateInstalacionesFijasConsumoPorId(int id, InstalacionesFijasConsumoModifyDTO org);
@@ -45,19 +45,14 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
-        public async Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumoByID(int id)
+        public async Task<InstalacionesFijasConsumoDTO?> GetInstalacionesFijasConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo/" + id);
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
-                var list = JsonConvert.DeserializeObject<IEnumerable<InstalacionesFijasConsumoDTO>>(resultString);
-                List<InstalacionesFijasConsumoDTO> lista = new List<InstalacionesFijasConsumoDTO>();
-                foreach (var veh in list)
-                {
-                    lista.Add(veh);
-                }
-                return lista;
+                var list = JsonConvert.DeserializeObject<InstalacionesFijasConsumoDTO>(resultString);
+                return list;
             }
             if (!response.IsSuccessStatusCode)
             {
