@@ -54,7 +54,7 @@ namespace API.Controllers
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-            var currentOrg = currentUser.OrganizacionRef;
+            var currentOrg =  await _context.Organizacion.FindAsync(currentUser.Id);
 
             var antiguaorganizacion = await _context.Organizacion.FindAsync(currentOrg.Id);
 
@@ -104,7 +104,6 @@ namespace API.Controllers
                 Email = org.Email,
                 Contraseña = org.Contraseña,
                 OrganizacionId = org.Id,
-                OrganizacionRef = org,
                 Role = Role.OrgAdmin
             };
             _context.Usuario.Add(usuario);
@@ -119,8 +118,8 @@ namespace API.Controllers
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-            var currentOrg = currentUser.OrganizacionRef;
-
+            var currentOrg = await _context.Organizacion.FindAsync(currentUser.OrganizacionId);
+        
             _context.Organizacion.Remove(currentOrg);
             await _context.SaveChangesAsync();
 

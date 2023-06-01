@@ -1,0 +1,100 @@
+﻿@inject NavigationManager Navigation
+@page "/agregar/emisionfugitiva"
+@using API.Models;
+@using Web.Services;
+@layout AgregarDispositivo
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Agregar EmisionFugitiva</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    #labelnew {
+        font-size: 24px;
+        margin-bottom: 3%;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="labelnew"><label><b>Nueva Emisión Fugitiva:</b></label></div>
+    <div id="container">
+        <EditForm Model="@emisionFugitiva" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="emisionFugitiva.Edificio" />
+            <ValidationMessage For="@(() => emisionFugitiva.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Nombre del Equipo</b></label>
+            <InputText class="input" id="matricula" placeholder="  Nombre del Equipo" @bind-Value="emisionFugitiva.NombreEquipo" />
+            <ValidationMessage For="@(() => emisionFugitiva.NombreEquipo)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Añadir Emisión Fugitiva</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    private EmisionesFugitivasCreateDTO emisionFugitiva = new EmisionesFugitivasCreateDTO();
+    string result;
+    [Inject]
+    public IEmisionesFugitivasServices EmisionFugitivaServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await EmisionFugitivaServices.PostEmisionesFugitivas(emisionFugitiva);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+}

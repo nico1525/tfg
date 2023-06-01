@@ -111,7 +111,6 @@ namespace API.Controllers
             Transporte transporte = _mapper.Map<Transporte>(transporteDTO);
 
             transporte.OrganizacionId = currentUser.OrganizacionId;
-            transporte.OrganizacionRef = currentUser.OrganizacionRef;
             _context.Transporte.Add(transporte);
             await _context.SaveChangesAsync();
             return Ok("Transporte creado correctamente");

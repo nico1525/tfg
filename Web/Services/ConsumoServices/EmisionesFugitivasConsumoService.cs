@@ -9,6 +9,7 @@ namespace Web.Services.ConsumoServices
     public interface IEmisionesFugitivasConsumoServices
     {
         public Task<List<EmisionesFugitivasConsumoDTO>?> GetEmisionesFugitivasConsumo();
+        public Task<EmisionesFugitivasConsumoDTO?> GetConsumoByID(int id);
         public Task<EmisionesFugitivasConsumoDTO?> GetEmisionesFugitivasConsumoByID(int id);
         public Task<string> PostEmisionesFugitivasConsumo(EmisionesFugitivasConsumoCreateDTO org);
         public Task<string> DeleteEmisionesFugitivasConsumo(int id);
@@ -38,6 +39,21 @@ namespace Web.Services.ConsumoServices
                     lista.Add(veh);
                 }
                 return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
+        public async Task<EmisionesFugitivasConsumoDTO?> GetConsumoByID(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/Consumo/id/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var consumo = JsonConvert.DeserializeObject<EmisionesFugitivasConsumoDTO>(resultString);
+                return consumo;
             }
             if (!response.IsSuccessStatusCode)
             {

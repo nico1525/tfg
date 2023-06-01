@@ -17,7 +17,6 @@ namespace API.Models.Consumos
         public float Consumo { get; set; }
         [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
-        public Organizacion? OrganizacionRef { get; set; }
     }
 
     public class OtrosConsumosDTO

@@ -1,5 +1,7 @@
-﻿@inject NavigationManager Navigation
+﻿
+@inject NavigationManager Navigation
 @page "/agregar"
+@using Web.Helpers;
 @layout NavBarLogged
 @inherits LayoutComponentBase
 
@@ -25,11 +27,6 @@
         float: left;
         margin-top: 1%;
     }
-    #button{
-        font-size: 18px;
-        margin-left: 30px;
-        margin-top: 1%;
-    }
     #select{
         font-size: 18px;
         margin-left: 30px;
@@ -49,12 +46,11 @@
                 <option value="vehiculo">Vehiculo</option>
                 <option value="transporte">Transporte</option>
                 <option value="maquinaria">Maquinaria</option>
-                <option value="gases">Emisiones Fugitivas</option>
-                <option value="instalacionesfijas">Instalaciones Fijas</option>
+                <option value="emisionfugitiva">Emisiones Fugitivas</option>
+                <option value="instalacionfija">Instalaciones Fijas</option>
     
             </select>
     </div>
-    <button id="button" @onclick="SelectDispositivo">Elegir tipo Dispositivo</button>
     <div id="dispositivo">
         @Body
     </div>
@@ -62,9 +58,19 @@
 </body>
 
 @code {
-    private string? dispositivo = "vehiculo";
+    private string? dispositivo2;
+    private string? dispositivo { get { return dispositivo2; } set { dispositivo2 = value;  SelectDispositivo(); } }
     public void SelectDispositivo()
     {
-        Navigation.NavigateTo("agregar/" + dispositivo);
+        Navigation.NavigateTo("agregar/" + dispositivo2);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        Navigation.NavigateTo("agregar/vehiculo");
     }
 }

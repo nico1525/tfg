@@ -1,0 +1,133 @@
+﻿@inject NavigationManager Navigation
+@page "/nuevoconsumo/emisionesfugitivas"
+@using API.Models;
+@using API.Models.Consumos;
+@using Web.Services;
+@layout NuevoConsumo;
+@using Microsoft.AspNetCore.Components.Forms
+@using Web.Services.ConsumoServices;
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Agregar Consumo EmisionesFugitivas</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    #labelnew {
+        font-size: 24px;
+        margin-bottom: 3%;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="labelnew"><label><b>Nuevo Consumo de Emisiones Fugitivas:</b></label></div>
+    <div id="container">
+        <EditForm Model="@emisionesFugitivas" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="matricula"><b>Id del EmisionesFugitivas</b></label>
+            <InputNumber class="input" id="EmisionesFugitivasId" placeholder="  EmisionesFugitivasId" @bind-Value="emisionesFugitivas.EmisionesFugitivasId" />
+            <ValidationMessage For="@(() => emisionesFugitivas.EmisionesFugitivasId)" class="errormsg" />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="emisionesFugitivas.Edificio" />
+            <ValidationMessage For="@(() => emisionesFugitivas.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Cantidad de la Recarga</b></label>
+            <InputNumber class="input" id="CantidadCombustible" placeholder="  Recarga" @bind-Value="emisionesFugitivas.Recarga" />
+            <ValidationMessage For="@(() => emisionesFugitivas.Recarga)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="emisionesFugitivas.FechaInicio" />
+            <ValidationMessage For="@(() => emisionesFugitivas.FechaInicio)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha Fin</b></label>
+            <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="emisionesFugitivas.FechaFin" />
+            <ValidationMessage For="@(() => emisionesFugitivas.FechaFin)" class="errormsg" />
+
+            <label for="categoria"><b>Tipo de Gas</b></label>
+            <InputSelect class="input" id="categoria" @bind-Value="emisionesFugitivas.Gas">
+                @*<option value="E5">E5</option>
+                <option value="E10">E10</option>
+                <option value="E85">E85</option>
+                <option value="E100">E100</option>
+                <option value="B7">B7</option>
+                <option value="B10">B10</option>
+                <option value="B20">B20</option>
+                <option value="B30">B30</option>
+                <option value="B100">B100</option>
+                <option value="LPG">LPG</option>
+                <option value="CNG">CNG</option>*@
+
+            </InputSelect>
+            <ValidationMessage For="@(() => emisionesFugitivas.Gas)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Añadir Consumo de EmisionesFugitivas</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    private EmisionesFugitivasConsumoCreateDTO emisionesFugitivas = new EmisionesFugitivasConsumoCreateDTO() { Gas = "", FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
+    string result;
+
+
+    [Inject]
+    public IEmisionesFugitivasConsumoServices EmisionesFugitivasConsumoServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await EmisionesFugitivasConsumoServices.PostEmisionesFugitivasConsumo(emisionesFugitivas);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+}

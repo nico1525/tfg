@@ -43,6 +43,17 @@ namespace API.Controllers.ControllersConsumo
             return orgConsumoList;
         }
 
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<VehiculoConsumoDTO>> GetVehiculoConsumoId(int id)
+        {
+            //Devuelve el consumos por su id
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var consumo = await _context.VehiculoConsumo.FindAsync(id);
+            VehiculoConsumoDTO consumodto = _mapper.Map<VehiculoConsumoDTO>(consumo);
+
+            return consumodto;
+        }
+
         [HttpGet("{vehiculoid}")]
         public async Task<ActionResult<IEnumerable<VehiculoConsumoDTO>>> GetVehiculoConsumo(int id)
         {
@@ -151,7 +162,6 @@ namespace API.Controllers.ControllersConsumo
                     VehiculoConsumo vehiculoConsumo = _mapper.Map<VehiculoConsumo>(vehiculoConsumoDTO);
 
                     vehiculoConsumo.Consumo = CalculoVehiculo.CalculoConsumoVehiculo(vehiculo, vehiculoConsumo, _context);
-                    vehiculoConsumo.VehiculoRef = vehiculo;
                     vehiculoConsumo.VehiculoId = vehiculo.Id;
 
                     _context.VehiculoConsumo.Add(vehiculoConsumo);
@@ -169,7 +179,7 @@ namespace API.Controllers.ControllersConsumo
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
             try { 
             var vehiculoDelete = await _context.VehiculoConsumo.FindAsync(id);
-            var vehiculo = await _context.Vehiculo.FindAsync(id);
+            var vehiculo = await _context.Vehiculo.FindAsync(vehiculoDelete.VehiculoId);
             if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
             {
                 return BadRequest("Este consumo de vehiculo no existe o no pertenece a esta organización");
@@ -201,13 +211,6 @@ namespace API.Controllers.ControllersConsumo
                              VehiculoId = v.Id,
                              Consumo = c.Consumo
                          }).Where(r => r.VehiculoId == id).ToList();
-
-            foreach (var t in joinTables)
-            {
-                Console.WriteLine("{0} {1} {2} {3}", t.OrganizaciónId, t.Matricula, t.ConsumoId, t.VehiculoId);
-                return Ok("Id Organizacion "+ t.OrganizaciónId + " Matricula: " + t.Matricula  +" Id del Consumo: " 
-                    + t.ConsumoId+  " Id Vehiculo: " +  t.VehiculoId +" Consumo: "+ t.Consumo);
-            }
 
             return joinTables;            
         }

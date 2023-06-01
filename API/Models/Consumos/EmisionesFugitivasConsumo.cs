@@ -16,8 +16,6 @@ namespace API.Models.Consumos
         public float Consumo { get; set; }
         [ForeignKey("EmisionesFugitivas")]
         public int EmisionesFugitivasId { get; set; }
-        [JsonIgnore]
-        public EmisionesFugitivas? EmisionesFugitivasRef { get; set; }
     }
 
     public class EmisionesFugitivasConsumoCreateDTO

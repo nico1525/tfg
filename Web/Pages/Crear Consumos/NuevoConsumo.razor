@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager Navigation
 @page "/nuevoconsumo"
+@using Web.Helpers;
 @layout NavBarLogged
 @inherits LayoutComponentBase
 
@@ -55,8 +56,9 @@
             <option value="vehiculo">Vehiculo</option>
             <option value="transporte">Transporte</option>
             <option value="maquinaria">Maquinaria</option>
-            <option value="gases">Emisiones Fugitivas</option>
+            <option value="emisionesfugitivas">Emisiones Fugitivas</option>
             <option value="instalacionesfijas">Instalaciones Fijas</option>
+            <option value="otrosconsumos">Otros Consumos</option>
 
         </select>
     </div>
@@ -72,5 +74,13 @@
     public void SelectDispositivo()
     {
         Navigation.NavigateTo("nuevoconsumo/" + dispositivo);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
     }
 }

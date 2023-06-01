@@ -101,7 +101,6 @@ namespace API.Controllers
             InstalacionesFijas instalacionesFijas = _mapper.Map<InstalacionesFijas>(instalacionesFijasDTO);
 
             instalacionesFijas.OrganizacionId = currentUser.OrganizacionId;
-            instalacionesFijas.OrganizacionRef = currentUser.OrganizacionRef;
             _context.InstalacionesFijas.Add(instalacionesFijas);
             await _context.SaveChangesAsync();
             return Ok("Instalación fija creada correctamente");

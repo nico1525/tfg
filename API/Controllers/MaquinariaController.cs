@@ -100,7 +100,6 @@ namespace API.Controllers
             Maquinaria maquinaria = _mapper.Map<Maquinaria>(maquinariaDTO);
 
             maquinaria.OrganizacionId = currentUser.OrganizacionId;
-            maquinaria.OrganizacionRef = currentUser.OrganizacionRef;
             _context.Maquinaria.Add(maquinaria);
             await _context.SaveChangesAsync();
             return Ok("Maquinaria creada correctamente");

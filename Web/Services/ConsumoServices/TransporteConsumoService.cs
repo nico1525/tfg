@@ -9,6 +9,7 @@ namespace Web.Services.ConsumoServices
     public interface ITransporteConsumoServices
     {
         public Task<List<TransporteConsumoDTO>?> GetTransporteConsumo();
+        public Task<TransporteConsumoDTO?> GetConsumoByID(int id);
         public Task<TransporteConsumoDTO?> GetTransporteConsumoByID(int id);
         public Task<string> PostTransporteConsumo(TransporteConsumoCreateDTO org);
         public Task<string> DeleteTransporteConsumo(int id);
@@ -38,6 +39,22 @@ namespace Web.Services.ConsumoServices
                     lista.Add(veh);
                 }
                 return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
+
+        public async Task<TransporteConsumoDTO?> GetConsumoByID(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Transporte/Consumo/id/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var consumo = JsonConvert.DeserializeObject<TransporteConsumoDTO>(resultString);
+                return consumo;
             }
             if (!response.IsSuccessStatusCode)
             {

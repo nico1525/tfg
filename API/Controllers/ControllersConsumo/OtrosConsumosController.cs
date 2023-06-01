@@ -46,6 +46,17 @@ namespace API.Controllers.ControllersConsumo
             return orgConsumoList;
         }
 
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<OtrosConsumosDTO>> GetOtrosConsumosId(int id)
+        {
+            //Devuelve el consumos por su id
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var consumo = await _context.OtrosConsumos.FindAsync(id);
+            OtrosConsumosDTO consumodto = _mapper.Map<OtrosConsumosDTO>(consumo);
+
+            return consumodto;
+        }
+
         [HttpGet("{otrosconsumosid}")]
         public async Task<ActionResult<OtrosConsumosDTO>> GetOtrosConsumosById(int id)
         {
@@ -133,7 +144,6 @@ namespace API.Controllers.ControllersConsumo
                 return BadRequest("Algo ha ido mla en el calculo del consumo");
             }
             otrosconsumosConsumo.OrganizacionId = currentUser.OrganizacionId;
-            otrosconsumosConsumo.OrganizacionRef = currentUser.OrganizacionRef;
 
             _context.OtrosConsumos.Add(otrosconsumosConsumo);
             await _context.SaveChangesAsync();
@@ -147,6 +157,7 @@ namespace API.Controllers.ControllersConsumo
             try
             {
                 var otrosconsumosDelete = await _context.OtrosConsumos.FindAsync(id);
+
                 if (currentUser.OrganizacionId != otrosconsumosDelete.OrganizacionId)
                 {
                     return BadRequest("Este consumo de otras fuentes no existe o no pertenece a esta organización");

@@ -1,0 +1,142 @@
+﻿@inject NavigationManager Navigation
+@page "/nuevoconsumo/instalacionesfijas"
+@using API.Models;
+@using API.Models.Consumos;
+@using Web.Services;
+@layout NuevoConsumo;
+@using Microsoft.AspNetCore.Components.Forms
+@using Web.Services.ConsumoServices;
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Agregar Consumo InstalacionesFijas</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    #labelnew {
+        font-size: 24px;
+        margin-bottom: 3%;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="labelnew"><label><b>Nuevo Consumo de Instalación Fija:</b></label></div>
+    <div id="container">
+        <EditForm Model="@instalacionesFijas" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="matricula"><b>Id del Instalación Fija</b></label>
+            <InputNumber class="input" id="InstalacionesFijasId" placeholder="  InstalacionesFijasId" @bind-Value="instalacionesFijas.InstalacionesFijasId" />
+            <ValidationMessage For="@(() => instalacionesFijas.InstalacionesFijasId)" class="errormsg" />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="instalacionesFijas.Edificio" />
+            <ValidationMessage For="@(() => instalacionesFijas.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Cantidad de Combustible</b></label>
+            <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="instalacionesFijas.CantidadCombustible" />
+            <ValidationMessage For="@(() => instalacionesFijas.CantidadCombustible)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="instalacionesFijas.FechaInicio" />
+            <ValidationMessage For="@(() => instalacionesFijas.FechaInicio)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha Fin</b></label>
+            <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="instalacionesFijas.FechaFin" />
+            <ValidationMessage For="@(() => instalacionesFijas.FechaFin)" class="errormsg" />
+
+            <label for="categoria"><b>Tipo de Combustible</b></label>
+            <InputSelect class="input" id="categoria" @bind-Value="instalacionesFijas.TipoCombustible">
+                <option value="gasoleoc">Gasóleo C</option>
+                <option value="gasoleob">Gasóleo B</option>
+                <option value="gasnatural">Gas Natural</option>
+                <option value="fueloleo">Fuelóleo</option>
+                <option value="LPG">LPG</option>
+                <option value="queroseno">Queroseno</option>
+                <option value="gaspropano">Gasp ropano</option>
+                <option value="gasbutano">Gas butano</option>
+                <option value="gasmanufacturado">Gas manufacturado</option>
+                <option value="biogas">Biogás</option>
+                <option value="biomasamadera">Biomasa madera</option>
+                <option value="biomasapellets">Biomasa pellets</option>
+                <option value="biomasaastillas">Biomasa astillas</option>
+                <option value="biomasaserrinesvirutas">Biomasa serrines virutas</option>
+                <option value="biomasacascaraf.secos">Biomasa cáscara f. secos</option>
+                <option value="biomasahuesoaceituna">Biomasa hueso aceituna</option>
+                <option value="carbonvegetal">Carbón vegetal</option>
+                <option value="coquedepetroleo">Coque de petróleo</option>
+                <option value="coquedecarbon">Coque de carbón</option>
+                <option value="hullayantracita">Hulla y antracita</option>
+                <option value="hullassubituminosas">Hullas subituminosas</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => instalacionesFijas.TipoCombustible)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Añadir Consumo de Instalación Fija</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    private InstalacionesFijasConsumoCreateDTO instalacionesFijas = new InstalacionesFijasConsumoCreateDTO() { TipoCombustible = "gasoleoc", FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
+    string result;
+
+
+    [Inject]
+    public IInstalacionesFijasConsumoServices InstalacionesFijasConsumoServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await InstalacionesFijasConsumoServices.PostInstalacionesFijasConsumo(instalacionesFijas);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+}

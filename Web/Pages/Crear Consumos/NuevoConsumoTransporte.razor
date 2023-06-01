@@ -1,0 +1,116 @@
+﻿@inject NavigationManager Navigation
+@page "/nuevoconsumo/transporte"
+@using API.Models;
+@using API.Models.Consumos;
+@using Web.Services;
+@layout NuevoConsumo;
+@using Microsoft.AspNetCore.Components.Forms
+@using Web.Services.ConsumoServices;
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Agregar Consumo Transporte</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    #labelnew {
+        font-size: 24px;
+        margin-bottom: 3%;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="labelnew"><label><b>Nuevo Consumo de Transporte:</b></label></div>
+    <div id="container">
+        <EditForm Model="@transporte" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="matricula"><b>Id del Transporte</b></label>
+            <InputNumber class="input" id="TransporteId" placeholder="  TransporteId" @bind-Value="transporte.TransporteId" />
+            <ValidationMessage For="@(() => transporte.TransporteId)" class="errormsg" />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="transporte.Edificio" />
+            <ValidationMessage For="@(() => transporte.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Cantidad de Combustible</b></label>
+            <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="transporte.CantidadCombustible" />
+            <ValidationMessage For="@(() => transporte.CantidadCombustible)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="transporte.FechaInicio" />
+            <ValidationMessage For="@(() => transporte.FechaInicio)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha Fin</b></label>
+            <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="transporte.FechaFin" />
+            <ValidationMessage For="@(() => transporte.FechaFin)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Añadir Consumo de Transporte</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    private TransporteConsumoCreateDTO transporte = new TransporteConsumoCreateDTO() { FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
+    string result;
+
+
+    [Inject]
+    public ITransporteConsumoServices TransporteConsumoServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await TransporteConsumoServices.PostTransporteConsumo(transporte);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+}

@@ -9,6 +9,7 @@ namespace Web.Services.ConsumoServices
     public interface IInstalacionesFijasConsumoServices
     {
         public Task<List<InstalacionesFijasConsumoDTO>?> GetInstalacionesFijasConsumo();
+        public Task<InstalacionesFijasConsumoDTO?> GetConsumoByID(int id);
         public Task<InstalacionesFijasConsumoDTO?> GetInstalacionesFijasConsumoByID(int id);
         public Task<string> PostInstalacionesFijasConsumo(InstalacionesFijasConsumoCreateDTO org);
         public Task<string> DeleteInstalacionesFijasConsumo(int id);
@@ -45,6 +46,22 @@ namespace Web.Services.ConsumoServices
             }
             return null;
         }
+        public async Task<InstalacionesFijasConsumoDTO?> GetConsumoByID(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo/id/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var consumo = JsonConvert.DeserializeObject<InstalacionesFijasConsumoDTO>(resultString);
+                return consumo;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
+
         public async Task<InstalacionesFijasConsumoDTO?> GetInstalacionesFijasConsumoByID(int id)
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/Consumo/" + id);

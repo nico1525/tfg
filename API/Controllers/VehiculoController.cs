@@ -109,7 +109,6 @@ namespace API.Controllers
             Vehiculo vehiculo = _mapper.Map<Vehiculo>(vehiculoDTO);
 
             vehiculo.OrganizacionId = currentUser.OrganizacionId;
-            vehiculo.OrganizacionRef = currentUser.OrganizacionRef;
             _context.Vehiculo.Add(vehiculo);
             await _context.SaveChangesAsync();
             return Ok("Vehiculo creado correctamente");

@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager Navigation
 @page "/modificarconsumo"
+@using Web.Helpers;
 @layout NavBarLogged
 @inherits LayoutComponentBase
 
@@ -33,4 +34,12 @@
 </body>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+    }
 }

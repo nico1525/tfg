@@ -16,8 +16,6 @@ namespace API.Models.Consumos
         public float Consumo { get; set; }
         [ForeignKey("Vehiculo")]
         public int VehiculoId { get; set; }
-        [JsonIgnore]
-        public Vehiculo? VehiculoRef { get; set; }
 
     }
     public class VehiculoConsumoCreateDTO

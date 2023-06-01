@@ -9,6 +9,7 @@ namespace Web.Services.ConsumoServices
     public interface IOtrosConsumosServices
     {
         public Task<List<OtrosConsumosDTO>?> GetOtrosConsumos();
+        public Task<OtrosConsumosDTO?> GetConsumoByID(int id);
         public Task<OtrosConsumosDTO?> GetOtrosConsumosByID(int id);
         public Task<string> PostOtrosConsumos(OtrosConsumosCreateDTO org);
         public Task<string> DeleteOtrosConsumos(int id);
@@ -39,6 +40,22 @@ namespace Web.Services.ConsumoServices
                     lista.Add(veh);
                 }
                 return lista;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
+
+        public async Task<OtrosConsumosDTO?> GetConsumoByID(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/OtrosConsumo/Consumo/id/" + id);
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var consumo = JsonConvert.DeserializeObject<OtrosConsumosDTO>(resultString);
+                return consumo;
             }
             if (!response.IsSuccessStatusCode)
             {

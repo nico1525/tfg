@@ -14,8 +14,6 @@ namespace API.Models
         public string? Email { get; set; }
         public string? Contraseña { get; set; }
         public int OrganizacionId { get; set; }
-        [JsonIgnore]
-        public Organizacion? OrganizacionRef { get; set; }
         public Role Role { get; set; } = Role.User;
     }
 

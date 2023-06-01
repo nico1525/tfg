@@ -95,7 +95,6 @@ namespace API.Controllers
             EmisionesFugitivas emisiones = _mapper.Map<EmisionesFugitivas>(emisionesDTO);
 
             emisiones.OrganizacionId = currentUser.OrganizacionId;
-            emisiones.OrganizacionRef = currentUser.OrganizacionRef;
             _context.EmisionesFugitivas.Add(emisiones);
             await _context.SaveChangesAsync();
             return Ok("Equipo de refrigeración/climatización o fuga de gas añadido creado correctamente");

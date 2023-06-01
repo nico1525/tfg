@@ -11,7 +11,6 @@ namespace API.Models
         public string? Nombre { get; set; }
         [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
-        public Organizacion? OrganizacionRef { get; set; }
     }
 
     public class InstalacionesFijasDTO

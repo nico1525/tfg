@@ -48,6 +48,17 @@ namespace API.Controllers.ControllersConsumo
             return orgConsumoList;
         }
 
+        [HttpGet("id/{id}")] 
+        public async Task<ActionResult<MaquinariaConsumoDTO>> GetMaquinariaConsumoId(int id)
+        {
+            //Devuelve el consumos por su id
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var consumo = await _context.MaquinariaConsumo.FindAsync(id);
+            MaquinariaConsumoDTO consumodto = _mapper.Map<MaquinariaConsumoDTO>(consumo);
+
+            return consumodto;
+        }
+
         [HttpGet("{maquinariaid}")]
         public async Task<ActionResult<IEnumerable<MaquinariaConsumoDTO>>> GetMaquinariaConsumo(int id)
         {
@@ -142,7 +153,6 @@ namespace API.Controllers.ControllersConsumo
                     MaquinariaConsumo maquinariaConsumo = _mapper.Map<MaquinariaConsumo>(maquinariaConsumoDTO);
 
                     maquinariaConsumo.Consumo = CalculoMaquinaria.CalculoConsumoMaquinaria(maquinaria, maquinariaConsumo, _context);
-                    maquinariaConsumo.MaquinariaRef = maquinaria;
                     maquinariaConsumo.MaquinariaId = maquinaria.Id;
 
                     _context.MaquinariaConsumo.Add(maquinariaConsumo);
@@ -161,7 +171,9 @@ namespace API.Controllers.ControllersConsumo
             try
             {
                 var maquinariaDelete = await _context.MaquinariaConsumo.FindAsync(id);
-                if (currentUser.OrganizacionId != maquinariaDelete.MaquinariaRef.OrganizacionId)
+                var Maquinaria = await _context.Maquinaria.FindAsync(maquinariaDelete.MaquinariaId);
+
+                if (currentUser.OrganizacionId != Maquinaria.OrganizacionId)
                 {
                     return BadRequest("Este consumo de maquinaria no existe o no pertenece a esta organización");
                 }

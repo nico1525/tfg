@@ -43,6 +43,17 @@ namespace API.Controllers.ControllersConsumo
             return orgConsumoList;
         }
 
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<EmisionesFugitivasConsumoDTO>> GetEmisionesFugitivasConsumoId(int id)
+        {
+            //Devuelve el consumos por su id
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var consumo = await _context.EmisionesFugitivasConsumo.FindAsync(id);
+            EmisionesFugitivasConsumoDTO consumodto = _mapper.Map<EmisionesFugitivasConsumoDTO>(consumo);
+
+            return consumodto;
+        }
+
         [HttpGet("{emisionesid}")]
         public async Task<ActionResult<IEnumerable<EmisionesFugitivasConsumoDTO>>> GetEmisionesFugitivasConsumo(int id)
         {
@@ -142,7 +153,6 @@ namespace API.Controllers.ControllersConsumo
                     {
                         return BadRequest("Este Tipo de Gas no es válido");
                     }
-                    emisionesConsumo.EmisionesFugitivasRef = emisiones;
                     emisionesConsumo.EmisionesFugitivasId = emisiones.Id;
 
                     _context.EmisionesFugitivasConsumo.Add(emisionesConsumo);
@@ -161,7 +171,9 @@ namespace API.Controllers.ControllersConsumo
             try
             {
                 var emisionesDelete = await _context.EmisionesFugitivasConsumo.FindAsync(id);
-                if (currentUser.OrganizacionId != emisionesDelete.EmisionesFugitivasRef.OrganizacionId)
+                var EmisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(emisionesDelete.EmisionesFugitivasId);
+
+                if (currentUser.OrganizacionId != EmisionesFugitivas.OrganizacionId)
                 {
                     return BadRequest("Este consumo de equipo o fuga no existe o no pertenece a esta organización");
                 }

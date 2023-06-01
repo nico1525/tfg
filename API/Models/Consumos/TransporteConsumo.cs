@@ -15,8 +15,6 @@ namespace API.Models.Consumos
         public float Consumo { get; set; }
         [ForeignKey("Transporte")]
         public int TransporteId { get; set; }
-        [JsonIgnore]
-        public Transporte? TransporteRef { get; set; }
     }
 
     public class TransporteConsumoCreateDTO

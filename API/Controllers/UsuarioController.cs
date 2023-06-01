@@ -140,7 +140,6 @@ namespace API.Controllers
 
             Usuario usu = _mapper.Map<Usuario>(usuario);
             usu.OrganizacionId = currentUser.OrganizacionId;
-            usu.OrganizacionRef = currentUser.OrganizacionRef;
             _context.Usuario.Add(usu);
             await _context.SaveChangesAsync();
 

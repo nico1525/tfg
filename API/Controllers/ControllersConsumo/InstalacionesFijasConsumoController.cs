@@ -48,6 +48,17 @@ namespace API.Controllers.ControllersConsumo
             return orgConsumoList;
         }
 
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<InstalacionesFijasConsumoDTO>> GetInstalacionesFijasConsumoId(int id)
+        {
+            //Devuelve el consumos por su id
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var consumo = await _context.InstalacionesFijasConsumo.FindAsync(id);
+            InstalacionesFijasConsumoDTO consumodto = _mapper.Map<InstalacionesFijasConsumoDTO>(consumo);
+
+            return consumodto;
+        }
+
         [HttpGet("{instalacionesFijaid}")]
         public async Task<ActionResult<IEnumerable<InstalacionesFijasConsumoDTO>>> GetInstalacionesFijasConsumo(int id)
         {
@@ -146,7 +157,6 @@ namespace API.Controllers.ControllersConsumo
                     {
                         return BadRequest("Este Tipo de combustible no es válido");
                     }
-                    instalacionesFijaConsumo.InstalacionesFijasRef = instalacionesFija;
                     instalacionesFijaConsumo.InstalacionesFijasId = instalacionesFija.Id;
 
                     _context.InstalacionesFijasConsumo.Add(instalacionesFijaConsumo);
@@ -163,9 +173,11 @@ namespace API.Controllers.ControllersConsumo
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
             try
-            {
+            {  
                 var instalacionesFijaDelete = await _context.InstalacionesFijasConsumo.FindAsync(id);
-                if (currentUser.OrganizacionId != instalacionesFijaDelete.InstalacionesFijasRef.OrganizacionId)
+                var InstalacionesFijas = await _context.InstalacionesFijas.FindAsync(instalacionesFijaDelete.InstalacionesFijasId);
+
+                if (currentUser.OrganizacionId != InstalacionesFijas.OrganizacionId)
                 {
                     return BadRequest("Este consumo de instalación fija no existe o no pertenece a esta organización");
                 }

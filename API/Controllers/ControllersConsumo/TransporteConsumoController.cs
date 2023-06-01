@@ -48,6 +48,17 @@ namespace API.Controllers.ControllersConsumo
             return orgConsumoList;
         }
 
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<TransporteConsumoDTO>> GetTransporteConsumoId(int id)
+        {
+            //Devuelve el consumos por su id
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            var consumo = await _context.TransporteConsumo.FindAsync(id);
+            TransporteConsumoDTO consumodto = _mapper.Map<TransporteConsumoDTO>(consumo);
+
+            return consumodto;
+        }
+
         [HttpGet("{transporteid}")]
         public async Task<ActionResult<IEnumerable<TransporteConsumoDTO>>> GetTransporteConsumo(int id)
         {
@@ -133,7 +144,6 @@ namespace API.Controllers.ControllersConsumo
                     TransporteConsumo transporteConsumo = _mapper.Map<TransporteConsumo>(transporteConsumoDTO);
 
                     transporteConsumo.Consumo = CalculoTransporte.CalculoConsumoTransporte(transporte, transporteConsumo, _context);
-                    transporteConsumo.TransporteRef = transporte;
                     transporteConsumo.TransporteId = transporte.Id;
 
                     _context.TransporteConsumo.Add(transporteConsumo);
@@ -152,7 +162,8 @@ namespace API.Controllers.ControllersConsumo
             try
             {
                 var transporteDelete = await _context.TransporteConsumo.FindAsync(id);
-                if (currentUser.OrganizacionId != transporteDelete.TransporteRef.OrganizacionId)
+                var transporte = await _context.Transporte.FindAsync(transporteDelete.TransporteId);
+                if (currentUser.OrganizacionId != transporte.OrganizacionId)
                 {
                     return BadRequest("Este consumo de transporte no existe o no pertenece a esta organización");
                 }

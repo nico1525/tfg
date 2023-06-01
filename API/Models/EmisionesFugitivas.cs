@@ -12,7 +12,6 @@ namespace API.Models
 
         [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
-        public Organizacion? OrganizacionRef { get; set; }
     }
 
     public class EmisionesFugitivasCreateDTO

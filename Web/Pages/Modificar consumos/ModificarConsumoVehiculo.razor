@@ -109,7 +109,7 @@
     [Parameter]
     public string id { get; set; }
 
-    private VehiculoConsumoModifyDTO vehiculo = new VehiculoConsumoModifyDTO();
+    private VehiculoConsumoModifyDTO vehiculo = new VehiculoConsumoModifyDTO() { FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
     private VehiculoConsumoDTO originalvehiculo = new VehiculoConsumoDTO();
 
     string result;
@@ -128,12 +128,12 @@
             return;
         }
         await JsRuntime.InvokeVoidAsync("alert", result);
-        Navigation.NavigateTo("/consumo/vehiculo");
+        Navigation.NavigateTo("/consumo/vehiculo/" + originalvehiculo.VehiculoId);
     }
     async void GetVehiculo()
     {
         int idint = int.Parse(id);
-        originalvehiculo = await VehiculoServices.GetVehiculoConsumoByID(idint);
+        originalvehiculo = await VehiculoServices.GetConsumoByID(idint);
         vehiculo.Edificio = originalvehiculo.Edificio;
         vehiculo.FechaInicio = originalvehiculo.FechaInicio;
         vehiculo.FechaFin = originalvehiculo.FechaFin;

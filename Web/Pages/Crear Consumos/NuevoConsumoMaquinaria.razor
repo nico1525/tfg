@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager Navigation
-@page "/nuevoconsumo/vehiculo"
+@page "/nuevoconsumo/maquinaria"
 @using API.Models;
 @using API.Models.Consumos;
 @using Web.Services;
@@ -9,7 +9,7 @@
 @inject IJSRuntime JsRuntime
 
 
-<PageTitle>Agregar Consumo Vehículo</PageTitle>
+<PageTitle>Agregar Consumo Maquinaria</PageTitle>
 
 <style>
     #Agregar {
@@ -63,33 +63,33 @@
 
 <body>
     <div id="Agregar"></div>
-    <div id="labelnew"><label><b>Nuevo Consumo de Vehículo:</b></label></div>
+    <div id="labelnew"><label><b>Nuevo Consumo de Maquinaria:</b></label></div>
     <div id="container">
-        <EditForm Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
+        <EditForm Model="@maquinaria" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="matricula"><b>Id del Vehículo</b></label>
-            <InputNumber class="input" id="VehiculoId" placeholder="  VehiculoId" @bind-Value="vehiculo.VehiculoId" />
-            <ValidationMessage For="@(() => vehiculo.VehiculoId)" class="errormsg" />
+            <label for="matricula"><b>Id del Maquinaria</b></label>
+            <InputNumber class="input" id="MaquinariaId" placeholder="  MaquinariaId" @bind-Value="maquinaria.MaquinariaId" />
+            <ValidationMessage For="@(() => maquinaria.MaquinariaId)" class="errormsg" />
 
             <label for="edificio"><b>Edificio/Sede</b></label>
-            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="vehiculo.Edificio" />
-            <ValidationMessage For="@(() => vehiculo.Edificio)" class="errormsg" />
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="maquinaria.Edificio" />
+            <ValidationMessage For="@(() => maquinaria.Edificio)" class="errormsg" />
 
             <label for="matricula"><b>Cantidad de Combustible</b></label>
-            <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="vehiculo.CantidadCombustible" />
-            <ValidationMessage For="@(() => vehiculo.CantidadCombustible)" class="errormsg" />
+            <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="maquinaria.CantidadCombustible" />
+            <ValidationMessage For="@(() => maquinaria.CantidadCombustible)" class="errormsg" />
 
             <label for="matricula"><b>Fecha de Inicio</b></label>
-            <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="vehiculo.FechaInicio" />
-            <ValidationMessage For="@(() => vehiculo.FechaInicio)" class="errormsg" />
+            <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="maquinaria.FechaInicio" />
+            <ValidationMessage For="@(() => maquinaria.FechaInicio)" class="errormsg" />
 
             <label for="matricula"><b>Fecha Fin</b></label>
-            <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="vehiculo.FechaFin" />
-            <ValidationMessage For="@(() => vehiculo.FechaFin)" class="errormsg" />
+            <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="maquinaria.FechaFin" />
+            <ValidationMessage For="@(() => maquinaria.FechaFin)" class="errormsg" />
 
             <label for="categoria"><b>Tipo de Combustible</b></label>
-            <InputSelect class="input" id="categoria" @bind-Value="vehiculo.TipoCombustible">
+            <InputSelect class="input" id="categoria" @bind-Value="maquinaria.TipoCombustible">
                 <option value="E5">E5</option>
                 <option value="E10">E10</option>
                 <option value="E85">E85</option>
@@ -103,25 +103,25 @@
                 <option value="CNG">CNG</option>
 
             </InputSelect>
-            <ValidationMessage For="@(() => vehiculo.TipoCombustible)" class="errormsg" />
+            <ValidationMessage For="@(() => maquinaria.TipoCombustible)" class="errormsg" />
 
-            <button class="iniciarbtn" type="submit">Añadir Consumo de Vehículo</button>
+            <button class="iniciarbtn" type="submit">Añadir Consumo de Maquinaria</button>
         </EditForm>
     </div>
 </body>
 
 @code {
-    private VehiculoConsumoCreateDTO vehiculo = new VehiculoConsumoCreateDTO() { TipoCombustible = "E5", FechaInicio = DateTime.Now,  FechaFin = DateTime.Now};
+    private MaquinariaConsumoCreateDTO maquinaria = new MaquinariaConsumoCreateDTO() { TipoCombustible = "E5", FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
     string result;
-    
+
 
     [Inject]
-    public IVehiculoConsumoServices VehiculoConsumoServices { get; set; }
+    public IMaquinariaConsumoServices MaquinariaConsumoServices { get; set; }
     private async Task HandleValidSubmit()
     {
         try
         {
-            result = await VehiculoConsumoServices.PostVehiculoConsumo(vehiculo);
+            result = await MaquinariaConsumoServices.PostMaquinariaConsumo(maquinaria);
         }
         catch (Exception e)
         {

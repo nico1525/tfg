@@ -16,8 +16,6 @@ namespace API.Models.Consumos
         public float Consumo { get; set; }
         [ForeignKey("InstalacionesFijas")]
         public int InstalacionesFijasId { get; set; }
-        [JsonIgnore]
-        public InstalacionesFijas? InstalacionesFijasRef { get; set; }
     }
 
     public class InstalacionesFijasConsumoDTO
