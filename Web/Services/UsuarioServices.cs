@@ -10,7 +10,7 @@ namespace Web.Services
 {
     public interface IUsuarioServices
     {
-        public Task<IEnumerable<UsuarioDTO>?> GetUsuario();
+        public Task<List<UsuarioDTO>?> GetUsuario();
         public Task<IEnumerable<UsuarioDTO>?> GetAllUsuario();
         public Task<string> RegistrarUsuario(UsuarioCreateDTO org);
         public Task<LoginUserResponse?> LoginUsuario(LoginRequest org);
@@ -32,7 +32,7 @@ namespace Web.Services
             //_httpClientAnonymous = httpClient;  Por si para las llamadas anonimas no se tuviera que enviar token
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<IEnumerable<UsuarioDTO>?> GetUsuario()
+        public async Task<List<UsuarioDTO>?> GetUsuario()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Usuario");
             if (response.IsSuccessStatusCode)
@@ -40,7 +40,7 @@ namespace Web.Services
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<UsuarioDTO>>(resultString);
                 List<UsuarioDTO> lista = new List<UsuarioDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }

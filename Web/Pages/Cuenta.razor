@@ -1,9 +1,10 @@
 ﻿@page "/cuenta"
 @inject IJSRuntime JsRuntime
+@using API.Models;
 @using Web.Services;
 
 
-<PageTitle>Login</PageTitle>
+<PageTitle>Cuenta</PageTitle>
 
 <style>
     #inilabel {
@@ -16,6 +17,13 @@
     #text {
         text-align: center;
     }
+    .info{
+        font-size: 30px;
+    }
+    #container{
+        background-color:white;
+        margin: 4% 20% 0 20%;
+    }
 </style>
 
 <body>
@@ -24,19 +32,38 @@
         </NavBarLogged>
     </div>
     <div id="text"> <label id="inilabel">Información del Usuario</label></div>
+    <div id="container">
+        <label class="info">@usuario.NombreApellidos</label>
+        <label class="info">@usuario.Contraseña</label>
+        <label class="info">@usuario.Email</label>
+        <label class="info">@usuario.Id</label>
+
+    </div>
 </body>
 
 
 @code {
+    UsuarioDTO usuario = new UsuarioDTO();
+    List<UsuarioDTO> usuariolist = new List<UsuarioDTO>();
+
     [Inject]
     public IUsuarioServices UsuarioServices { get; set; }
-    async void SomeStartupTask()
+    async void GetInfoUser()
     {
-        //await UsuarioServices.GetUsuario();
+        try
+        {
+            usuariolist = await UsuarioServices.GetUsuario();
+            usuario = usuariolist.FirstOrDefault();
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
     }
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1);
-        SomeStartupTask();
+        GetInfoUser();
     }
 }

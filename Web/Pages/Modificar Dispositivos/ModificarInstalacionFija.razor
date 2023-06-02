@@ -9,7 +9,7 @@
 
 
 
-<PageTitle>Modificar InstalacionesFijas</PageTitle>
+<PageTitle>Modificar Instalación Fija</PageTitle>
 
 <style>
     #Agregar {
@@ -62,7 +62,7 @@
         <EditForm Model="@instalacionfija" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id del instalacionfija</b></label>
+            <label><b>Id de la Instalación Fija</b></label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
             <label for="edificio"><b>Edificio/Sede</b></label>
@@ -70,8 +70,8 @@
             <ValidationMessage For="@(() => instalacionfija.Edificio)" class="errormsg" />
 
             <label for="matricula"><b>Matricula</b></label>
-            <InputText class="input" id="matricula" placeholder="  Matricula" @bind-Value="instalacionfija.Matricula" />
-            <ValidationMessage For="@(() => instalacionfija.Matricula)" class="errormsg" />
+            <InputText class="input" id="matricula" placeholder="  Nombre" @bind-Value="instalacionfija.Nombre" />
+            <ValidationMessage For="@(() => instalacionfija.Nombre)" class="errormsg" />
 
             <button class="iniciarbtn" type="submit">Modificar InstalacionesFijas</button>
         </EditForm>
@@ -107,7 +107,7 @@
     {
         int idint = int.Parse(id);
         originalinstalacionfija = await InstalacionesFijasServices.GetInstalacionesFijasById(idint);
-        instalacionfija.Matricula = originalinstalacionfija.Matricula;
+        instalacionfija.Nombre = originalinstalacionfija.Nombre;
         instalacionfija.Edificio = originalinstalacionfija.Edificio;
         StateHasChanged();
     }

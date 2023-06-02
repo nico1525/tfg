@@ -62,14 +62,14 @@
         <EditForm Model="@emisionesfugitivas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id del emisionesfugitivas</b></label>
+            <label><b>Id de la Emisión Fugitiva</b></label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
             <label for="edificio"><b>Edificio/Sede</b></label>
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="emisionesfugitivas.Edificio" />
             <ValidationMessage For="@(() => emisionesfugitivas.Edificio)" class="errormsg" />
 
-            <label for="matricula"><b>Matricula</b></label>
+            <label for="matricula"><b>Nombre del Equipo</b></label>
             <InputText class="input" id="matricula" placeholder="  Nombre del Equipo" @bind-Value="emisionesfugitivas.NombreEquipo" />
             <ValidationMessage For="@(() => emisionesfugitivas.NombreEquipo)" class="errormsg" />
 

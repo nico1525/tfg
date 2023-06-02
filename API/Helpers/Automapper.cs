@@ -23,7 +23,7 @@ namespace API.Helpers
             CreateMap<VehiculoConsumo, VehiculoConsumoDTO>();
             CreateMap<VehiculoConsumoCreateDTO, VehiculoConsumo>();
 
-            CreateMap<Transporte, VehiculoDTO>();
+            CreateMap<Transporte, TransporteDTO>();
             CreateMap<TransporteCreateDTO, Transporte>();
 
             CreateMap<TransporteConsumo, TransporteConsumoDTO>();

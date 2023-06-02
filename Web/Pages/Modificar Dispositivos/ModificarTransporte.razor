@@ -69,10 +69,6 @@
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="transporte.Edificio" />
             <ValidationMessage For="@(() => transporte.Edificio)" class="errormsg" />
 
-            <label for="matricula"><b>Matricula</b></label>
-            <InputText class="input" id="matricula" placeholder="  Matricula" @bind-Value="transporte.Matricula" />
-            <ValidationMessage For="@(() => transporte.Matricula)" class="errormsg" />
-
             <button class="iniciarbtn" type="submit">Modificar Transporte</button>
         </EditForm>
     </div>
@@ -107,7 +103,6 @@
     {
         int idint = int.Parse(id);
         originaltransporte = await TransporteServices.GetTransporteById(idint);
-        transporte.Matricula = originaltransporte.Matricula;
         transporte.Edificio = originaltransporte.Edificio;
         StateHasChanged();
     }
