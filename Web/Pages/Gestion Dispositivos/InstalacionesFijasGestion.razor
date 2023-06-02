@@ -1,16 +1,14 @@
 ﻿@inject NavigationManager Navigation
-@page "/consumo/vehiculo/{id}"
+@page "/gestion/instalacionesfijas"
 @using API.Models;
-@using API.Models.Consumos;
 @using Microsoft.AspNetCore.Components.Web.Virtualization;
 @using Web.Helpers;
 @using Web.Services;
-@using Web.Services.ConsumoServices;
-@layout Consumos
+@layout GestionDispositivos
 @inject IJSRuntime JsRuntime
 
 
-<PageTitle>Consumo Vehiculo</PageTitle>
+<PageTitle>Gestion InstalacionesFijas</PageTitle>
 
 <style>
     h1 {
@@ -89,17 +87,15 @@
 </style>
 
 <body>
-    <h1><b>Lista de Consumo de Vehículos</b></h1>
+    <h1><b>Lista de Instalaciones Fijas</b></h1>
 
     <div id="filtro">
         <label id="tipolabel"><b>Filtrar:</b></label>
 
         <select @bind="tipofiltro" id="select">
             <option value="id">ID</option>
-            <option value="consumo">Consumo</option>
-            <option value="tipo">Tipo de Combustible</option>
+            <option value="nombre">Nombre</option>
             <option value="edificio">Edificio / Sede</option>
-            <option value="idvehiculo">ID del Vehículo</option>
 
         </select>
         <input id="input" placeholder="Buscar" @bind="filtrocat" />
@@ -113,33 +109,25 @@
 
             <thead>
                 <tr>
-                    <th>Id Consumo</th>
-                    <th>Consumo</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha Fin</th>
-                    <th>Tipo de Combustible</th>
-                    <th>Cantidad de Combustible</th>
-                    <th>Edificio/Sede</th>
-                    <th>Id del Vehículo</th>
+                    <th>Id InstalacionesFijas</th>
+                    <th>Nombre</th>
+                    <th>Edificio</th>
                     <th class="headerbuttons">Modificar</th>
                     <th class="headerbuttons">Eliminar</th>
+                    <th class="headerbuttons">Ver Consumos</th>
 
 
                 </tr>
             </thead>
-            <Virtualize Items="@listashow" Context="consumo">
+            <Virtualize Items="@listashow" Context="instalacionfija">
                 <tbody>
                     <tr>
-                        <td>@consumo.Id</td>
-                        <td>@consumo.Consumo</td>
-                        <td>@consumo.FechaInicio</td>
-                        <td>@consumo.FechaFin</td>
-                        <td>@consumo.TipoCombustible</td>
-                        <td>@consumo.CantidadCombustible</td>
-                        <td>@consumo.Edificio</td>
-                        <td>@consumo.VehiculoId</td>
-                        <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
-                        <td><button class="botones" @onclick="(() => Eliminar(consumo.Id, consumo))">X</button></td>
+                        <td>@instalacionfija.Id</td>
+                        <td>@instalacionfija.Nombre</td>
+                        <td>@instalacionfija.Edificio</td>
+                        <td><button class="botones" @onclick="(() => Modificar(instalacionfija.Id))">M</button></td>
+                        <td><button class="botones" @onclick="(() => Eliminar(instalacionfija.Id, instalacionfija))">X</button></td>
+                        <td><button class="botones" @onclick="(() => VerConsumos(instalacionfija.Id))">C</button></td>
                     </tr>
 
                 </tbody>
@@ -150,37 +138,39 @@
 </body>
 
 @code {
-    [Parameter]
-    public string id { get; set; }
-
-    List<VehiculoConsumoDTO> lista = new List<VehiculoConsumoDTO>();
-    List<VehiculoConsumoDTO> listashow = new List<VehiculoConsumoDTO>();
+    List<InstalacionesFijasDTO> lista = new List<InstalacionesFijasDTO>();
+    List<InstalacionesFijasDTO> listashow = new List<InstalacionesFijasDTO>();
     string tipofiltro = "id";
     string filtrocat = "";
 
     [Inject]
-    public IVehiculoConsumoServices vehiculoconsumoServices { get; set; }
+    public IInstalacionesFijasServices instalacionfijaServices { get; set; }
 
     public void Modificar(int id)
     {
-        Navigation.NavigateTo("/modificar/consumovehiculo/" + id);
+        Navigation.NavigateTo("/modificar/instalacionfija/" + id);
     }
 
-    public async void Eliminar(int id, VehiculoConsumoDTO consumo)
+    public async void Eliminar(int id, InstalacionesFijasDTO instalacionfija)
     {
         try
         {
-            await vehiculoconsumoServices.DeleteVehiculoConsumo(id);
+            await instalacionfijaServices.DeleteInstalacionesFijas(id);
         }
         catch (Exception e)
         {
             await JsRuntime.InvokeVoidAsync("alert", e.Message);
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", $"Consumo con id {id} eliminado correctamente");
-        listashow.Remove(consumo);
-        lista.Remove(consumo);
+        await JsRuntime.InvokeVoidAsync("alert", $"InstalacionesFijas con id {id} eliminado correctamente");
+        listashow.Remove(instalacionfija);
+        lista.Remove(instalacionfija);
         StateHasChanged();
+    }
+
+    public void VerConsumos(int id)
+    {
+        Navigation.NavigateTo("/consumo/instalacionfija/" + id);
     }
 
     public void Filtrar()
@@ -191,38 +181,26 @@
             listashow.AddRange(lista);
             return;
         }
-        foreach (var consumo in lista)
+        foreach (var instalacionfija in lista)
         {
             switch (tipofiltro)
             {
                 case "id":
-                    if (consumo.Id.ToString().Contains(filtrocat))
+                    if (instalacionfija.Id.ToString().Contains(filtrocat))
                     {
-                        listashow.Add(consumo);
+                        listashow.Add(instalacionfija);
                     }
                     break;
-                case "consumo":
-                    if (consumo.Consumo.ToString().Contains(filtrocat))
+                case "nombre":
+                    if (instalacionfija.Nombre is not null && instalacionfija.Nombre.Contains(filtrocat))
                     {
-                        listashow.Add(consumo);
-                    }
-                    break;
-                case "idvehiculo":
-                    if (consumo.VehiculoId.ToString().Contains(filtrocat))
-                    {
-                        listashow.Add(consumo);
+                        listashow.Add(instalacionfija);
                     }
                     break;
                 case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat))
+                    if (instalacionfija.Edificio is not null && instalacionfija.Edificio.Contains(filtrocat))
                     {
-                        listashow.Add(consumo);
-                    }
-                    break;
-                case "tipo":
-                    if (consumo.TipoCombustible is not null && consumo.TipoCombustible.Contains(filtrocat))
-                    {
-                        listashow.Add(consumo);
+                        listashow.Add(instalacionfija);
                     }
                     break;
             }
@@ -231,26 +209,11 @@
         StateHasChanged();
     }
 
-    async void GetConsumoList()
+    async void GetInstalacionesFijasList()
     {
+        lista = await instalacionfijaServices.GetInstalacionesFijas();
 
-        lista = await vehiculoconsumoServices.GetVehiculoConsumo();
-        if (id.Equals("0"))
-        {
-            listashow.AddRange(lista);
-        }
-        else
-        {
-            foreach(var consumo in lista)
-            {
-                if (consumo.VehiculoId.ToString() == id)
-                {
-                    listashow.Add(consumo);
-                }
-            }
-            lista.Clear();
-            lista.AddRange(listashow);
-        }
+        listashow.AddRange(lista);
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
@@ -260,6 +223,6 @@
             Navigation.NavigateTo("");
             return;
         }
-        GetConsumoList();
+        GetInstalacionesFijasList();
     }
 }

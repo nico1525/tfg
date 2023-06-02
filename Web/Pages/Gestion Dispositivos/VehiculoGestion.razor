@@ -185,13 +185,13 @@ td{
                     }
                     break;
                 case "matricula":
-                    if (vehiculo.Matricula.Contains(filtrocat))
+                    if (vehiculo.Matricula is not null && vehiculo.Matricula.Contains(filtrocat))
                     {
                         listashow.Add(vehiculo);
                     }
                     break;
                 case "catvehiculo":
-                    if (vehiculo.CategoriaVehiculo.Contains(filtrocat))
+                    if (vehiculo.CategoriaVehiculo is not null && vehiculo.CategoriaVehiculo.Contains(filtrocat))
                     {
                         listashow.Add(vehiculo);
                     }

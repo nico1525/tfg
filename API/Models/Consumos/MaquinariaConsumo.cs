@@ -38,7 +38,7 @@ namespace API.Models.Consumos
         public int CantidadCombustible { get; set; }
 
         [Required(ErrorMessage = "El tipo de combustible es obligatorio")]
-        [RegularExpression("gasoleoB|E5|E10|E85|E100|E100|B7|B10|B20|B30|B100", ErrorMessage = "El tipo de  combustible es incorrecto")]
+        [RegularExpression("gasoleoB|E5|E85|E100|B7|B20|B30|B100|E10|B10", ErrorMessage = "El tipo de  combustible es incorrecto")]
         public string? TipoCombustible { get; set; }
 
         [Required(ErrorMessage = "La fecha de inicio es obligatoria")]
@@ -56,7 +56,7 @@ namespace API.Models.Consumos
         public string? Edificio { get; set; }
         public int CantidadCombustible { get; set; }
 
-        [RegularExpression("gasoleoB|E5|E10|E85|E100|E100|B7|B10|B20|B30|B100", ErrorMessage = "El tipo de  combustible es incorrecto")]
+        [RegularExpression("E5|E85|E100|B7|B20|B30|B100|gasoleoB|E10|B10", ErrorMessage = "El tipo de  combustible es incorrecto")]
         public string? TipoCombustible { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }

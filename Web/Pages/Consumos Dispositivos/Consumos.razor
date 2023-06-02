@@ -58,8 +58,9 @@
             <option value="vehiculo">Vehiculo</option>
             <option value="transporte">Transporte</option>
             <option value="maquinaria">Maquinaria</option>
-            <option value="gases">Emisiones Fugitivas</option>
+            <option value="emisionesfugitivas">Emisiones Fugitivas</option>
             <option value="InstalacionesFijas">Instalaciones Fijas</option>
+            <option value="otrosconsumos">Consumos de otras fuentes</option>
 
         </select>
     </div>
@@ -74,6 +75,11 @@
 
     public void SelectDispositivo()
     {
+        if (dispositivo.Equals("otrosconsumos"))
+        {
+            Navigation.NavigateTo("consumo/otrosconsumos");
+            return;
+        }
         Navigation.NavigateTo("consumo/" + dispositivo + "/0");
     }
     protected override async Task OnInitializedAsync()

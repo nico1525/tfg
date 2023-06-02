@@ -1,0 +1,123 @@
+﻿@inject NavigationManager Navigation
+@page "/modificar/maquinaria/{id}"
+@using API.Models;
+@using Web.Helpers;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@layout Modificar
+
+
+
+<PageTitle>Modificar Maquinaria</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="container">
+        <EditForm Model="@maquinaria" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label><b>Id de la Maquinaria</b></label>
+            <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="maquinaria.Edificio" />
+            <ValidationMessage For="@(() => maquinaria.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Nombre</b></label>
+            <InputText class="input" id="matricula" placeholder="  Matricula" @bind-Value="maquinaria.Nombre" />
+            <ValidationMessage For="@(() => maquinaria.Nombre)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Modificar Maquinaria</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private MaquinariaModifyDTO maquinaria = new MaquinariaModifyDTO();
+    private MaquinariaDTO originalmaquinaria = new MaquinariaDTO();
+
+    string result;
+    [Inject]
+    public IMaquinariaServices MaquinariaServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            int idint = int.Parse(id);
+            result = await MaquinariaServices.UpdateMaquinariaPorId(idint, maquinaria);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("/gestion/maquinaria");
+    }
+    async void GetMaquinaria()
+    {
+        int idint = int.Parse(id);
+        originalmaquinaria = await MaquinariaServices.GetMaquinariaById(idint);
+        maquinaria.Nombre = originalmaquinaria.Nombre;
+        maquinaria.Edificio = originalmaquinaria.Edificio;
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetMaquinaria();
+    }
+}

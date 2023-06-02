@@ -1,25 +1,22 @@
 ﻿@inject NavigationManager Navigation
-@page "/nuevoconsumo/maquinaria"
+@page "/modificar/consumomaquinaria/{id}"
 @using API.Models;
 @using API.Models.Consumos;
+@using Web.Helpers;
 @using Web.Services;
-@layout NuevoConsumo;
 @using Microsoft.AspNetCore.Components.Forms
 @using Web.Services.ConsumoServices;
 @inject IJSRuntime JsRuntime
+@layout ModificarConsumo
 
 
-<PageTitle>Agregar Consumo Maquinaria</PageTitle>
+
+<PageTitle>Modificar Consumo de Maquinaria</PageTitle>
 
 <style>
     #Agregar {
         margin-bottom: 2%;
         float: left;
-    }
-
-    #labelnew {
-        font-size: 24px;
-        margin-bottom: 3%;
     }
 
     .iniciarbtn {
@@ -63,14 +60,12 @@
 
 <body>
     <div id="Agregar"></div>
-    <div id="labelnew"><label><b>Nuevo Consumo de Maquinaria:</b></label></div>
     <div id="container">
         <EditForm Model="@maquinaria" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="matricula"><b>Id del Maquinaria</b></label>
-            <InputNumber class="input" id="MaquinariaId" placeholder="  MaquinariaId" @bind-Value="maquinaria.MaquinariaId" />
-            <ValidationMessage For="@(() => maquinaria.MaquinariaId)" class="errormsg" />
+            <label><b>Id del maquinaria</b></label>
+            <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
             <label for="edificio"><b>Edificio/Sede</b></label>
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="maquinaria.Edificio" />
@@ -110,17 +105,21 @@
 </body>
 
 @code {
-    private MaquinariaConsumoCreateDTO maquinaria = new MaquinariaConsumoCreateDTO() { TipoCombustible = "E5", FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
+    [Parameter]
+    public string id { get; set; }
+
+    private MaquinariaConsumoModifyDTO maquinaria = new MaquinariaConsumoModifyDTO() { FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
+    private MaquinariaConsumoDTO originalmaquinaria = new MaquinariaConsumoDTO();
+
     string result;
-
-
     [Inject]
-    public IMaquinariaConsumoServices MaquinariaConsumoServices { get; set; }
+    public IMaquinariaConsumoServices MaquinariaServices { get; set; }
     private async Task HandleValidSubmit()
     {
         try
         {
-            result = await MaquinariaConsumoServices.PostMaquinariaConsumo(maquinaria);
+            int idint = int.Parse(id);
+            result = await MaquinariaServices.UpdateMaquinariaConsumoPorId(idint, maquinaria);
         }
         catch (Exception e)
         {
@@ -128,5 +127,27 @@
             return;
         }
         await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("/consumo/maquinaria/" + originalmaquinaria.MaquinariaId);
+    }
+    async void GetMaquinaria()
+    {
+        int idint = int.Parse(id);
+        originalmaquinaria = await MaquinariaServices.GetConsumoByID(idint);
+        maquinaria.Edificio = originalmaquinaria.Edificio;
+        maquinaria.FechaInicio = originalmaquinaria.FechaInicio;
+        maquinaria.FechaFin = originalmaquinaria.FechaFin;
+        maquinaria.CantidadCombustible = originalmaquinaria.CantidadCombustible;
+        maquinaria.TipoCombustible = originalmaquinaria.TipoCombustible;
+
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetMaquinaria();
     }
 }

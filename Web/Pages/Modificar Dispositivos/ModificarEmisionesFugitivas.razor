@@ -1,0 +1,123 @@
+﻿@inject NavigationManager Navigation
+@page "/modificar/emisionesfugitivas/{id}"
+@using API.Models;
+@using Web.Helpers;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@layout Modificar
+
+
+
+<PageTitle>Modificar Emisión Fugitiva</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="container">
+        <EditForm Model="@emisionesfugitivas" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label><b>Id del emisionesfugitivas</b></label>
+            <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="emisionesfugitivas.Edificio" />
+            <ValidationMessage For="@(() => emisionesfugitivas.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Matricula</b></label>
+            <InputText class="input" id="matricula" placeholder="  Nombre del Equipo" @bind-Value="emisionesfugitivas.NombreEquipo" />
+            <ValidationMessage For="@(() => emisionesfugitivas.NombreEquipo)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Modificar Emisión Fugitiva</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private EmisionesFugitivasModifyDTO emisionesfugitivas = new EmisionesFugitivasModifyDTO();
+    private EmisionesFugitivasDTO originalemisionesfugitivas = new EmisionesFugitivasDTO();
+
+    string result;
+    [Inject]
+    public IEmisionesFugitivasServices EmisionesFugitivasServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            int idint = int.Parse(id);
+            result = await EmisionesFugitivasServices.UpdateEmisionesFugitivasPorId(idint, emisionesfugitivas);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("/gestion/emisionesfugitivas");
+    }
+    async void GetEmisionesFugitivas()
+    {
+        int idint = int.Parse(id);
+        originalemisionesfugitivas = await EmisionesFugitivasServices.GetEmisionesFugitivasById(idint);
+        emisionesfugitivas.NombreEquipo = originalemisionesfugitivas.NombreEquipo;
+        emisionesfugitivas.Edificio = originalemisionesfugitivas.Edificio;
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetEmisionesFugitivas();
+    }
+}

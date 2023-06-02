@@ -1,0 +1,152 @@
+﻿@inject NavigationManager Navigation
+@page "/modificar/otrosconsumos/{id}"
+@using API.Models;
+@using API.Models.Consumos;
+@using Web.Helpers;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@using Web.Services.ConsumoServices;
+@inject IJSRuntime JsRuntime
+@layout ModificarConsumo
+
+
+
+<PageTitle>Modificar Consumo de Vehiculo</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="container">
+        <EditForm Model="@OtrosConsumos" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label><b>Id del OtrosConsumos</b></label>
+            <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="OtrosConsumos.Edificio" />
+            <ValidationMessage For="@(() => OtrosConsumos.Edificio)" class="errormsg" />
+
+            <label for="edificio"><b>Nombre</b></label>
+            <InputText class="input" id="Nombre" placeholder="  Nombre" @bind-Value="OtrosConsumos.Nombre" />
+            <ValidationMessage For="@(() => OtrosConsumos.Nombre)" class="errormsg" />
+
+            <label for="edificio"><b>Categoria de la Actividad</b></label>
+            <InputText class="input" id="CategoriaActividad" placeholder="Categoria de la Actividad" @bind-Value="OtrosConsumos.CategoriaActividad" />
+            <ValidationMessage For="@(() => OtrosConsumos.CategoriaActividad)" class="errormsg" />
+
+            <label for="matricula"><b>Cantidad de Consumo</b></label>
+            <InputNumber class="input" id="CantidadCombustible" placeholder="  Cantidad de Consumo" @bind-Value="OtrosConsumos.CantidadConsumo" />
+            <ValidationMessage For="@(() => OtrosConsumos.CantidadConsumo)" class="errormsg" />
+
+            <label for="matricula"><b>Factor de Emision</b></label>
+            <InputNumber class="input" id="FactorEmision" placeholder="Factor de Emision" @bind-Value="OtrosConsumos.FactorEmision" />
+            <ValidationMessage For="@(() => OtrosConsumos.FactorEmision)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="OtrosConsumos.FechaInicio" />
+            <ValidationMessage For="@(() => OtrosConsumos.FechaInicio)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha Fin</b></label>
+            <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="OtrosConsumos.FechaFin" />
+            <ValidationMessage For="@(() => OtrosConsumos.FechaFin)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Añadir Consumo de Vehiculo</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private OtrosConsumosModifyDTO OtrosConsumos = new OtrosConsumosModifyDTO() { FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
+    private OtrosConsumosDTO originalOtrosConsumos = new OtrosConsumosDTO();
+
+    string result;
+    [Inject]
+    public IOtrosConsumosServices VehiculoServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            int idint = int.Parse(id);
+            result = await VehiculoServices.UpdateOtrosConsumosPorId(idint, OtrosConsumos);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("/consumo/OtrosConsumos");
+    }
+    async void GetVehiculo()
+    {
+        int idint = int.Parse(id);
+        originalOtrosConsumos = await VehiculoServices.GetConsumoByID(idint);
+        OtrosConsumos.Edificio = originalOtrosConsumos.Edificio;
+        OtrosConsumos.FechaInicio = originalOtrosConsumos.FechaInicio;
+        OtrosConsumos.FechaFin = originalOtrosConsumos.FechaFin;
+        OtrosConsumos.FactorEmision = originalOtrosConsumos.FactorEmision;
+        OtrosConsumos.Nombre = originalOtrosConsumos.Nombre;
+        OtrosConsumos.CantidadConsumo = originalOtrosConsumos.CantidadConsumo;
+        OtrosConsumos.CategoriaActividad = originalOtrosConsumos.CategoriaActividad;
+
+
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetVehiculo();
+    }
+}

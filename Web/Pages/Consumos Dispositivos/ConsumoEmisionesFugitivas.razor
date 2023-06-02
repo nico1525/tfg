@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager Navigation
-@page "/consumo/vehiculo/{id}"
+@page "/consumo/emisionesfugitivas/{id}"
 @using API.Models;
 @using API.Models.Consumos;
 @using Microsoft.AspNetCore.Components.Web.Virtualization;
@@ -10,7 +10,7 @@
 @inject IJSRuntime JsRuntime
 
 
-<PageTitle>Consumo Vehiculo</PageTitle>
+<PageTitle>Consumo EmisionesFugitivas</PageTitle>
 
 <style>
     h1 {
@@ -89,7 +89,7 @@
 </style>
 
 <body>
-    <h1><b>Lista de Consumo de Vehículos</b></h1>
+    <h1><b>Lista de Consumo de Emisiones Fugitivas</b></h1>
 
     <div id="filtro">
         <label id="tipolabel"><b>Filtrar:</b></label>
@@ -97,9 +97,10 @@
         <select @bind="tipofiltro" id="select">
             <option value="id">ID</option>
             <option value="consumo">Consumo</option>
-            <option value="tipo">Tipo de Combustible</option>
+            <option value="tipogas">Tipo de Gas</option>
+            <option value="cantidad">Cantidad de Recarga</option>
             <option value="edificio">Edificio / Sede</option>
-            <option value="idvehiculo">ID del Vehículo</option>
+            <option value="idemisionesfugitivas">ID del Gas</option>
 
         </select>
         <input id="input" placeholder="Buscar" @bind="filtrocat" />
@@ -117,13 +118,12 @@
                     <th>Consumo</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha Fin</th>
-                    <th>Tipo de Combustible</th>
-                    <th>Cantidad de Combustible</th>
+                    <th>Gas</th>
+                    <th>Cantidad de Recarga</th>
                     <th>Edificio/Sede</th>
-                    <th>Id del Vehículo</th>
+                    <th>Id del Gas</th>
                     <th class="headerbuttons">Modificar</th>
                     <th class="headerbuttons">Eliminar</th>
-
 
                 </tr>
             </thead>
@@ -134,10 +134,10 @@
                         <td>@consumo.Consumo</td>
                         <td>@consumo.FechaInicio</td>
                         <td>@consumo.FechaFin</td>
-                        <td>@consumo.TipoCombustible</td>
-                        <td>@consumo.CantidadCombustible</td>
+                        <td>@consumo.Gas</td>
+                        <td>@consumo.Recarga</td>
                         <td>@consumo.Edificio</td>
-                        <td>@consumo.VehiculoId</td>
+                        <td>@consumo.EmisionesFugitivasId</td>
                         <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
                         <td><button class="botones" @onclick="(() => Eliminar(consumo.Id, consumo))">X</button></td>
                     </tr>
@@ -153,24 +153,24 @@
     [Parameter]
     public string id { get; set; }
 
-    List<VehiculoConsumoDTO> lista = new List<VehiculoConsumoDTO>();
-    List<VehiculoConsumoDTO> listashow = new List<VehiculoConsumoDTO>();
+    List<EmisionesFugitivasConsumoDTO> lista = new List<EmisionesFugitivasConsumoDTO>();
+    List<EmisionesFugitivasConsumoDTO> listashow = new List<EmisionesFugitivasConsumoDTO>();
     string tipofiltro = "id";
     string filtrocat = "";
 
     [Inject]
-    public IVehiculoConsumoServices vehiculoconsumoServices { get; set; }
+    public IEmisionesFugitivasConsumoServices emisionesfugitivasconsumoServices { get; set; }
 
     public void Modificar(int id)
     {
-        Navigation.NavigateTo("/modificar/consumovehiculo/" + id);
+        Navigation.NavigateTo("/modificar/consumogases/" + id);
     }
 
-    public async void Eliminar(int id, VehiculoConsumoDTO consumo)
+    public async void Eliminar(int id, EmisionesFugitivasConsumoDTO consumo)
     {
         try
         {
-            await vehiculoconsumoServices.DeleteVehiculoConsumo(id);
+            await emisionesfugitivasconsumoServices.DeleteEmisionesFugitivasConsumo(id);
         }
         catch (Exception e)
         {
@@ -207,8 +207,8 @@
                         listashow.Add(consumo);
                     }
                     break;
-                case "idvehiculo":
-                    if (consumo.VehiculoId.ToString().Contains(filtrocat))
+                case "idemisionesfugitivas":
+                    if (consumo.EmisionesFugitivasId.ToString().Contains(filtrocat))
                     {
                         listashow.Add(consumo);
                     }
@@ -219,8 +219,8 @@
                         listashow.Add(consumo);
                     }
                     break;
-                case "tipo":
-                    if (consumo.TipoCombustible is not null && consumo.TipoCombustible.Contains(filtrocat))
+                case "tipogas":
+                    if (consumo.Gas.Contains(filtrocat))
                     {
                         listashow.Add(consumo);
                     }
@@ -234,16 +234,16 @@
     async void GetConsumoList()
     {
 
-        lista = await vehiculoconsumoServices.GetVehiculoConsumo();
+        lista = await emisionesfugitivasconsumoServices.GetEmisionesFugitivasConsumo();
         if (id.Equals("0"))
         {
             listashow.AddRange(lista);
         }
         else
         {
-            foreach(var consumo in lista)
+            foreach (var consumo in lista)
             {
-                if (consumo.VehiculoId.ToString() == id)
+                if (consumo.EmisionesFugitivasId.ToString() == id)
                 {
                     listashow.Add(consumo);
                 }
