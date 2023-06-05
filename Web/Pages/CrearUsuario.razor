@@ -1,5 +1,6 @@
 ﻿@using API.Models;
 @using Microsoft.Data.SqlClient;
+@using Web.Helpers;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
 @inject IJSRuntime JsRuntime
@@ -69,19 +70,11 @@
     .login {
         margin: 0 35% 0 35%;
     }
-
-    #navbar {
-        margin: 4% 15% 0px 15%;
-    }
-
-    h1 {
-        margin-bottom: 3%;
-    }
 </style>
 
 <body>
     <div id="navbar">
-    
+    </div>
     <div id="text"> <label id="reglabel">Registrar Nuevo Usuario</label></div>
 
     <div class="container">
@@ -106,7 +99,7 @@
     <div class="login">
         <a class="link" href="login">Ya tienes una cuenta? Inicia Sesión.</a>
     </div>
-    </div>
+
 
 </body>
 
@@ -130,5 +123,13 @@
             return;
         }
         await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Storage.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
     }
 }

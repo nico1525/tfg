@@ -126,7 +126,10 @@
         await Task.Delay(1000);
         var result = await BrowserStorage.GetAsync<string>("token");
         var currentInputValue = result.Success ? result.Value : "";
-        Token.token = currentInputValue;
+        Storage.token = currentInputValue;
+
+        var usuario = await UsuarioServices.GetUsuario();
+        Storage.role = usuario.Rol;
 
         Navigation.NavigateTo("inicio");
         

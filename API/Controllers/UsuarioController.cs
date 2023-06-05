@@ -106,10 +106,10 @@ namespace API.Controllers
             }
             else
             {
-                if (usuario.Email != null) currentUser.Email = usuario.Email;
+                if (usuario.Email != null && usuario.Email != "") currentUser.Email = usuario.Email;
             }
-            if (usuario.NombreApellidos != null) currentUser.NombreApellidos = usuario.NombreApellidos;
-            if (usuario.Contraseña != null) currentUser.Contraseña = usuario.Contraseña;
+            if (usuario.NombreApellidos != null && usuario.NombreApellidos != "") currentUser.NombreApellidos = usuario.NombreApellidos;
+            if (usuario.Contraseña != null && usuario.Contraseña != "") currentUser.Contraseña = usuario.Contraseña;
 
             await _context.SaveChangesAsync();
 

@@ -61,8 +61,7 @@
     h1 {
         margin-bottom: 3%;
         text-align:center;
-                font-size: 35px;
-
+        font-size: 35px;
     }
 </style>
 
@@ -131,7 +130,7 @@
     }
     protected override async Task OnInitializedAsync()
     {
-        if (Token.token == null)
+        if (Storage.token == null)
         {
             Navigation.NavigateTo("");
             return;

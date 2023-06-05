@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using API.Helpers;
+@using Web.Helpers;
+@inherits LayoutComponentBase
 @inject NavigationManager Navigation
 
 <style>
@@ -137,19 +139,26 @@
                     <a href="#">Historial informes</a>
                 </div>
             </div>
-            <div class="dropdown">
-                <a href="/" class="dropbtn">
+        </li>
+            @if (Storage.role == Role.OrgAdmin)
+            {
+            <li>
+                <div class="dropdown">
+                    <a href="/" class="dropbtn">
                     Usuarios
                     <i class="fa fa-caret-down"></i>
                 </a>
                 <div class="dropdown-content">
-                    <a href="cuenta">Información de la cuenta</a>
+                    <a href="cuenta">Información Personal</a>
                     <a href="gestion/usuario">Gestión Usuarios de la Organización</a>
                     <a href="registrarusuario">Crear Usuarios</a>
                 </div>
             </div>
-        </li>
-        <li><a id="idcuenta" href="cuenta">Cuenta</a></li>
+            </li>
+            }
+        else{
+            <li><a id="idcuenta" href="cuenta">Cuenta</a></li>
+        }
 
         <li><a href="">Cerrar Sesión</a></li>
 

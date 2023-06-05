@@ -1,6 +1,7 @@
 ﻿@inject NavigationManager Navigation
 @page "/agregar/vehiculo"
 @using API.Models;
+@using Web.Helpers;
 @using Web.Services;
 @layout AgregarDispositivo
 @using Microsoft.AspNetCore.Components.Forms;
@@ -107,5 +108,13 @@
             return;
         }
         await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Storage.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
     }
 }

@@ -26,7 +26,7 @@ builder.Services.AddScoped<IInstalacionesFijasConsumoServices, InstalacionesFija
 builder.Services.AddScoped<IEmisionesFugitivasConsumoServices, EmisionesFugitivasConsumoServices>();
 
 builder.Services.AddScoped<ProtectedLocalStorage>();
-builder.Services.AddSingleton<Token>();
+builder.Services.AddSingleton<Storage>();
 
 //builder.Services.AddHttpClient<IOrganizacionServices, OrganizacionServices>(client =>
 //{

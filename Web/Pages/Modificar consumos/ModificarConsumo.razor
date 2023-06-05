@@ -36,7 +36,7 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
-        if (Token.token == null)
+        if (Storage.token == null)
         {
             Navigation.NavigateTo("");
             return;

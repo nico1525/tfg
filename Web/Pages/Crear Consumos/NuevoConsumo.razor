@@ -62,7 +62,6 @@
 
         </select>
     </div>
-    <button id="button" @onclick="SelectDispositivo">Elegir tipo Dispositivo</button>
     <div id="dispositivo">
         @Body
     </div>
@@ -70,17 +69,19 @@
 </body>
 
 @code {
-    private string? dispositivo = "vehiculo";
+    private string? dispositivo2;
+    private string? dispositivo { get { return dispositivo2; } set { dispositivo2 = value;  SelectDispositivo(); } }
     public void SelectDispositivo()
     {
-        Navigation.NavigateTo("nuevoconsumo/" + dispositivo);
+        Navigation.NavigateTo("agregar/" + dispositivo2);
     }
     protected override async Task OnInitializedAsync()
     {
-        if (Token.token == null)
+        if (Storage.token == null)
         {
             Navigation.NavigateTo("");
             return;
         }
+        Navigation.NavigateTo("nuevoconsumo/vehiculo");
     }
 }

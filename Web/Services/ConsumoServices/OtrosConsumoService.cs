@@ -25,7 +25,7 @@ namespace Web.Services.ConsumoServices
         public OtrosConsumosServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Storage.token}");
         }
         public async Task<List<OtrosConsumosDTO>?> GetOtrosConsumos()
         {

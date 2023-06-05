@@ -3,8 +3,10 @@
 @using API.Helpers;
 @using API.Models;
 @using API.Models.Query_Models;
+@using Web.Helpers;
 @using Web.Services;
 @layout NavBarLogged
+@inject NavigationManager Navigation
 
 
 <PageTitle>Cuenta</PageTitle>
@@ -100,6 +102,11 @@
     }
     protected override async Task OnInitializedAsync()
     {
+        if (Storage.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
         await Task.Delay(1);
         GetInfoUser();
     }
