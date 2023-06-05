@@ -28,7 +28,7 @@
         display: block;
         color: black;
         text-align: center;
-        padding: 20px 50px 0px 20px;
+        padding: 20px 20px 0px 20px;
         text-decoration: none;
         font-size: 24px;
     }
@@ -38,7 +38,7 @@
         font-size: 20px;
         color: black;
         text-align: center;
-        padding: 20px 30px;
+        padding: 20px 20px;
         text-decoration: none;
     }
 
@@ -49,7 +49,7 @@
         overflow: hidden;
         text-align: center;
         text-decoration: none;
-        padding: 6px 30px;
+        padding: 6px 10px;
     }
 
     .dropdown .dropbtn {
@@ -110,7 +110,6 @@
 <body>
     <ul>
         <li><label id="appname">Web Cálculo Huella de Carbono</label></li>
-        <li><a href="inicio" >Inicio</a></li>
         <li><a id="alta" @onclick="navigate">Dar dispositivo de Alta</a></li>
         <li><a id="alta" @onclick="navigateconsumo">Añadir Nuevo Consumo</a></li>
 
@@ -136,6 +135,17 @@
                     <a href="#">Generar Informe</a>
                     <a href="#">Gráficas</a>
                     <a href="#">Historial informes</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="/" class="dropbtn">
+                    Usuarios
+                    <i class="fa fa-caret-down"></i>
+                </a>
+                <div class="dropdown-content">
+                    <a href="cuenta">Información de la cuenta</a>
+                    <a href="gestion/usuario">Gestión Usuarios de la Organización</a>
+                    <a href="registrarusuario">Crear Usuarios</a>
                 </div>
             </div>
         </li>

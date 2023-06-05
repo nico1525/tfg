@@ -74,8 +74,8 @@ namespace API.Controllers
                 {
                     return BadRequest("Este equipo o fuga no existe o no pertenece a esta organización");
                 }
-                if (emisiones.Edificio != null) emisionesChange.Edificio = emisiones.Edificio;
-                if (emisiones.NombreEquipo != null) emisionesChange.NombreEquipo = emisiones.NombreEquipo;
+                if (emisiones.Edificio != null && emisiones.Edificio != "") emisionesChange.Edificio = emisiones.Edificio;
+                if (emisiones.NombreEquipo != null && emisiones.NombreEquipo != "") emisionesChange.NombreEquipo = emisiones.NombreEquipo;
 
                 await _context.SaveChangesAsync();
 

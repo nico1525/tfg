@@ -106,8 +106,8 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("Este consumo de maquinaria no pertenece a esta organización");
                 }
-                if (maquinariaConsumo.Edificio != null) maquinariaChange.Edificio = maquinariaConsumo.Edificio;
-                if (maquinariaConsumo.TipoCombustible != null) maquinariaChange.TipoCombustible = maquinariaConsumo.TipoCombustible;
+                if (maquinariaConsumo.Edificio != null && maquinariaConsumo.Edificio != "") maquinariaChange.Edificio = maquinariaConsumo.Edificio;
+                if (maquinariaConsumo.TipoCombustible != null && maquinariaConsumo.TipoCombustible != "") maquinariaChange.TipoCombustible = maquinariaConsumo.TipoCombustible;
                 if (maquinariaConsumo.CantidadCombustible > 0) maquinariaChange.CantidadCombustible = maquinariaConsumo.CantidadCombustible;
                 if (maquinariaConsumo.FechaInicio != test) maquinariaChange.FechaInicio = maquinariaConsumo.FechaInicio;
                 if (maquinariaConsumo.FechaFin != test) maquinariaChange.FechaFin = maquinariaConsumo.FechaFin;

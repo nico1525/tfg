@@ -1,0 +1,232 @@
+﻿@inject NavigationManager Navigation
+@page "/gestion/usuario"
+@using API.Models;
+@using Microsoft.AspNetCore.Components.Web.Virtualization;
+@using Web.Helpers;
+@using Web.Services;
+@layout NavBarLogged
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>Gestion Usuarios</PageTitle>
+
+<style>
+    h1 {
+        font-size: 30px;
+        color: #000;
+        text-transform: uppercase;
+        font-weight: 300;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    thead {
+    }
+
+    .tbl-content thead th {
+        position: sticky;
+        background-color: aqua;
+        top: 0px;
+        border-bottom: solid 1px black;
+    }
+
+    .tbl-content {
+        height: 600px;
+        overflow-x: auto;
+        margin-top: 0px;
+        border-collapse: collapse;
+    }
+
+    th {
+        padding: 20px 10px;
+        text-align: left;
+        font-weight: 500;
+        font-size: 12px;
+        color: #000;
+        text-transform: uppercase;
+        border-top: solid 2px black;
+        border-right: solid 1px black;
+    }
+
+    td {
+        padding: 15px;
+        text-align: left;
+        vertical-align: middle;
+        font-weight: 300;
+        font-size: 15px;
+        color: #000;
+        border-right: solid 1px black;
+        text-align: center;
+        background-color: aquamarine;
+    }
+
+    #filtro {
+        width: 100%;
+        padding: 10px 0px;
+        background-color: aqua;
+    }
+
+    #input {
+        padding: 2.5px 20px
+    }
+
+    .botones {
+        padding: 15% 20%;
+    }
+
+    .headerbuttons {
+        padding: 20px 0px;
+        width: 7%;
+        text-align: center;
+    }
+
+    #navbar {
+        margin: 4% 15% 0px 15%;
+    }
+    h1{
+        margin-bottom: 3%;
+    }
+</style>
+
+<body>
+    <div id="navbar">
+    
+    <h1><b>Lista de Usuarios</b></h1>
+
+    <div id="filtro">
+        <label id="tipolabel"><b>Filtrar:</b></label>
+
+        <select @bind="tipofiltro" id="select">
+            <option value="id">ID</option>
+            <option value="nombre">Nombre</option>
+            <option value="email">Email</option>
+
+        </select>
+        <input id="input" placeholder="Buscar" @bind="filtrocat" />
+        <button id="button" @onclick="Filtrar">Filtrar</button>
+
+    </div>
+
+
+    <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+
+            <thead>
+                <tr>
+                    <th>Id Usuario</th>
+                    <th>Nombre y Apellidos</th>
+                    <th>Email</th>
+                    <th>Contraseña</th>
+                    <th class="headerbuttons">Modificar</th>
+                    <th class="headerbuttons">Eliminar</th>
+
+
+                </tr>
+            </thead>
+            <Virtualize Items="@listashow" Context="usuario">
+                <tbody>
+                    <tr>
+                        <td>@usuario.Id</td>
+                        <td>@usuario.NombreApellidos</td>
+                        <td>@usuario.Email</td>
+                        <td>@usuario.Contraseña</td>
+                        <td><button class="botones" @onclick="(() => Modificar(usuario.Id))">M</button></td>
+                        <td><button class="botones" @onclick="(() => Eliminar(usuario.Id, usuario))">X</button></td>
+                    </tr>
+
+                </tbody>
+            </Virtualize>
+        </table>
+    </div>
+    </div>
+</body>
+
+@code {
+    List<UsuarioDTO> lista = new List<UsuarioDTO>();
+    List<UsuarioDTO> listashow = new List<UsuarioDTO>();
+    string tipofiltro = "id";
+    string filtrocat = "";
+
+    [Inject]
+    public IUsuarioServices usuarioServices { get; set; }
+
+    public void Modificar(int id)
+    {
+        Navigation.NavigateTo("/modificar/usuario/" + id);
+    }
+
+    public async void Eliminar(int id, UsuarioDTO usuario)
+    {
+        try
+        {
+            await usuarioServices.DeleteUsuario(id);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", $"Usuario con id {id} eliminado correctamente");
+        listashow.Remove(usuario);
+        lista.Remove(usuario);
+        StateHasChanged();
+    }
+
+    public void Filtrar()
+    {
+        listashow.Clear();
+        if (filtrocat.Equals(""))
+        {
+            listashow.AddRange(lista);
+            return;
+        }
+        foreach (var usuario in lista)
+        {
+            switch (tipofiltro)
+            {
+                case "id":
+                    if (usuario.Id.ToString().Contains(filtrocat))
+                    {
+                        listashow.Add(usuario);
+                    }
+                    break;
+                case "nombre":
+                    if (usuario.NombreApellidos is not null && usuario.NombreApellidos.Contains(filtrocat))
+                    {
+                        listashow.Add(usuario);
+                    }
+                    break;
+                case "email":
+                    if (usuario.Email is not null && usuario.Email.Contains(filtrocat))
+                    {
+                        listashow.Add(usuario);
+                    }
+                    break;
+            }
+
+        }
+        StateHasChanged();
+    }
+
+    async void GetusuarioList()
+    {
+        lista = await usuarioServices.GetAllUsuario();
+
+        listashow.AddRange(lista);
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        GetusuarioList();
+    }
+}

@@ -84,9 +84,9 @@ namespace API.Controllers
             }
             else
             {
-                if (vehiculo.Matricula != null) vehiculoChange.Matricula = vehiculo.Matricula;
+                if (vehiculo.Matricula != null && vehiculo.Matricula != null) vehiculoChange.Matricula = vehiculo.Matricula;
             }
-            if (vehiculo.Edificio != null) vehiculoChange.Edificio = vehiculo.Edificio;
+            if (vehiculo.Edificio != null && vehiculo.Edificio != null) vehiculoChange.Edificio = vehiculo.Edificio;
             await _context.SaveChangesAsync();
 
             return Ok("Vehículo modificado correctamente");

@@ -106,7 +106,7 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("Este consumo de transporte no pertenece a esta organización");
                 }
-                if (transporteConsumo.Edificio != null) transporteChange.Edificio = transporteConsumo.Edificio;
+                if (transporteConsumo.Edificio != null && transporteConsumo.Edificio != "") transporteChange.Edificio = transporteConsumo.Edificio;
                 if (transporteConsumo.CantidadCombustible > 0) transporteChange.CantidadCombustible = transporteConsumo.CantidadCombustible;
                 if (transporteConsumo.FechaInicio != test) transporteChange.FechaInicio = transporteConsumo.FechaInicio;
                 if (transporteConsumo.FechaFin != test) transporteChange.FechaFin = transporteConsumo.FechaFin;

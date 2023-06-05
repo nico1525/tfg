@@ -80,8 +80,8 @@ namespace API.Controllers
                     return BadRequest("Esta instalación fija no existe o no pertenece a esta organización");
                 }
 
-                if (instalacionesFijas.Edificio != null) instalacionesFijasChange.Edificio = instalacionesFijas.Edificio;
-                if (instalacionesFijas.Nombre != null) instalacionesFijasChange.Nombre = instalacionesFijas.Nombre;
+                if (instalacionesFijas.Edificio != null && instalacionesFijas.Edificio != "") instalacionesFijasChange.Edificio = instalacionesFijas.Edificio;
+                if (instalacionesFijas.Nombre != null && instalacionesFijas.Nombre != "") instalacionesFijasChange.Nombre = instalacionesFijas.Nombre;
 
                 await _context.SaveChangesAsync();
 

@@ -1,7 +1,10 @@
 ﻿@page "/cuenta"
 @inject IJSRuntime JsRuntime
+@using API.Helpers;
 @using API.Models;
+@using API.Models.Query_Models;
 @using Web.Services;
+@layout NavBarLogged
 
 
 <PageTitle>Cuenta</PageTitle>
@@ -18,48 +21,82 @@
         text-align: center;
     }
     .info{
-        font-size: 30px;
+        font-size: 20px;
+    }
+    .datos{
+        font-size: 20px;
     }
     #container{
-        background-color:white;
+        background-color:dimgray;
         margin: 4% 20% 0 20%;
+    }
+    .box{
+        margin-bottom: 2%;
     }
 </style>
 
 <body>
     <div id="navbar">
-        <NavBarLogged>
-        </NavBarLogged>
     </div>
     <div id="text"> <label id="inilabel">Información del Usuario</label></div>
     <div id="container">
-        <label class="info">@usuario.NombreApellidos</label>
-        <label class="info">@usuario.Contraseña</label>
-        <label class="info">@usuario.Email</label>
-        <label class="info">@usuario.Id</label>
-
+        <div class="box">
+            <label class="info"><b>Id: </b></label>
+            <label class="datos">@usuario.Id</label>
+        </div>
+        <div class="box">
+            <label class="info"><b>Nombre y Apellidos: </b></label>
+            <label class="datos">@usuario.NombreApellidos</label>
+        </div>
+        
+        <div class="box">
+            <label class="info"><b>Email: </b></label>
+            <label class="datos">@usuario.Email</label>
+        </div>
+        <div class="box">
+            <label class="info"><b>Contraseña: </b></label>
+            <label class="datos">@usuario.Contraseña</label>
+        </div>
+        <div class="box">
+            <label class="info"><b>Nombre de la Organización: </b></label>
+            <label class="datos">@usuario.NombreOrg</label>
+        </div>
+        <div class="box">
+            <label class="info"><b>Dirección de la Organización: </b></label>
+            <label class="datos">@usuario.Dirección</label>
+        </div>
+        <div class="box">
+            <label class="info"><b>Rol: </b></label>
+            <label class="datos">@rol</label>
+        </div>
     </div>
 </body>
 
 
 @code {
-    UsuarioDTO usuario = new UsuarioDTO();
     List<UsuarioDTO> usuariolist = new List<UsuarioDTO>();
-
+    InfoUsuario usuario = new InfoUsuario();
+    string rol;
     [Inject]
     public IUsuarioServices UsuarioServices { get; set; }
     async void GetInfoUser()
     {
         try
         {
-            usuariolist = await UsuarioServices.GetUsuario();
-            usuario = usuariolist.FirstOrDefault();
+            usuario = await UsuarioServices.GetUsuario();
+            switch (usuario.Rol)
+            {
+                case Role.OrgAdmin: rol = "Admin de la Organización"; break;
+                case Role.User: rol = "Usuario de la Organización"; break;
+                case Role.SuperAdmin: rol = "Admin de la Aplicación"; break;
+            }
         }
         catch (Exception e)
         {
             await JsRuntime.InvokeVoidAsync("alert", e.Message);
             return;
         }
+        StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
     {

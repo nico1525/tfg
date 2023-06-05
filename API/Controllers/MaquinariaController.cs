@@ -79,8 +79,8 @@ namespace API.Controllers
                     return BadRequest("Esta maquinaria no existe o no pertenece a esta organización");
                 }
 
-                if (maquinaria.Edificio != null) maquinariaChange.Edificio = maquinaria.Edificio;
-                if (maquinaria.Nombre != null) maquinariaChange.Nombre = maquinaria.Nombre;
+                if (maquinaria.Edificio != null && maquinaria.Edificio != "") maquinariaChange.Edificio = maquinaria.Edificio;
+                if (maquinaria.Nombre != null && maquinaria.Nombre != "") maquinariaChange.Nombre = maquinaria.Nombre;
 
                 await _context.SaveChangesAsync();
 

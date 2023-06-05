@@ -1,0 +1,141 @@
+﻿@inject NavigationManager Navigation
+@page "/modificar/usuario/{id}"
+@using API.Models;
+@using Web.Helpers;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@layout NavBarLogged
+
+
+
+<PageTitle>Modificar Usuario</PageTitle>
+
+<style>
+    #Agregar {
+        margin: 
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+
+    #navbar {
+        margin: 4% 15% 0px 15%;
+    }
+
+    h1 {
+        margin-bottom: 3%;
+        text-align:center;
+                font-size: 35px;
+
+    }
+</style>
+
+<body>
+    <div id="navbar">
+        <h1>Modificar Usuario</h1>
+    <div id="container">
+        <EditForm Model="@usuario" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label><b>Id del Usuario</b></label>
+            <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
+
+            <label for="edificio"><b>Nombre y Apellidos</b></label>
+            <InputText class="input" id="edificio" placeholder="  Nombre y Apellidos" @bind-Value="usuario.NombreApellidos" />
+            <ValidationMessage For="@(() => usuario.NombreApellidos)" class="errormsg" />
+
+            <label for="matricula"><b>Email</b></label>
+            <InputText class="input" id="matricula" placeholder="  Email" @bind-Value="usuario.Email" />
+            <ValidationMessage For="@(() => usuario.Email)" class="errormsg" />
+
+            <label for="matricula"><b>Contraseña</b></label>
+            <InputText class="input" id="matricula" placeholder="  Contraseña" @bind-Value="usuario.Contraseña" />
+            <ValidationMessage For="@(() => usuario.Contraseña)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Modificar Usuario</button>
+        </EditForm>
+    </div>
+    </div>
+</body>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private UsuarioModifyDTO usuario = new UsuarioModifyDTO();
+    private UsuarioDTO originalusuario = new UsuarioDTO();
+
+    string result;
+    [Inject]
+    public IUsuarioServices usuarioServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            int idint = int.Parse(id);
+            result = await usuarioServices.UpdateUsuarioPorId(idint, usuario);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("/gestion/usuario");
+    }
+    async void Getusuario()
+    {
+        int idint = int.Parse(id);
+        originalusuario = await usuarioServices.GetUsuarioById(idint);
+        usuario.NombreApellidos = originalusuario.NombreApellidos;
+        usuario.Email = originalusuario.Email;
+        usuario.Contraseña = originalusuario.Contraseña;
+
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Token.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        Getusuario();
+    }
+}

@@ -64,7 +64,7 @@ namespace API.Controllers
             }
             else
             {
-                if(organizacion.NombreOrg != null) currentOrg.NombreOrg = organizacion.NombreOrg;
+                if(organizacion.NombreOrg != null && organizacion.NombreOrg != "") currentOrg.NombreOrg = organizacion.NombreOrg;
             }
             if (_context.Organizacion.Any(e => e.Email == organizacion.Email && e.Id != currentOrg.Id))
             {
@@ -72,10 +72,10 @@ namespace API.Controllers
             }
             else
             {
-                if (organizacion.Email != null) currentOrg.Email = organizacion.Email;
+                if (organizacion.Email != null && organizacion.Email != "") currentOrg.Email = organizacion.Email;
             }
-            if (organizacion.Direccion != null) currentOrg.Direccion = organizacion.Direccion;
-            if (organizacion.Contraseña != null) currentOrg.Contraseña = organizacion.Contraseña;
+            if (organizacion.Direccion != null && organizacion.Direccion != "") currentOrg.Direccion = organizacion.Direccion;
+            if (organizacion.Contraseña != null && organizacion.Contraseña != "") currentOrg.Contraseña = organizacion.Contraseña;
 
             await _context.SaveChangesAsync();
 

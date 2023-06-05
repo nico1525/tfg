@@ -1,0 +1,134 @@
+﻿@using API.Models;
+@using Microsoft.Data.SqlClient;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@inject NavigationManager Navigation
+@layout NavBarLogged
+@page "/registrarusuario"
+<PageTitle>Registrar Usuario</PageTitle>
+
+<style>
+    #navbar {
+        margin-bottom: 2%;
+    }
+    #reglabel {
+        font-size: 35px;
+    }
+
+    #text {
+        text-align: center;
+    }
+
+    .registerbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    .link:hover {
+        color: dodgerblue;
+    }
+
+    .registerbtn:hover {
+        opacity: 1;
+    }
+
+    .signin {
+        text-align: center;
+    }
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .container {
+        margin: 0% 20% 20px 20%;
+    }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+
+    #navbar {
+        margin: 4% 15% 0px 15%;
+    }
+
+    h1 {
+        margin-bottom: 3%;
+    }
+</style>
+
+<body>
+    <div id="navbar">
+    
+    <div id="text"> <label id="reglabel">Registrar Nuevo Usuario</label></div>
+
+    <div class="container">
+        <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="name"><b>Nombre del Usuario</b></label>
+            <InputText class="input" id="name" placeholder="  Nombre del ususario" @bind-Value="org.NombreApellidos" />
+            <ValidationMessage For="@(() => org.NombreApellidos)" class="errormsg" />
+
+            <label for="email"><b>Email</b></label>
+            <InputText class="input" id="email" placeholder="  Email" @bind-Value="org.Email" />
+            <ValidationMessage For="@(() => org.Email)" class="errormsg" />
+
+            <label for="password"><b>Contraseña</b></label>
+            <InputText class="input" id="password" placeholder="  Contraseña" @bind-Value="org.Contraseña" />
+            <ValidationMessage For="@(() => org.Contraseña)" class="errormsg" />
+
+            <button class="registerbtn" type="submit">Registrar Usuario</button>
+        </EditForm>
+    </div>
+    <div class="login">
+        <a class="link" href="login">Ya tienes una cuenta? Inicia Sesión.</a>
+    </div>
+    </div>
+
+</body>
+
+
+
+@code {
+    private UsuarioCreateDTO org = new UsuarioCreateDTO();
+    string result;
+    [Inject]
+    public IUsuarioServices UsuarioServices { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await UsuarioServices.RegistrarUsuario(org);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+}

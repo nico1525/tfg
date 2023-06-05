@@ -4,14 +4,15 @@ using API.Models.Autentificacion;
 using Web.Helpers;
 using Newtonsoft.Json;
 using Azure;
-
+using API.Models.Query_Models;
 
 namespace Web.Services
 {
     public interface IUsuarioServices
     {
-        public Task<List<UsuarioDTO>?> GetUsuario();
-        public Task<IEnumerable<UsuarioDTO>?> GetAllUsuario();
+        public Task<InfoUsuario> GetUsuario();
+        public Task<List<UsuarioDTO>?> GetAllUsuario();
+        public Task<UsuarioDTO?> GetUsuarioById(int id);
         public Task<string> RegistrarUsuario(UsuarioCreateDTO org);
         public Task<LoginUserResponse?> LoginUsuario(LoginRequest org);
         public Task<string> DeleteUsuario(int id);
@@ -32,19 +33,14 @@ namespace Web.Services
             //_httpClientAnonymous = httpClient;  Por si para las llamadas anonimas no se tuviera que enviar token
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Token.token}");
         }
-        public async Task<List<UsuarioDTO>?> GetUsuario()
+        public async Task<InfoUsuario> GetUsuario()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Usuario");
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
-                var list = JsonConvert.DeserializeObject<IEnumerable<UsuarioDTO>>(resultString);
-                List<UsuarioDTO> lista = new List<UsuarioDTO>();
-                foreach (var veh in list)
-                {
-                    lista.Add(veh);
-                }
-                return lista;
+                var usuario = JsonConvert.DeserializeObject<InfoUsuario>(resultString);
+                return usuario;
             }
             if (!response.IsSuccessStatusCode)
             {
@@ -52,7 +48,23 @@ namespace Web.Services
             }
             return null;
         }
-        public async Task<IEnumerable<UsuarioDTO>?> GetAllUsuario()
+        public async Task<UsuarioDTO?> GetUsuarioById(int id)
+        {
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Usuario/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultString = await response.Content.ReadAsStringAsync();
+                var usuario = JsonConvert.DeserializeObject<UsuarioDTO>(resultString);
+                return usuario;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(response.Content.ReadAsStringAsync().Result);
+            }
+            return null;
+        }
+            public async Task<List<UsuarioDTO>?> GetAllUsuario()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/Usuario/all");
             if (response.IsSuccessStatusCode)
@@ -60,7 +72,7 @@ namespace Web.Services
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<UsuarioDTO>>(resultString);
                 List<UsuarioDTO> lista = new List<UsuarioDTO>();
-                foreach (var veh in lista)
+                foreach (var veh in list)
                 {
                     lista.Add(veh);
                 }

@@ -78,7 +78,7 @@ namespace API.Controllers
                 {
                     return BadRequest("Este transporte no existe o no pertenece a esta organización");
                 }
-                if (transporte.Edificio != null) transporteChange.Edificio = transporte.Edificio;
+                if (transporte.Edificio != null && transporte.Edificio != "") transporteChange.Edificio = transporte.Edificio;
 
                 await _context.SaveChangesAsync();
 

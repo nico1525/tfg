@@ -94,9 +94,9 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("Este consumo de instalación fija no pertenece a esta organización");
                 }
-                if (otrosconsumosConsumo.Edificio != null) otrosconsumosChange.Edificio = otrosconsumosConsumo.Edificio;
-                if (otrosconsumosConsumo.Nombre != null) otrosconsumosChange.Nombre = otrosconsumosConsumo.Nombre;
-                if (otrosconsumosConsumo.CategoriaActividad != null) otrosconsumosChange.CategoriaActividad = otrosconsumosConsumo.CategoriaActividad;
+                if (otrosconsumosConsumo.Edificio != null && otrosconsumosConsumo.Edificio != "") otrosconsumosChange.Edificio = otrosconsumosConsumo.Edificio;
+                if (otrosconsumosConsumo.Nombre != null && otrosconsumosConsumo.Nombre != "") otrosconsumosChange.Nombre = otrosconsumosConsumo.Nombre;
+                if (otrosconsumosConsumo.CategoriaActividad != null && otrosconsumosConsumo.CategoriaActividad != "") otrosconsumosChange.CategoriaActividad = otrosconsumosConsumo.CategoriaActividad;
                 if (otrosconsumosConsumo.CantidadConsumo > 0) otrosconsumosChange.CantidadConsumo = otrosconsumosConsumo.CantidadConsumo;
                 if (otrosconsumosConsumo.FactorEmision > 0) otrosconsumosChange.FactorEmision = otrosconsumosConsumo.FactorEmision;
                 if (otrosconsumosConsumo.FechaInicio != test) otrosconsumosChange.FechaInicio = otrosconsumosConsumo.FechaInicio;

@@ -44,7 +44,6 @@ namespace API.Models
 
         [EmailAddress(ErrorMessage = "Debe introducir un Email válido")]
         public string? Email { get; set; }
-
         public string? Contraseña { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using API.Authorization;
 using API.Helpers;
 using API.Models.Autentificacion;
 using AutoMapper;
+using API.Models.Query_Models;
 
 namespace API.Controllers
 {
@@ -28,28 +29,45 @@ namespace API.Controllers
             _jwtUtils = jwtUtils;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> GetUsuarios()
+        public InfoUsuario GetUsuarios()
+        {// Informacion del usuario junto a datos de la Organización
+            var currentUser = (Usuario)HttpContext.Items["Usuario"];
+
+                InfoUsuario query = (from u in _context.Usuario
+                             join o in _context.Organizacion
+                             on u.OrganizacionId equals o.Id
+                             select new InfoUsuario()
+                             {
+                                 Id = u.Id,
+                                 NombreApellidos = u.NombreApellidos,
+                                 Email = u.Email,
+                                 Contraseña = u.Contraseña,
+                                 Rol = u.Role,
+                                 NombreOrg = o.NombreOrg,
+                                 Dirección = o.Direccion
+                             }).Where(r => r.Id == currentUser.Id).Single();
+                return query;
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UsuarioDTO>> GetUsuarioById(int id)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-            if (currentUser.Role == Role.OrgAdmin || currentUser.Role == Role.User)
+            Usuario usuario = await _context.Usuario.FindAsync(id);
+            UsuarioDTO usuarioDTO;
+            if (usuario.OrganizacionId == currentUser.OrganizacionId)
             {
-                var user = await _context.Usuario.FindAsync(currentUser.Id);
-                UsuarioDTO userDTO = _mapper.Map<UsuarioDTO>(user);
-                List<UsuarioDTO> listorg = new()
-            {
-                    userDTO
-            };
-                return listorg;
+                usuarioDTO = _mapper.Map<UsuarioDTO>(usuario);
             }
             else
             {
-                return await _context.Organizacion.ToListAsync();
+                return BadRequest("Este usuario no existe o no pertenece a esta organización");
             }
-        }
+            return usuarioDTO;
 
+        }
         [Authorize(Role.OrgAdmin,Role.SuperAdmin)]
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<object>>> GetAllUsuarios()
@@ -114,10 +132,10 @@ namespace API.Controllers
             }
             else
             {
-                if (usuario.Email != null) userChange.Email = usuario.Email;
+                if (usuario.Email != null && usuario.Email != "") userChange.Email = usuario.Email;
             }
-            if (usuario.NombreApellidos != null) userChange.NombreApellidos = usuario.NombreApellidos;
-            if (usuario.Contraseña != null) userChange.Contraseña = usuario.Contraseña;
+            if (usuario.NombreApellidos != null && usuario.NombreApellidos != "") userChange.NombreApellidos = usuario.NombreApellidos;
+            if (usuario.Contraseña != null && usuario.Contraseña != "") userChange.Contraseña = usuario.Contraseña;
 
             await _context.SaveChangesAsync();
 
@@ -182,7 +200,7 @@ namespace API.Controllers
             _context.Usuario.Remove(userDelete);
             await _context.SaveChangesAsync();
 
-            return Ok("Organización eliminada correctamente");
+            return Ok("Usuario eliminado correctamente");
             }
             catch (NullReferenceException ex)
             {
