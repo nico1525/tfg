@@ -1,3 +1,4 @@
+using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -28,11 +29,8 @@ builder.Services.AddScoped<IEmisionesFugitivasConsumoServices, EmisionesFugitiva
 
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<Storage>();
+builder.Services.AddSweetAlert2();
 
-//builder.Services.AddHttpClient<IOrganizacionServices, OrganizacionServices>(client =>
-//{
-//    client.BaseAddress = new Uri("https://localhost:7011/");
-//});
 
 
 var app = builder.Build();

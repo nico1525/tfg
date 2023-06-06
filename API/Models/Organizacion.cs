@@ -21,6 +21,8 @@ namespace API.Models
         public string? NombreOrg { get; set; }
         public string? Email { get; set; }
         public string? Direccion { get; set; }
+        public string? Contraseña { get; set; }
+
     }
 
     public class OrganizacionCreateDTO

@@ -121,8 +121,11 @@
                     <th>Cantidad de Combustible</th>
                     <th>Edificio/Sede</th>
                     <th>Id de la Instalación Fija</th>
-                    <th class="headerbuttons">Modificar</th>
-                    <th class="headerbuttons">Eliminar</th>
+                    @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                    {
+                        <th class="headerbuttons">Modificar</th>
+                        <th class="headerbuttons">Eliminar</th>
+                    }
                 </tr>
             </thead>
             <Virtualize Items="@listashow" Context="consumo">
@@ -136,8 +139,11 @@
                         <td>@consumo.CantidadCombustible</td>
                         <td>@consumo.Edificio</td>
                         <td>@consumo.InstalacionesFijasId</td>
-                        <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
-                        <td><button class="botones" @onclick="(() => Eliminar(consumo.Id, consumo))">X</button></td>
+                        @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                        {
+                            <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
+                            <td><button class="botones" @onclick="(() => Eliminar(consumo.Id, consumo))">X</button></td>
+                        }
                     </tr>
 
                 </tbody>

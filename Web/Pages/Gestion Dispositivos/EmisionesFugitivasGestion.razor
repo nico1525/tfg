@@ -113,8 +113,11 @@
                     <th>Id EmisionesFugitivas</th>
                     <th>Nombre del Equipo</th>
                     <th>Edificio</th>
-                    <th class="headerbuttons">Modificar</th>
-                    <th class="headerbuttons">Eliminar</th>
+                    @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                    {
+                        <th class="headerbuttons">Modificar</th>
+                        <th class="headerbuttons">Eliminar</th>
+                    }
                     <th class="headerbuttons">Ver Consumos</th>
                 </tr>
             </thead>
@@ -124,8 +127,11 @@
                         <td>@emisionesfugitivas.Id</td>
                         <td>@emisionesfugitivas.NombreEquipo</td> 
                         <td>@emisionesfugitivas.Edificio</td>
-                        <td><button class="botones" @onclick="(() => Modificar(emisionesfugitivas.Id))">M</button></td>
-                        <td><button class="botones" @onclick="(() => Eliminar(emisionesfugitivas.Id, emisionesfugitivas))">X</button></td>
+                        @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                        {
+                            <td><button class="botones" @onclick="(() => Modificar(emisionesfugitivas.Id))">M</button></td>
+                            <td><button class="botones" @onclick="(() => Eliminar(emisionesfugitivas.Id, emisionesfugitivas))">X</button></td>
+                        }
                         <td><button class="botones" @onclick="(() => VerConsumos(emisionesfugitivas.Id))">C</button></td>
                     </tr>
 
@@ -222,7 +228,7 @@
             Navigation.NavigateTo("");
             return;
         }
-        EmisionesFugitivasServices = new EmisionesFugitivasServices(Http);
+        emisionesfugitivasServices = new EmisionesFugitivasServices(Http);
         GetEmisionesFugitivasList();
     }
 }

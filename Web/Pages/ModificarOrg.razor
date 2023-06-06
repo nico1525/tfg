@@ -1,0 +1,136 @@
+﻿@inject NavigationManager Navigation
+@page "/modificar/organizacion"
+@using API.Models;
+@using Web.Helpers;
+@using Web.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@layout NavBarLogged
+@inject HttpClient Http
+
+
+<PageTitle>Modificar org</PageTitle>
+
+<style>
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+
+    #navbar {
+        margin: 4% 15% 0px 15%;
+    }
+
+    h1 {
+        margin-bottom: 3%;
+        text-align: center;
+        font-size: 35px;
+    }
+</style>
+
+<body>
+    <div id="navbar">
+        <h1>Modificar org</h1>
+        <div id="container">
+            <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+
+                <label for="edificio"><b>Nombre de la Organización</b></label>
+                <InputText class="input" id="edificio" placeholder="  Nombre de la Organización" @bind-Value="org.NombreOrg" />
+                <ValidationMessage For="@(() => org.NombreOrg)" class="errormsg" />
+
+                <label for="matricula"><b>Dirección</b></label>
+                <InputText class="input" id="matricula" placeholder="  Dirección" @bind-Value="org.Direccion" />
+                <ValidationMessage For="@(() => org.Direccion)" class="errormsg" />
+
+                <label for="matricula"><b>Email</b></label>
+                <InputText class="input" id="matricula" placeholder="  Email" @bind-Value="org.Email" />
+                <ValidationMessage For="@(() => org.Email)" class="errormsg" />
+
+                <label for="matricula"><b>Contraseña</b></label>
+                <InputText class="input" id="matricula" placeholder="  Contraseña" @bind-Value="org.Contraseña" />
+                <ValidationMessage For="@(() => org.Contraseña)" class="errormsg" />
+
+                <button class="iniciarbtn" type="submit">Modificar Organización</button>
+            </EditForm>
+        </div>
+    </div>
+</body>
+
+@code {
+
+    private OrganizacionModifyDTO org = new OrganizacionModifyDTO();
+    private OrganizacionDTO originalorg = new OrganizacionDTO();
+
+    string result;
+    [Inject]
+    public IOrganizacionServices organizacionServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await organizacionServices.UpdateOrganizacion(org);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+        Navigation.NavigateTo("inicio");
+    }
+    async void Getorg()
+    {
+        originalorg = await organizacionServices.GetOrg();
+        org.NombreOrg = originalorg.NombreOrg;
+        org.Email = originalorg.Email;
+        org.Contraseña = originalorg.Contraseña;
+        org.Direccion = originalorg.Direccion;
+
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Storage.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        organizacionServices = new OrganizacionServices(Http);
+
+        Getorg();
+    }
+}

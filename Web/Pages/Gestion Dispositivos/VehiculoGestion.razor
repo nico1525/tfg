@@ -106,8 +106,11 @@ td{
                     <th>Matrícula</th>
                     <th>Categoría del Vehículo</th>
                     <th>Edificio</th>
-                    <th class="headerbuttons">Modificar</th>
-                    <th class="headerbuttons">Eliminar</th>
+                    @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                    {
+                        <th class="headerbuttons">Modificar</th>
+                        <th class="headerbuttons">Eliminar</th>
+                    }
                     <th class="headerbuttons">Ver Consumos</th>
 
 
@@ -120,8 +123,10 @@ td{
                     <td>@vehiculo.Matricula</td>
                     <td>@vehiculo.CategoriaVehiculo</td>
                     <td>@vehiculo.Edificio</td>
+                    @if(Storage.role == API.Helpers.Role.OrgAdmin){
                         <td><button class="botones" @onclick="(() => Modificar(vehiculo.Id))">M</button></td>
                         <td><button class="botones" @onclick="(() => Eliminar(vehiculo.Id, vehiculo))">X</button></td>
+                    }
                         <td><button class="botones" @onclick="(() => VerConsumos(vehiculo.Id))">C</button></td>
                 </tr>
 

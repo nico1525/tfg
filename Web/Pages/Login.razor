@@ -4,8 +4,8 @@
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject SweetAlertService Swal;
 @inject ProtectedLocalStorage BrowserStorage
-@inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 @inject HttpClient Http
 @page "/login"
@@ -119,17 +119,18 @@
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            await Swal.FireAsync("Ha habido un problema", e.Message, "error");
+
             return;
         }
-        //await JsRuntime.InvokeVoidAsync("alert", "Bienvenido " + response.NombreApellidos);
+        await Swal.FireAsync("Sesión iniciada correctamente!", "Bienvenido " + response.NombreApellidos, "success");
+
         await BrowserStorage.SetAsync("token", response.Token);
-        await Task.Delay(1000);
+        await Task.Delay(500);
         var result = await BrowserStorage.GetAsync<string>("token");
         var currentInputValue = result.Success ? result.Value : "";
         Storage.token = currentInputValue;
         UsuarioServices = new UsuarioServices(Http);
-        await Task.Delay(500);
         var rol= await UsuarioServices.GetUsuario();
 
         Storage.role = rol.Rol;

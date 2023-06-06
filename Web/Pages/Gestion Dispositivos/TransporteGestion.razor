@@ -115,8 +115,11 @@
                     <th>Categoría del Transporte</th>
                     <th>Combustible del Transporte</th>
                     <th>Edificio</th>
-                    <th class="headerbuttons">Modificar</th>
-                    <th class="headerbuttons">Eliminar</th>
+                    @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                    {
+                        <th class="headerbuttons">Modificar</th>
+                        <th class="headerbuttons">Eliminar</th>
+                    }
                     <th class="headerbuttons">Ver Consumos</th>
 
 
@@ -129,8 +132,11 @@
                         <td>@transporte.TipoTransporte</td>
                         <td>@transporte.CombustibleTransporte</td>
                         <td>@transporte.Edificio</td>
-                        <td><button class="botones" @onclick="(() => Modificar(transporte.Id))">M</button></td>
-                        <td><button class="botones" @onclick="(() => Eliminar(transporte.Id, transporte))">X</button></td>
+                        @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                        {
+                            <td><button class="botones" @onclick="(() => Modificar(transporte.Id))">M</button></td>
+                            <td><button class="botones" @onclick="(() => Eliminar(transporte.Id, transporte))">X</button></td>
+                        }
                         <td><button class="botones" @onclick="(() => VerConsumos(transporte.Id))">C</button></td>
                     </tr>
 

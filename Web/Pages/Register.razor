@@ -130,8 +130,4 @@
         await JsRuntime.InvokeVoidAsync("alert", result);
         Navigation.NavigateTo("login");
     }
-    protected override async Task OnInitializedAsync()
-    {
-        OrganizacionServices = new OrganizacionServices(Http);
-    }
 }

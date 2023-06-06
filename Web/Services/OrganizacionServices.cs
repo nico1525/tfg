@@ -11,7 +11,7 @@ namespace Web.Services
 {
     public interface IOrganizacionServices
     {
-        Task<IEnumerable<OrganizacionDTO>> GetOrg();
+        Task<OrganizacionDTO> GetOrg();
         Task<string> PostOrganizacion(OrganizacionCreateDTO org);
         Task<string?> DeleteOrganizacion();
         Task<string> UpdateOrganizacion(OrganizacionModifyDTO org);
@@ -27,19 +27,16 @@ namespace Web.Services
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Storage.token}");
         }
-        public async Task<IEnumerable<OrganizacionDTO>?> GetOrg()
+        public async Task<OrganizacionDTO> GetOrg()
         {
             var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion");
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
                 var list = JsonConvert.DeserializeObject<IEnumerable<OrganizacionDTO>>(resultString);
-                List<OrganizacionDTO> lista = new List<OrganizacionDTO>();
-                foreach (var veh in lista)
-                {
-                    lista.Add(veh);
-                }
-                return lista;
+                OrganizacionDTO org = new OrganizacionDTO();
+                org = list.FirstOrDefault();
+                return org;
             }
             if (!response.IsSuccessStatusCode)
             {

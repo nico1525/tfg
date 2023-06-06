@@ -115,8 +115,11 @@
                     <th>Nombre</th>
                     <th>Tipo de Maquinaria</th>
                     <th>Edificio</th>
-                    <th class="headerbuttons">Modificar</th>
-                    <th class="headerbuttons">Eliminar</th>
+                    @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                    {
+                        <th class="headerbuttons">Modificar</th>
+                        <th class="headerbuttons">Eliminar</th>
+                    }
                     <th class="headerbuttons">Ver Consumos</th>
 
 
@@ -129,8 +132,11 @@
                         <td>@maquinaria.Nombre</td>
                         <td>@maquinaria.TipoMaquinaria</td>
                         <td>@maquinaria.Edificio</td>
-                        <td><button class="botones" @onclick="(() => Modificar(maquinaria.Id))">M</button></td>
-                        <td><button class="botones" @onclick="(() => Eliminar(maquinaria.Id, maquinaria))">X</button></td>
+                        @if (Storage.role == API.Helpers.Role.OrgAdmin)
+                        {
+                            <td><button class="botones" @onclick="(() => Modificar(maquinaria.Id))">M</button></td>
+                            <td><button class="botones" @onclick="(() => Eliminar(maquinaria.Id, maquinaria))">X</button></td>
+                        }
                         <td><button class="botones" @onclick="(() => VerConsumos(maquinaria.Id))">C</button></td>
                     </tr>
 
