@@ -6,6 +6,7 @@
 @using Web.Services;
 @layout GestionDispositivos
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Gestion InstalacionesFijas</PageTitle>
@@ -223,6 +224,8 @@
             Navigation.NavigateTo("");
             return;
         }
+        instalacionfijaServices = new InstalacionesFijasServices(Http);
+
         GetInstalacionesFijasList();
     }
 }

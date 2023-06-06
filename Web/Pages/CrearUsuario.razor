@@ -6,6 +6,7 @@
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
 @layout NavBarLogged
+@inject HttpClient Http
 @page "/registrarusuario"
 <PageTitle>Registrar Usuario</PageTitle>
 
@@ -131,5 +132,6 @@
             Navigation.NavigateTo("");
             return;
         }
+        UsuarioServices = new UsuarioServices(Http);
     }
 }

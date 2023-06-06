@@ -8,6 +8,7 @@
 @using Web.Services.ConsumoServices;
 @layout Consumos
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Consumo OtrosConsumos</PageTitle>
@@ -256,6 +257,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        otrosConsumosconsumoServices = new OtrosConsumosServices(Http);
         GetConsumoList();
     }
 }

@@ -6,6 +6,7 @@
 @layout AgregarDispositivo
 @using Microsoft.AspNetCore.Components.Forms
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Agregar Maquinaria</PageTitle>
@@ -113,5 +114,6 @@
             Navigation.NavigateTo("");
             return;
         }
+        MaquinariaServices = new MaquinariaServices(Http);
     }
 }

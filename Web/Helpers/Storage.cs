@@ -7,6 +7,7 @@ namespace Web.Helpers
     {
         public static string? token { get; set; }
         public static Role? role { get; set; }
+        public static HttpClient httpclient { get; set;}
 
     }
 }

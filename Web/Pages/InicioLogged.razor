@@ -8,13 +8,18 @@
 <div> <NavBarLogged /></div>
 
 @code {
-    protected override async Task OnInitializedAsync()
-    {
-        if (Storage.token == null)
-        {
-            Navigation.NavigateTo("");
-            return;
-        }
-    }
+    //[Inject]
+    //public IUsuarioServices UsuarioServices { get; set; }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    if (Storage.token == null)
+    //    {
+    //        Navigation.NavigateTo("");
+    //        return;
+    //    }
+    //    var usuario = await UsuarioServices.GetUsuario();
+    //    Storage.role = usuario.Rol;
+    //}
 
 }

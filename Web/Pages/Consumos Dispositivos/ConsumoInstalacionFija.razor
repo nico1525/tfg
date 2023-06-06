@@ -8,6 +8,7 @@
 @using Web.Services.ConsumoServices;
 @layout Consumos
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Consumo InstalacionesFijas</PageTitle>
@@ -257,6 +258,8 @@
             Navigation.NavigateTo("");
             return;
         }
+        instalacionesFijasconsumoServices = new InstalacionesFijasConsumoServices(Http);
+
         GetConsumoList();
     }
 }

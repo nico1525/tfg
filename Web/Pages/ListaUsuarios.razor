@@ -6,6 +6,7 @@
 @using Web.Services;
 @layout NavBarLogged
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Gestion Usuarios</PageTitle>
@@ -227,6 +228,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        usuarioServices = new UsuarioServices(Http);
         GetusuarioList();
     }
 }

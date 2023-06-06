@@ -24,6 +24,7 @@ namespace Web.Services.ConsumoServices
         public VehiculoConsumoServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Storage.token}");
         }
         public async Task<List<VehiculoConsumoDTO>?> GetVehiculoConsumo()

@@ -8,6 +8,7 @@
 @using Web.Services.ConsumoServices;
 @inject IJSRuntime JsRuntime
 @layout ModificarConsumo
+@inject HttpClient Http
 
 
 
@@ -109,13 +110,13 @@
 
     string result;
     [Inject]
-    public IOtrosConsumosServices VehiculoServices { get; set; }
+    public IOtrosConsumosServices OtrosConsumosServices { get; set; }
     private async Task HandleValidSubmit()
     {
         try
         {
             int idint = int.Parse(id);
-            result = await VehiculoServices.UpdateOtrosConsumosPorId(idint, OtrosConsumos);
+            result = await OtrosConsumosServices.UpdateOtrosConsumosPorId(idint, OtrosConsumos);
         }
         catch (Exception e)
         {
@@ -128,7 +129,7 @@
     async void GetVehiculo()
     {
         int idint = int.Parse(id);
-        originalOtrosConsumos = await VehiculoServices.GetConsumoByID(idint);
+        originalOtrosConsumos = await OtrosConsumosServices.GetConsumoByID(idint);
         OtrosConsumos.Edificio = originalOtrosConsumos.Edificio;
         OtrosConsumos.FechaInicio = originalOtrosConsumos.FechaInicio;
         OtrosConsumos.FechaFin = originalOtrosConsumos.FechaFin;
@@ -147,6 +148,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        OtrosConsumosServices = new OtrosConsumosServices(Http);
         GetVehiculo();
     }
 }

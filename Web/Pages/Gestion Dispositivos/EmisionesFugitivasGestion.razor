@@ -6,6 +6,7 @@
 @using Web.Services;
 @layout GestionDispositivos
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Gestion EmisionesFugitivas</PageTitle>
@@ -221,6 +222,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        EmisionesFugitivasServices = new EmisionesFugitivasServices(Http);
         GetEmisionesFugitivasList();
     }
 }

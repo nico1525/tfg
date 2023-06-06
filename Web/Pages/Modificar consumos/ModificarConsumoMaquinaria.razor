@@ -8,6 +8,7 @@
 @using Web.Services.ConsumoServices;
 @inject IJSRuntime JsRuntime
 @layout ModificarConsumo
+@inject HttpClient Http
 
 
 
@@ -148,6 +149,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        MaquinariaServices = new MaquinariaConsumoServices(Http);
         GetMaquinaria();
     }
 }

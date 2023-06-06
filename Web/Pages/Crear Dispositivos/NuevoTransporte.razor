@@ -6,6 +6,7 @@
 @layout AgregarDispositivo
 @using Microsoft.AspNetCore.Components.Forms
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Agregar Transporte</PageTitle>
@@ -119,5 +120,6 @@
             Navigation.NavigateTo("");
             return;
         }
+        TransporteServices = new TransporteServices(Http);
     }
 }

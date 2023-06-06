@@ -7,6 +7,7 @@
 @inject ProtectedLocalStorage BrowserStorage
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
+@inject HttpClient Http
 @page "/login"
 <PageTitle>Login</PageTitle>
 
@@ -127,11 +128,16 @@
         var result = await BrowserStorage.GetAsync<string>("token");
         var currentInputValue = result.Success ? result.Value : "";
         Storage.token = currentInputValue;
+        UsuarioServices = new UsuarioServices(Http);
+        await Task.Delay(500);
+        var rol= await UsuarioServices.GetUsuario();
 
-        var usuario = await UsuarioServices.GetUsuario();
-        Storage.role = usuario.Rol;
-
+        Storage.role = rol.Rol;
         Navigation.NavigateTo("inicio");
         
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        UsuarioServices = new UsuarioServices(Http);
     }
 }

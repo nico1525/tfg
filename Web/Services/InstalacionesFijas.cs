@@ -23,6 +23,7 @@ namespace Web.Services
         public InstalacionesFijasServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Storage.token}");
         }
         public async Task<List<InstalacionesFijasDTO>?> GetInstalacionesFijas()

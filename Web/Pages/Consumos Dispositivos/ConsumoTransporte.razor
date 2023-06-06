@@ -8,6 +8,7 @@
 @using Web.Services.ConsumoServices;
 @layout Consumos
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Consumo Transporte</PageTitle>
@@ -251,6 +252,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        transporteconsumoServices = new TransporteConsumoServices(Http);
         GetConsumoList();
     }
 }

@@ -8,6 +8,7 @@
 @using Web.Services.ConsumoServices;
 @inject IJSRuntime JsRuntime
 @layout ModificarConsumo
+@inject HttpClient Http
 
 
 
@@ -149,6 +150,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        VehiculoServices = new VehiculoConsumoServices(Http);
         GetVehiculo();
     }
 }

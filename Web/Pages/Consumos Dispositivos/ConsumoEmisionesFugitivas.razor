@@ -8,6 +8,7 @@
 @using Web.Services.ConsumoServices;
 @layout Consumos
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Consumo EmisionesFugitivas</PageTitle>
@@ -260,6 +261,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        emisionesfugitivasconsumoServices = new EmisionesFugitivasConsumoServices(Http);
         GetConsumoList();
     }
 }

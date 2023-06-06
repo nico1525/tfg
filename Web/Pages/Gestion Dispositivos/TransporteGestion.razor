@@ -6,6 +6,7 @@
 @using Web.Services;
 @layout GestionDispositivos
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Gestión Transporte</PageTitle>
@@ -232,6 +233,7 @@
             Navigation.NavigateTo("");
             return;
         }
+        transporteServices = new TransporteServices(Http);
         GetTransporteList();
     }
 }

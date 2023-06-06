@@ -6,8 +6,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @inject IJSRuntime JsRuntime
 @layout Modificar
-
-
+@inject HttpClient Http
 
 <PageTitle>Modificar Transporte</PageTitle>
 
@@ -113,6 +112,8 @@
             Navigation.NavigateTo("");
             return;
         }
+        TransporteServices = new TransporteServices(Http);
+
         GetTransporte();
     }
 }

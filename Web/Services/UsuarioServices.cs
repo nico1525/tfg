@@ -30,7 +30,7 @@ namespace Web.Services
         public UsuarioServices(HttpClient httpClient)
         { 
             _httpClient = httpClient;
-            //_httpClientAnonymous = httpClient;  Por si para las llamadas anonimas no se tuviera que enviar token
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Storage.token}");
         }
         public async Task<InfoUsuario> GetUsuario()

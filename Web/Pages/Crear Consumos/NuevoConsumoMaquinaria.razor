@@ -8,6 +8,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Web.Services.ConsumoServices;
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
 
 
 <PageTitle>Agregar Consumo Maquinaria</PageTitle>
@@ -137,5 +138,6 @@
             Navigation.NavigateTo("");
             return;
         }
+        MaquinariaConsumoServices = new MaquinariaConsumoServices(Http);
     }
 }

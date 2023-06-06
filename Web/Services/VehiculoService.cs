@@ -25,8 +25,8 @@ namespace Web.Services
         public VehiculoServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Storage.token}");
-            httpClient.Timeout = TimeSpan.FromMinutes(30);
         }
         public async Task<List<VehiculoDTO>?> GetVehiculo()
         {
