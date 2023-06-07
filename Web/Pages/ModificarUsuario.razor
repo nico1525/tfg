@@ -83,6 +83,12 @@
             <InputText class="input" id="matricula" placeholder="  Contraseña" @bind-Value="usuario.Contraseña" />
             <ValidationMessage For="@(() => usuario.Contraseña)" class="errormsg" />
 
+                <label for="categoria"><b>Seleccionar Permisos</b></label>
+                <InputSelect class="input" id="categoria" @bind-Value="rol">
+                    <option value="user">Usuario corriente</option>
+                    <option value="admin">Administrador de la Organización</option>
+                </InputSelect>
+
             <button class="iniciarbtn" type="submit">Modificar Usuario</button>
         </EditForm>
     </div>
@@ -92,7 +98,7 @@
 @code {
     [Parameter]
     public string id { get; set; }
-
+    public string rol;
     private UsuarioModifyDTO usuario = new UsuarioModifyDTO();
     private UsuarioDTO originalusuario = new UsuarioDTO();
 
@@ -104,6 +110,14 @@
         try
         {
             int idint = int.Parse(id);
+            if (rol.Equals("user"))
+            {
+                usuario.Role = API.Helpers.Role.User;
+            }
+            if (rol.Equals("admin"))
+            {
+                usuario.Role = API.Helpers.Role.OrgAdmin;
+            }
             result = await usuarioServices.UpdateUsuarioPorId(idint, usuario);
         }
         catch (Exception e)
@@ -121,6 +135,16 @@
         usuario.NombreApellidos = originalusuario.NombreApellidos;
         usuario.Email = originalusuario.Email;
         usuario.Contraseña = originalusuario.Contraseña;
+        if (originalusuario.Role == API.Helpers.Role.User)
+        {
+            rol = "user";
+        }
+        if (originalusuario.Role == API.Helpers.Role.OrgAdmin)
+        {
+            rol = "admin";
+        }
+        
+        usuario.Role = originalusuario.Role;
 
         StateHasChanged();
     }

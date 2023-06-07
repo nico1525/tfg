@@ -95,7 +95,7 @@ namespace Web.Services
         }
         public async Task<string> UpdateEmisionesFugitivasPorId(int id, EmisionesFugitivasModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync(baseUrl + "$api/Organizacion/EmisionesFugitivas/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/EmisionesFugitivas/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;

@@ -49,7 +49,7 @@ namespace Web.Services
 
         public async Task<InstalacionesFijasDTO?> GetInstalacionesFijasById(int id)
         {
-            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas" + id);
+            var response = await _httpClient.GetAsync(baseUrl + "api/Organizacion/InstalacionesFijas/" + id);
 
             if (response.IsSuccessStatusCode)
             {
@@ -96,7 +96,7 @@ namespace Web.Services
         }
         public async Task<string> UpdateInstalacionesFijasPorId(int id, InstalacionesFijasModifyDTO org)
         {
-            var response = await _httpClient.PutAsJsonAsync(baseUrl + "$api/Organizacion/InstalacionesFijas/" + id, org);
+            var response = await _httpClient.PutAsJsonAsync(baseUrl + "api/Organizacion/InstalacionesFijas/" + id, org);
             if (response.IsSuccessStatusCode)
             {
                 return response.Content.ReadAsStringAsync().Result;

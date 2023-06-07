@@ -81,7 +81,7 @@ namespace API.Controllers.ControllersConsumo
                 }
                 return orgConsumoList;
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún equipo o fuga");
             }
@@ -116,7 +116,7 @@ namespace API.Controllers.ControllersConsumo
                 {
                     emisionesChange.Consumo = CalculoEmisionesFugitivas.CalculoConsumoEmisionesFugitivas(emisionesChange, _context);
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
                     return BadRequest("Este Tipo de Gas no es válido");
                 }
@@ -124,7 +124,7 @@ namespace API.Controllers.ControllersConsumo
 
                 return Ok("Consumo del equipo o fuga con Id: " + emisiones.Id + " modificado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún consumo de equipo o fuga");
             }

@@ -136,8 +136,13 @@ namespace API.Controllers
             }
             if (usuario.NombreApellidos != null && usuario.NombreApellidos != "") userChange.NombreApellidos = usuario.NombreApellidos;
             if (usuario.Contraseña != null && usuario.Contraseña != "") userChange.Contraseña = usuario.Contraseña;
+            if (usuario.Role == Role.User || usuario.Role == Role.OrgAdmin) userChange.Role = usuario.Role; 
+                else
+                {
+                    return BadRequest("Seleccione un rol Válido");
+                }
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
             return Ok("Usuario modificado correctamente");
             }
@@ -202,7 +207,7 @@ namespace API.Controllers
 
             return Ok("Usuario eliminado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún usuario");
             }

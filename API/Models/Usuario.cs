@@ -23,6 +23,7 @@ namespace API.Models
         public string? NombreApellidos { get; set; }
         public string? Email { get; set; }
         public string? Contraseña { get; set; }
+        public Role Role { get; set; }
 
     }
 
@@ -45,5 +46,7 @@ namespace API.Models
         [EmailAddress(ErrorMessage = "Debe introducir un Email válido")]
         public string? Email { get; set; }
         public string? Contraseña { get; set; }
+        public Role Role { get; set; }
+
     }
 }

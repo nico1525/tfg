@@ -56,7 +56,7 @@ namespace API.Controllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             InstalacionesFijas InstalacionesFijas = await _context.InstalacionesFijas.FindAsync(id);
-            InstalacionesFijasDTO InstalacionesFijasDTO = new();
+            InstalacionesFijasDTO InstalacionesFijasDTO;
             if (InstalacionesFijas.OrganizacionId == currentUser.OrganizacionId)
             {
                 InstalacionesFijasDTO = _mapper.Map<InstalacionesFijasDTO>(InstalacionesFijas);
