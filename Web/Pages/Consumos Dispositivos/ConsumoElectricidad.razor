@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager Navigation
-@page "/consumo/transporte/{id}"
+@page "/consumo/electricidad/{id}"
 @using API.Models;
 @using API.Models.Consumos;
 @using Microsoft.AspNetCore.Components.Web.Virtualization;
@@ -11,7 +11,7 @@
 @inject HttpClient Http
 
 
-<PageTitle>Consumo Transporte</PageTitle>
+<PageTitle>Consumo Eléctrico</PageTitle>
 
 <style>
     h1 {
@@ -90,7 +90,7 @@
 </style>
 
 <body>
-    <h1><b>Lista de Consumo de Transporte</b></h1>
+    <h1><b>Lista de Consumo Eléctrico</b></h1>
 
     <div id="filtro">
         <label id="tipolabel"><b>Filtrar:</b></label>
@@ -98,8 +98,9 @@
         <select @bind="tipofiltro" id="select">
             <option value="id">ID</option>
             <option value="consumo">Consumo</option>
+            <option value="comercializadora">Comercializadora</option>
             <option value="edificio">Edificio / Sede</option>
-            <option value="idtransporte">ID del Transporte</option>
+            <option value="idelectricidad">ID del Dispositivo</option>
 
         </select>
         <input id="input" placeholder="Buscar" @bind="filtrocat" />
@@ -117,9 +118,10 @@
                     <th>Consumo</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha Fin</th>
-                    <th>Cantidad de Combustible</th>
+                    <th>Kilovatios consumidos</th>
+                    <th>Comercializadora</th>
                     <th>Edificio/Sede</th>
-                    <th>Id del Transporte</th>
+                    <th>Id del Dispositivo</th>
                     @if (Storage.role == API.Helpers.Role.OrgAdmin)
                     {
                         <th class="headerbuttons">Modificar</th>
@@ -135,9 +137,10 @@
                         <td>@consumo.Consumo</td>
                         <td>@consumo.FechaInicio</td>
                         <td>@consumo.FechaFin</td>
-                        <td>@consumo.CantidadCombustible</td>
+                        <td>@consumo.Kwh</td>
+                        <td>@consumo.Comercializadora</td>
                         <td>@consumo.Edificio</td>
-                        <td>@consumo.TransporteId</td>
+                        <td>@consumo.ElectricidadId</td>
                         @if (Storage.role == API.Helpers.Role.OrgAdmin)
                         {
                             <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
@@ -156,24 +159,24 @@
     [Parameter]
     public string id { get; set; }
 
-    List<TransporteConsumoDTO> lista = new List<TransporteConsumoDTO>();
-    List<TransporteConsumoDTO> listashow = new List<TransporteConsumoDTO>();
+    List<ElectricidadConsumoDTO> lista = new List<ElectricidadConsumoDTO>();
+    List<ElectricidadConsumoDTO> listashow = new List<ElectricidadConsumoDTO>();
     string tipofiltro = "id";
     string filtrocat = "";
 
     [Inject]
-    public ITransporteConsumoServices transporteconsumoServices { get; set; }
+    public IElectricidadConsumoServices electricidadconsumoServices { get; set; }
 
     public void Modificar(int id)
     {
-        Navigation.NavigateTo("/modificar/consumotransporte/" + id);
+        Navigation.NavigateTo("/modificar/consumoelectricidad/" + id);
     }
 
-    public async void Eliminar(int id, TransporteConsumoDTO consumo)
+    public async void Eliminar(int id, ElectricidadConsumoDTO consumo)
     {
         try
         {
-            await transporteconsumoServices.DeleteTransporteConsumo(id);
+            await electricidadconsumoServices.DeleteElectricidadConsumo(id);
         }
         catch (Exception e)
         {
@@ -199,25 +202,31 @@
             switch (tipofiltro)
             {
                 case "id":
-                    if (consumo.Id.ToString().Contains(filtrocat))
+                    if (consumo.Id.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
                 case "consumo":
-                    if (consumo.Consumo.ToString().Contains(filtrocat))
+                    if (consumo.Consumo.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
-                case "idtransporte":
-                    if (consumo.TransporteId.ToString().Contains(filtrocat))
+                case "idelectricidad":
+                    if (consumo.ElectricidadId.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
-                    break;
+                    break; 
                 case "edificio":
                     if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
+                    {
+                        listashow.Add(consumo);
+                    }
+                    break;
+                case "comercializadora":
+                    if (consumo.Comercializadora is not null && consumo.Comercializadora.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
@@ -231,7 +240,7 @@
     async void GetConsumoList()
     {
 
-        lista = await transporteconsumoServices.GetTransporteConsumo();
+        lista = await electricidadconsumoServices.GetElectricidadConsumo();
         if (id.Equals("0"))
         {
             listashow.AddRange(lista);
@@ -240,7 +249,7 @@
         {
             foreach (var consumo in lista)
             {
-                if (consumo.TransporteId.ToString() == id)
+                if (consumo.ElectricidadId.ToString() == id)
                 {
                     listashow.Add(consumo);
                 }
@@ -257,7 +266,7 @@
             Navigation.NavigateTo("");
             return;
         }
-        transporteconsumoServices = new TransporteConsumoServices(Http);
+        electricidadconsumoServices = new ElectricidadConsumoServices(Http);
         GetConsumoList();
     }
 }

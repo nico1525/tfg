@@ -59,6 +59,7 @@
             <option value="emisionesfugitivas">Emisiones Fugitivas</option>
             <option value="instalacionesfijas">Instalaciones Fijas</option>
             <option value="otrosconsumos">Otros Consumos</option>
+            <option value="electricidad">Dispositivo eléctrico</option>
 
         </select>
     </div>
@@ -73,7 +74,7 @@
     private string? dispositivo { get { return dispositivo2; } set { dispositivo2 = value;  SelectDispositivo(); } }
     public void SelectDispositivo()
     {
-        Navigation.NavigateTo("agregar/" + dispositivo2);
+        Navigation.NavigateTo("nuevoconsumo/" + dispositivo2);
     }
     protected override async Task OnInitializedAsync()
     {

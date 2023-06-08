@@ -1,0 +1,131 @@
+﻿@inject NavigationManager Navigation
+@page "/nuevoconsumo/electricidad"
+@using API.Models;
+@using API.Models.Consumos;
+@using Web.Helpers;
+@using Web.Services;
+@layout NuevoConsumo;
+@using Microsoft.AspNetCore.Components.Forms
+@using Web.Services.ConsumoServices;
+@inject IJSRuntime JsRuntime
+@inject HttpClient Http
+
+
+<PageTitle>Agregar Consumo Eléctrico</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    #labelnew {
+        font-size: 24px;
+        margin-bottom: 3%;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="labelnew"><label><b>Nuevo Consumo Eléctrico:</b></label></div>
+    <div id="container">
+        <EditForm Model="@electricidad" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="matricula"><b>Id del Electricidad</b></label>
+            <InputNumber class="input" id="ElectricidadId" placeholder="  ElectricidadId" @bind-Value="electricidad.ElectricidadId" />
+            <ValidationMessage For="@(() => electricidad.ElectricidadId)" class="errormsg" />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="electricidad.Edificio" />
+            <ValidationMessage For="@(() => electricidad.Edificio)" class="errormsg" />
+
+            <label for="matricula"><b>Kilovatios (kWh)</b></label>
+            <InputNumber class="input" id="CantidadCombustible" placeholder="  Kilovatios (kWh)" @bind-Value="electricidad.Kwh" />
+            <ValidationMessage For="@(() => electricidad.Kwh)" class="errormsg" />
+
+            <label for="matricula"><b>Id de la Comercializadora</b></label>
+            <InputNumber class="input" id="CantidadCombustible" placeholder="  Id de la Comercializadora" @bind-Value="electricidad.ComercializadoraId" />
+            <ValidationMessage For="@(() => electricidad.ComercializadoraId)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="electricidad.FechaInicio" />
+            <ValidationMessage For="@(() => electricidad.FechaInicio)" class="errormsg" />
+
+            <label for="matricula"><b>Fecha Fin</b></label>
+            <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="electricidad.FechaFin" />
+            <ValidationMessage For="@(() => electricidad.FechaFin)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Añadir Consumo Eléctrico</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    private ElectricidadConsumoCreateDTO electricidad = new ElectricidadConsumoCreateDTO() { FechaInicio = DateTime.Now, FechaFin = DateTime.Now };
+    string result;
+
+
+    [Inject]
+    public IElectricidadConsumoServices ElectricidadConsumoServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await ElectricidadConsumoServices.PostElectricidadConsumo(electricidad);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Storage.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        ElectricidadConsumoServices = new ElectricidadConsumoServices(Http);
+    }
+}

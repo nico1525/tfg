@@ -1,17 +1,15 @@
 ﻿@inject NavigationManager Navigation
-@page "/consumo/transporte/{id}"
+@page "/gestion/electricidad"
 @using API.Models;
-@using API.Models.Consumos;
 @using Microsoft.AspNetCore.Components.Web.Virtualization;
 @using Web.Helpers;
 @using Web.Services;
-@using Web.Services.ConsumoServices;
-@layout Consumos
+@layout GestionDispositivos
 @inject IJSRuntime JsRuntime
 @inject HttpClient Http
 
 
-<PageTitle>Consumo Transporte</PageTitle>
+<PageTitle>Gestión Electricidad</PageTitle>
 
 <style>
     h1 {
@@ -90,16 +88,16 @@
 </style>
 
 <body>
-    <h1><b>Lista de Consumo de Transporte</b></h1>
+    <h1><b>Lista de Electricidads</b></h1>
 
     <div id="filtro">
         <label id="tipolabel"><b>Filtrar:</b></label>
 
         <select @bind="tipofiltro" id="select">
             <option value="id">ID</option>
-            <option value="consumo">Consumo</option>
+            <option value="nombre">Nombre del Dispositivo</option>
+            <option value="desc">Descripción del Dispositivo</option>
             <option value="edificio">Edificio / Sede</option>
-            <option value="idtransporte">ID del Transporte</option>
 
         </select>
         <input id="input" placeholder="Buscar" @bind="filtrocat" />
@@ -113,36 +111,33 @@
 
             <thead>
                 <tr>
-                    <th>Id Consumo</th>
-                    <th>Consumo</th>
-                    <th>Fecha de Inicio</th>
-                    <th>Fecha Fin</th>
-                    <th>Cantidad de Combustible</th>
-                    <th>Edificio/Sede</th>
-                    <th>Id del Transporte</th>
+                    <th>Id del Dispositivo</th>
+                    <th>Nombre del Dispositivo</th>
+                    <th>Descripción del Dispositivo</th>
+                    <th>Edificio</th>
                     @if (Storage.role == API.Helpers.Role.OrgAdmin)
                     {
                         <th class="headerbuttons">Modificar</th>
                         <th class="headerbuttons">Eliminar</th>
                     }
+                    <th class="headerbuttons">Ver Consumos</th>
+
 
                 </tr>
             </thead>
-            <Virtualize Items="@listashow" Context="consumo">
+            <Virtualize Items="@listashow" Context="electricidad">
                 <tbody>
                     <tr>
-                        <td>@consumo.Id</td>
-                        <td>@consumo.Consumo</td>
-                        <td>@consumo.FechaInicio</td>
-                        <td>@consumo.FechaFin</td>
-                        <td>@consumo.CantidadCombustible</td>
-                        <td>@consumo.Edificio</td>
-                        <td>@consumo.TransporteId</td>
+                        <td>@electricidad.Id</td>
+                        <td>@electricidad.Dispositivo</td>
+                        <td>@electricidad.Descripcion</td>
+                        <td>@electricidad.Edificio</td>
                         @if (Storage.role == API.Helpers.Role.OrgAdmin)
                         {
-                            <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
-                            <td><button class="botones" @onclick="(() => Eliminar(consumo.Id, consumo))">X</button></td>
+                            <td><button class="botones" @onclick="(() => Modificar(electricidad.Id))">M</button></td>
+                            <td><button class="botones" @onclick="(() => Eliminar(electricidad.Id, electricidad))">X</button></td>
                         }
+                        <td><button class="botones" @onclick="(() => VerConsumos(electricidad.Id))">C</button></td>
                     </tr>
 
                 </tbody>
@@ -153,37 +148,39 @@
 </body>
 
 @code {
-    [Parameter]
-    public string id { get; set; }
-
-    List<TransporteConsumoDTO> lista = new List<TransporteConsumoDTO>();
-    List<TransporteConsumoDTO> listashow = new List<TransporteConsumoDTO>();
+    List<ElectricidadDTO> lista = new List<ElectricidadDTO>();
+    List<ElectricidadDTO> listashow = new List<ElectricidadDTO>();
     string tipofiltro = "id";
     string filtrocat = "";
 
     [Inject]
-    public ITransporteConsumoServices transporteconsumoServices { get; set; }
+    public IElectricidadServices electricidadServices { get; set; }
 
     public void Modificar(int id)
     {
-        Navigation.NavigateTo("/modificar/consumotransporte/" + id);
+        Navigation.NavigateTo("/modificar/electricidad/" + id);
     }
 
-    public async void Eliminar(int id, TransporteConsumoDTO consumo)
+    public async void Eliminar(int id, ElectricidadDTO electricidad)
     {
         try
         {
-            await transporteconsumoServices.DeleteTransporteConsumo(id);
+            await electricidadServices.DeleteElectricidad(id);
         }
         catch (Exception e)
         {
             await JsRuntime.InvokeVoidAsync("alert", e.Message);
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", $"Consumo con id {id} eliminado correctamente");
-        listashow.Remove(consumo);
-        lista.Remove(consumo);
+        await JsRuntime.InvokeVoidAsync("alert", $"Electricidad con id {id} eliminado correctamente");
+        listashow.Remove(electricidad);
+        lista.Remove(electricidad);
         StateHasChanged();
+    }
+
+    public void VerConsumos(int id)
+    {
+        Navigation.NavigateTo("/consumo/electricidad/" + id);
     }
 
     public void Filtrar()
@@ -194,32 +191,32 @@
             listashow.AddRange(lista);
             return;
         }
-        foreach (var consumo in lista)
+        foreach (var electricidad in lista)
         {
             switch (tipofiltro)
             {
                 case "id":
-                    if (consumo.Id.ToString().Contains(filtrocat))
+                    if (electricidad.Id.ToString().Contains(filtrocat))
                     {
-                        listashow.Add(consumo);
+                        listashow.Add(electricidad);
                     }
                     break;
-                case "consumo":
-                    if (consumo.Consumo.ToString().Contains(filtrocat))
+                case "nombre":
+                    if (electricidad.Dispositivo is not null && electricidad.Dispositivo.Contains(filtrocat))
                     {
-                        listashow.Add(consumo);
+                        listashow.Add(electricidad);
                     }
                     break;
-                case "idtransporte":
-                    if (consumo.TransporteId.ToString().Contains(filtrocat))
+                case "desc":
+                    if (electricidad.Descripcion is not null && electricidad.Descripcion.Contains(filtrocat))
                     {
-                        listashow.Add(consumo);
+                        listashow.Add(electricidad);
                     }
                     break;
                 case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
+                    if (electricidad.Edificio is not null && electricidad.Edificio.Contains(filtrocat))
                     {
-                        listashow.Add(consumo);
+                        listashow.Add(electricidad);
                     }
                     break;
             }
@@ -228,26 +225,11 @@
         StateHasChanged();
     }
 
-    async void GetConsumoList()
+    async void GetElectricidadList()
     {
+        lista = await electricidadServices.GetElectricidad();
 
-        lista = await transporteconsumoServices.GetTransporteConsumo();
-        if (id.Equals("0"))
-        {
-            listashow.AddRange(lista);
-        }
-        else
-        {
-            foreach (var consumo in lista)
-            {
-                if (consumo.TransporteId.ToString() == id)
-                {
-                    listashow.Add(consumo);
-                }
-            }
-            lista.Clear();
-            lista.AddRange(listashow);
-        }
+        listashow.AddRange(lista);
         StateHasChanged();
     }
     protected override async Task OnInitializedAsync()
@@ -257,7 +239,7 @@
             Navigation.NavigateTo("");
             return;
         }
-        transporteconsumoServices = new TransporteConsumoServices(Http);
-        GetConsumoList();
+        electricidadServices = new ElectricidadServices(Http);
+        GetElectricidadList();
     }
 }

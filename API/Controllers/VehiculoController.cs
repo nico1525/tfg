@@ -56,7 +56,7 @@ namespace API.Controllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             Vehiculo vehiculo = await _context.Vehiculo.FindAsync(id);
-            VehiculoDTO vehiculoDTO = new();
+            VehiculoDTO vehiculoDTO;
             if (vehiculo.OrganizacionId == currentUser.OrganizacionId)
             {
                 vehiculoDTO = _mapper.Map<VehiculoDTO>(vehiculo);
@@ -130,7 +130,7 @@ namespace API.Controllers
 
             return Ok("Vehículo eliminado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún vehiculo");
             }

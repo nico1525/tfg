@@ -55,7 +55,7 @@ namespace API.Controllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             Maquinaria Maquinaria = await _context.Maquinaria.FindAsync(id);
-            MaquinariaDTO MaquinariaDTO = new();
+            MaquinariaDTO MaquinariaDTO;
             if (Maquinaria.OrganizacionId == currentUser.OrganizacionId)
             {
                 MaquinariaDTO = _mapper.Map<MaquinariaDTO>(Maquinaria);
@@ -86,7 +86,7 @@ namespace API.Controllers
 
                 return Ok("Maquinaria modificada correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ninguna maquinaria");
             }
@@ -122,7 +122,7 @@ namespace API.Controllers
 
                 return Ok("Maquinaria eliminada correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ninguna maquinaria");
             }

@@ -3,6 +3,7 @@ using System;
 using API.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,52 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230608070200_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("API.Models.Consumos.ElectricidadConsumo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comercializadora")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ComercializadoraId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Consumo")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Dispositivo")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Edificio")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ElectricidadId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaFin")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaInicio")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("Kwh")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ElectricidadConsumo");
-                });
 
             modelBuilder.Entity("API.Models.Consumos.EmisionesFugitivasConsumo", b =>
                 {
@@ -252,29 +217,6 @@ namespace API.Migrations
                     b.ToTable("VehiculoConsumo");
                 });
 
-            modelBuilder.Entity("API.Models.Electricidad", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descripcion")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Dispositivo")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Edificio")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("OrganizacionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Electricidad");
-                });
-
             modelBuilder.Entity("API.Models.EmisionesFugitivas", b =>
                 {
                     b.Property<int>("Id")
@@ -343,9 +285,6 @@ namespace API.Migrations
                     b.Property<string>("Comercializadora")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("factor")
                         .HasColumnType("longtext");

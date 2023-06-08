@@ -19,6 +19,7 @@ builder.Services.AddScoped<ITransporteServices, TransporteServices>();
 builder.Services.AddScoped<IMaquinariaServices, MaquinariaServices>();
 builder.Services.AddScoped<IInstalacionesFijasServices, InstalacionesFijasServices>();
 builder.Services.AddScoped<IEmisionesFugitivasServices, EmisionesFugitivasServices>();
+builder.Services.AddScoped<IElectricidadServices, ElectricidadServices>();
 
 builder.Services.AddScoped<IOtrosConsumosServices, OtrosConsumosServices>();
 builder.Services.AddScoped<IVehiculoConsumoServices, VehiculoConsumoServices>();
@@ -26,6 +27,7 @@ builder.Services.AddScoped<ITransporteConsumoServices, TransporteConsumoServices
 builder.Services.AddScoped<IMaquinariaConsumoServices, MaquinariaConsumoServices>();
 builder.Services.AddScoped<IInstalacionesFijasConsumoServices, InstalacionesFijasConsumoServices>();
 builder.Services.AddScoped<IEmisionesFugitivasConsumoServices, EmisionesFugitivasConsumoServices>();
+builder.Services.AddScoped<IElectricidadConsumoServices, ElectricidadConsumoServices>();
 
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<Storage>();

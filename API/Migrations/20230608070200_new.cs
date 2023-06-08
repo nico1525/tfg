@@ -16,6 +16,54 @@ namespace API.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "EmisionesFugitivas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Edificio = table.Column<string>(type: "longtext", nullable: true),
+                    NombreEquipo = table.Column<string>(type: "longtext", nullable: true),
+                    OrganizacionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmisionesFugitivas", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "EmisionesFugitivasConsumo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Edificio = table.Column<string>(type: "longtext", nullable: true),
+                    Gas = table.Column<string>(type: "longtext", nullable: true),
+                    Recarga = table.Column<int>(type: "int", nullable: false),
+                    FechaInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Consumo = table.Column<float>(type: "float", nullable: false),
+                    EmisionesFugitivasId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmisionesFugitivasConsumo", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "FactorEmisionElectricidad",
+                columns: table => new
+                {
+                    Comercializadora = table.Column<string>(type: "longtext", nullable: false),
+                    factor = table.Column<string>(type: "longtext", nullable: true)
+                },
+                constraints: table =>
+                {
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "FactorEmisionesFugitivas",
                 columns: table => new
                 {
@@ -84,45 +132,6 @@ namespace API.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Organizacion",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    NombreOrg = table.Column<string>(type: "varchar(255)", nullable: true),
-                    Email = table.Column<string>(type: "varchar(255)", nullable: true),
-                    Direccion = table.Column<string>(type: "longtext", nullable: true),
-                    Contraseña = table.Column<string>(type: "longtext", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Organizacion", x => x.Id);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "EmisionesFugitivas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Edificio = table.Column<string>(type: "longtext", nullable: true),
-                    NombreEquipo = table.Column<string>(type: "longtext", nullable: true),
-                    OrganizacionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmisionesFugitivas", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EmisionesFugitivas_Organizacion_OrganizacionId",
-                        column: x => x.OrganizacionId,
-                        principalTable: "Organizacion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "InstalacionesFijas",
                 columns: table => new
                 {
@@ -135,12 +144,26 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InstalacionesFijas", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InstalacionesFijas_Organizacion_OrganizacionId",
-                        column: x => x.OrganizacionId,
-                        principalTable: "Organizacion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "InstalacionesFijasConsumo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Edificio = table.Column<string>(type: "longtext", nullable: true),
+                    CantidadCombustible = table.Column<int>(type: "int", nullable: false),
+                    TipoCombustible = table.Column<string>(type: "longtext", nullable: true),
+                    FechaInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Consumo = table.Column<float>(type: "float", nullable: false),
+                    InstalacionesFijasId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InstalacionesFijasConsumo", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -158,12 +181,43 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Maquinaria", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Maquinaria_Organizacion_OrganizacionId",
-                        column: x => x.OrganizacionId,
-                        principalTable: "Organizacion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "MaquinariaConsumo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Edificio = table.Column<string>(type: "longtext", nullable: true),
+                    CantidadCombustible = table.Column<int>(type: "int", nullable: false),
+                    TipoCombustible = table.Column<string>(type: "longtext", nullable: true),
+                    FechaInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Consumo = table.Column<float>(type: "float", nullable: false),
+                    MaquinariaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MaquinariaConsumo", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Organizacion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    NombreOrg = table.Column<string>(type: "varchar(255)", nullable: true),
+                    Email = table.Column<string>(type: "varchar(255)", nullable: true),
+                    Direccion = table.Column<string>(type: "longtext", nullable: true),
+                    Contraseña = table.Column<string>(type: "longtext", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organizacion", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -186,12 +240,6 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OtrosConsumos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OtrosConsumos_Organizacion_OrganizacionId",
-                        column: x => x.OrganizacionId,
-                        principalTable: "Organizacion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -209,137 +257,6 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transporte", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transporte_Organizacion_OrganizacionId",
-                        column: x => x.OrganizacionId,
-                        principalTable: "Organizacion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Usuario",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    NombreApellidos = table.Column<string>(type: "longtext", nullable: true),
-                    Email = table.Column<string>(type: "varchar(255)", nullable: true),
-                    Contraseña = table.Column<string>(type: "longtext", nullable: true),
-                    OrganizacionId = table.Column<int>(type: "int", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Usuario", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Usuario_Organizacion_OrganizacionId",
-                        column: x => x.OrganizacionId,
-                        principalTable: "Organizacion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Vehiculo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Edificio = table.Column<string>(type: "longtext", nullable: true),
-                    Matricula = table.Column<string>(type: "varchar(255)", nullable: true),
-                    CategoriaVehiculo = table.Column<string>(type: "longtext", nullable: true),
-                    OrganizacionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vehiculo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Vehiculo_Organizacion_OrganizacionId",
-                        column: x => x.OrganizacionId,
-                        principalTable: "Organizacion",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "EmisionesFugitivasConsumo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Edificio = table.Column<string>(type: "longtext", nullable: true),
-                    Gas = table.Column<string>(type: "longtext", nullable: true),
-                    Recarga = table.Column<int>(type: "int", nullable: false),
-                    FechaInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Consumo = table.Column<float>(type: "float", nullable: false),
-                    EmisionesFugitivasId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmisionesFugitivasConsumo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EmisionesFugitivasConsumo_EmisionesFugitivas_EmisionesFugiti~",
-                        column: x => x.EmisionesFugitivasId,
-                        principalTable: "EmisionesFugitivas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "InstalacionesFijasConsumo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Edificio = table.Column<string>(type: "longtext", nullable: true),
-                    CantidadCombustible = table.Column<int>(type: "int", nullable: false),
-                    TipoCombustible = table.Column<string>(type: "longtext", nullable: true),
-                    FechaInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Consumo = table.Column<float>(type: "float", nullable: false),
-                    InstalacionesFijasId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InstalacionesFijasConsumo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_InstalacionesFijasConsumo_InstalacionesFijas_InstalacionesFi~",
-                        column: x => x.InstalacionesFijasId,
-                        principalTable: "InstalacionesFijas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "MaquinariaConsumo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Edificio = table.Column<string>(type: "longtext", nullable: true),
-                    CantidadCombustible = table.Column<int>(type: "int", nullable: false),
-                    TipoCombustible = table.Column<string>(type: "longtext", nullable: true),
-                    FechaInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Consumo = table.Column<float>(type: "float", nullable: false),
-                    MaquinariaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MaquinariaConsumo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MaquinariaConsumo_Maquinaria_MaquinariaId",
-                        column: x => x.MaquinariaId,
-                        principalTable: "Maquinaria",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -359,12 +276,41 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransporteConsumo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TransporteConsumo_Transporte_TransporteId",
-                        column: x => x.TransporteId,
-                        principalTable: "Transporte",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Usuario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    NombreApellidos = table.Column<string>(type: "longtext", nullable: true),
+                    Email = table.Column<string>(type: "varchar(255)", nullable: true),
+                    Contraseña = table.Column<string>(type: "longtext", nullable: true),
+                    OrganizacionId = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Vehiculo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Edificio = table.Column<string>(type: "longtext", nullable: true),
+                    Matricula = table.Column<string>(type: "varchar(255)", nullable: true),
+                    CategoriaVehiculo = table.Column<string>(type: "longtext", nullable: true),
+                    OrganizacionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vehiculo", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -385,44 +331,8 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_VehiculoConsumo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_VehiculoConsumo_Vehiculo_VehiculoId",
-                        column: x => x.VehiculoId,
-                        principalTable: "Vehiculo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmisionesFugitivas_OrganizacionId",
-                table: "EmisionesFugitivas",
-                column: "OrganizacionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmisionesFugitivasConsumo_EmisionesFugitivasId",
-                table: "EmisionesFugitivasConsumo",
-                column: "EmisionesFugitivasId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InstalacionesFijas_OrganizacionId",
-                table: "InstalacionesFijas",
-                column: "OrganizacionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InstalacionesFijasConsumo_InstalacionesFijasId",
-                table: "InstalacionesFijasConsumo",
-                column: "InstalacionesFijasId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Maquinaria_OrganizacionId",
-                table: "Maquinaria",
-                column: "OrganizacionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MaquinariaConsumo_MaquinariaId",
-                table: "MaquinariaConsumo",
-                column: "MaquinariaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Organizacion_Email",
@@ -437,53 +347,29 @@ namespace API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OtrosConsumos_OrganizacionId",
-                table: "OtrosConsumos",
-                column: "OrganizacionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transporte_OrganizacionId",
-                table: "Transporte",
-                column: "OrganizacionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TransporteConsumo_TransporteId",
-                table: "TransporteConsumo",
-                column: "TransporteId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Usuario_Email",
                 table: "Usuario",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuario_OrganizacionId",
-                table: "Usuario",
-                column: "OrganizacionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vehiculo_Matricula",
                 table: "Vehiculo",
                 column: "Matricula",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vehiculo_OrganizacionId",
-                table: "Vehiculo",
-                column: "OrganizacionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VehiculoConsumo_VehiculoId",
-                table: "VehiculoConsumo",
-                column: "VehiculoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "EmisionesFugitivas");
+
+            migrationBuilder.DropTable(
                 name: "EmisionesFugitivasConsumo");
+
+            migrationBuilder.DropTable(
+                name: "FactorEmisionElectricidad");
 
             migrationBuilder.DropTable(
                 name: "FactorEmisionesFugitivas");
@@ -501,13 +387,25 @@ namespace API.Migrations
                 name: "FactorInstalacionesFijas");
 
             migrationBuilder.DropTable(
+                name: "InstalacionesFijas");
+
+            migrationBuilder.DropTable(
                 name: "InstalacionesFijasConsumo");
+
+            migrationBuilder.DropTable(
+                name: "Maquinaria");
 
             migrationBuilder.DropTable(
                 name: "MaquinariaConsumo");
 
             migrationBuilder.DropTable(
+                name: "Organizacion");
+
+            migrationBuilder.DropTable(
                 name: "OtrosConsumos");
+
+            migrationBuilder.DropTable(
+                name: "Transporte");
 
             migrationBuilder.DropTable(
                 name: "TransporteConsumo");
@@ -516,25 +414,10 @@ namespace API.Migrations
                 name: "Usuario");
 
             migrationBuilder.DropTable(
-                name: "VehiculoConsumo");
-
-            migrationBuilder.DropTable(
-                name: "EmisionesFugitivas");
-
-            migrationBuilder.DropTable(
-                name: "InstalacionesFijas");
-
-            migrationBuilder.DropTable(
-                name: "Maquinaria");
-
-            migrationBuilder.DropTable(
-                name: "Transporte");
-
-            migrationBuilder.DropTable(
                 name: "Vehiculo");
 
             migrationBuilder.DropTable(
-                name: "Organizacion");
+                name: "VehiculoConsumo");
         }
     }
 }

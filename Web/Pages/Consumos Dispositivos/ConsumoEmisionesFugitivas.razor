@@ -201,25 +201,25 @@
             switch (tipofiltro)
             {
                 case "id":
-                    if (consumo.Id.ToString().Contains(filtrocat))
+                    if (consumo.Id.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
                 case "consumo":
-                    if (consumo.Consumo.ToString().Contains(filtrocat))
+                    if (consumo.Consumo.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
                 case "idemisionesfugitivas":
-                    if (consumo.EmisionesFugitivasId.ToString().Contains(filtrocat))
+                    if (consumo.EmisionesFugitivasId.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
                 case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat))
+                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }

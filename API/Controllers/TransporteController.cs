@@ -55,7 +55,7 @@ namespace API.Controllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             Transporte Transporte = await _context.Transporte.FindAsync(id);
-            TransporteDTO TransporteDTO = new();
+            TransporteDTO TransporteDTO;
             if (Transporte.OrganizacionId == currentUser.OrganizacionId)
             {
                 TransporteDTO = _mapper.Map<TransporteDTO>(Transporte);
@@ -84,7 +84,7 @@ namespace API.Controllers
 
                 return Ok("Transporte modificado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún transporte");
             }
@@ -133,7 +133,7 @@ namespace API.Controllers
 
                 return Ok("Transporte eliminado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún transporte");
             }

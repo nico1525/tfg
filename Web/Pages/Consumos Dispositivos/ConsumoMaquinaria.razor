@@ -208,7 +208,7 @@
                     }
                     break;
                 case "consumo":
-                    if (consumo.Consumo.ToString().Contains(filtrocat))
+                    if (consumo.Consumo.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
@@ -220,13 +220,13 @@
                     }
                     break;
                 case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat))
+                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
                 case "tipo":
-                    if (consumo.TipoCombustible is not null && consumo.TipoCombustible.Contains(filtrocat))
+                    if (consumo.TipoCombustible is not null && consumo.TipoCombustible.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }

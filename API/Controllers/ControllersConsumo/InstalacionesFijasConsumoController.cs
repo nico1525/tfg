@@ -52,7 +52,6 @@ namespace API.Controllers.ControllersConsumo
         public async Task<ActionResult<InstalacionesFijasConsumoDTO>> GetInstalacionesFijasConsumoId(int id)
         {
             //Devuelve el consumos por su id
-            var currentUser = (Usuario)HttpContext.Items["Usuario"];
             var consumo = await _context.InstalacionesFijasConsumo.FindAsync(id);
             InstalacionesFijasConsumoDTO consumodto = _mapper.Map<InstalacionesFijasConsumoDTO>(consumo);
 
@@ -86,7 +85,7 @@ namespace API.Controllers.ControllersConsumo
                 }
                 return orgConsumoList;
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ninguna instalación fija");
             }
@@ -101,7 +100,7 @@ namespace API.Controllers.ControllersConsumo
                 var instalacionesFijaChange = await _context.InstalacionesFijasConsumo.FindAsync(id);
 
                 var instalacionesFija = await _context.InstalacionesFijas.FindAsync(instalacionesFijaChange.InstalacionesFijasId);
-                DateTime test = new DateTime(1, 1, 1, 0, 0, 0, 0);
+                DateTime test = new(1, 1, 1, 0, 0, 0, 0);
                 if (currentUser.OrganizacionId != instalacionesFija.OrganizacionId)
                 {
                     return BadRequest("Este consumo de instalación fija no pertenece a esta organización");
@@ -121,7 +120,7 @@ namespace API.Controllers.ControllersConsumo
                 {
                     instalacionesFijaChange.Consumo = CalculoInstalacionesFijas.CalculoConsumoInstalacionesFijas(instalacionesFijaChange, _context);
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
                     return BadRequest("Este Tipo de combustible no es válido");
                 }
@@ -129,7 +128,7 @@ namespace API.Controllers.ControllersConsumo
 
                 return Ok("Consumo de instalación fija con Id: " + instalacionesFija.Id + " modificado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún consumo de instalación fija");
             }
@@ -186,7 +185,7 @@ namespace API.Controllers.ControllersConsumo
 
                 return Ok("Consumo de la instalación fija eliminado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún consumo de instalación fija");
             }

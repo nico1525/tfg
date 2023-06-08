@@ -50,6 +50,11 @@ namespace API.Helpers
             CreateMap<OtrosConsumos, OtrosConsumosDTO>();
             CreateMap<OtrosConsumosCreateDTO, OtrosConsumos>();
 
+            CreateMap<Electricidad, ElectricidadDTO>();
+            CreateMap<ElectricidadCreateDTO, Electricidad>();
+
+            CreateMap<ElectricidadConsumo, ElectricidadConsumoDTO>();
+            CreateMap<ElectricidadConsumoCreateDTO, ElectricidadConsumo>();
         }
     }
 }

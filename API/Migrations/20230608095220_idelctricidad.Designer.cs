@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230523115041_new")]
-    partial class @new
+    [Migration("20230608095220_idelctricidad")]
+    partial class idelctricidad
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,44 @@ namespace API.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("API.Models.Consumos.ElectricidadConsumo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comercializadora")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ComercializadoraId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Consumo")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Dispositivo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Edificio")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ElectricidadId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Kwh")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ElectricidadConsumo");
+                });
 
             modelBuilder.Entity("API.Models.Consumos.EmisionesFugitivasConsumo", b =>
                 {
@@ -50,8 +88,6 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmisionesFugitivasId");
 
                     b.ToTable("EmisionesFugitivasConsumo");
                 });
@@ -85,8 +121,6 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InstalacionesFijasId");
-
                     b.ToTable("InstalacionesFijasConsumo");
                 });
 
@@ -118,8 +152,6 @@ namespace API.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MaquinariaId");
 
                     b.ToTable("MaquinariaConsumo");
                 });
@@ -159,8 +191,6 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizacionId");
-
                     b.ToTable("OtrosConsumos");
                 });
 
@@ -189,8 +219,6 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TransporteId");
 
                     b.ToTable("TransporteConsumo");
                 });
@@ -224,9 +252,30 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VehiculoId");
-
                     b.ToTable("VehiculoConsumo");
+                });
+
+            modelBuilder.Entity("API.Models.Electricidad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Dispositivo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Edificio")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrganizacionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Electricidad");
                 });
 
             modelBuilder.Entity("API.Models.EmisionesFugitivas", b =>
@@ -245,8 +294,6 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizacionId");
 
                     b.ToTable("EmisionesFugitivas");
                 });
@@ -267,8 +314,6 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizacionId");
 
                     b.ToTable("InstalacionesFijas");
                 });
@@ -293,9 +338,22 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizacionId");
-
                     b.ToTable("Maquinaria");
+                });
+
+            modelBuilder.Entity("API.Models.Master_Tables.FactorEmisionElectricidad", b =>
+                {
+                    b.Property<string>("Comercializadora")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("factor")
+                        .HasColumnType("longtext");
+
+                    b.ToTable("FactorEmisionElectricidad");
                 });
 
             modelBuilder.Entity("API.Models.Master_Tables.FactorEmisionMaquinaria", b =>
@@ -430,8 +488,6 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizacionId");
-
                     b.ToTable("Transporte");
                 });
 
@@ -461,8 +517,6 @@ namespace API.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("OrganizacionId");
-
                     b.ToTable("Usuario");
                 });
 
@@ -489,141 +543,7 @@ namespace API.Migrations
                     b.HasIndex("Matricula")
                         .IsUnique();
 
-                    b.HasIndex("OrganizacionId");
-
                     b.ToTable("Vehiculo");
-                });
-
-            modelBuilder.Entity("API.Models.Consumos.EmisionesFugitivasConsumo", b =>
-                {
-                    b.HasOne("API.Models.EmisionesFugitivas", "EmisionesFugitivasRef")
-                        .WithMany()
-                        .HasForeignKey("EmisionesFugitivasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("EmisionesFugitivasRef");
-                });
-
-            modelBuilder.Entity("API.Models.Consumos.InstalacionesFijasConsumo", b =>
-                {
-                    b.HasOne("API.Models.InstalacionesFijas", "InstalacionesFijasRef")
-                        .WithMany()
-                        .HasForeignKey("InstalacionesFijasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InstalacionesFijasRef");
-                });
-
-            modelBuilder.Entity("API.Models.Consumos.MaquinariaConsumo", b =>
-                {
-                    b.HasOne("API.Models.Maquinaria", "MaquinariaRef")
-                        .WithMany()
-                        .HasForeignKey("MaquinariaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MaquinariaRef");
-                });
-
-            modelBuilder.Entity("API.Models.Consumos.OtrosConsumos", b =>
-                {
-                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
-                        .WithMany()
-                        .HasForeignKey("OrganizacionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrganizacionRef");
-                });
-
-            modelBuilder.Entity("API.Models.Consumos.TransporteConsumo", b =>
-                {
-                    b.HasOne("API.Models.Transporte", "TransporteRef")
-                        .WithMany()
-                        .HasForeignKey("TransporteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TransporteRef");
-                });
-
-            modelBuilder.Entity("API.Models.Consumos.VehiculoConsumo", b =>
-                {
-                    b.HasOne("API.Models.Vehiculo", "VehiculoRef")
-                        .WithMany()
-                        .HasForeignKey("VehiculoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("VehiculoRef");
-                });
-
-            modelBuilder.Entity("API.Models.EmisionesFugitivas", b =>
-                {
-                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
-                        .WithMany()
-                        .HasForeignKey("OrganizacionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrganizacionRef");
-                });
-
-            modelBuilder.Entity("API.Models.InstalacionesFijas", b =>
-                {
-                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
-                        .WithMany()
-                        .HasForeignKey("OrganizacionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrganizacionRef");
-                });
-
-            modelBuilder.Entity("API.Models.Maquinaria", b =>
-                {
-                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
-                        .WithMany()
-                        .HasForeignKey("OrganizacionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrganizacionRef");
-                });
-
-            modelBuilder.Entity("API.Models.Transporte", b =>
-                {
-                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
-                        .WithMany()
-                        .HasForeignKey("OrganizacionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrganizacionRef");
-                });
-
-            modelBuilder.Entity("API.Models.Usuario", b =>
-                {
-                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
-                        .WithMany()
-                        .HasForeignKey("OrganizacionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrganizacionRef");
-                });
-
-            modelBuilder.Entity("API.Models.Vehiculo", b =>
-                {
-                    b.HasOne("API.Models.Organizacion", "OrganizacionRef")
-                        .WithMany()
-                        .HasForeignKey("OrganizacionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrganizacionRef");
                 });
 #pragma warning restore 612, 618
         }

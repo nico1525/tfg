@@ -3,6 +3,7 @@ using System;
 using API.Models.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230608073159_tablaconsumoelectrico")]
+    partial class tablaconsumoelectrico
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,10 +28,7 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Comercializadora")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ComercializadoraId")
+                    b.Property<int>("Comercializadora")
                         .HasColumnType("int");
 
                     b.Property<float>("Consumo")
@@ -343,9 +343,6 @@ namespace API.Migrations
                     b.Property<string>("Comercializadora")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("factor")
                         .HasColumnType("longtext");

@@ -223,19 +223,19 @@
                     }
                     break;
                 case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat))
+                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
                 case "nombre":
-                    if (consumo.Nombre is not null && consumo.Nombre.Contains(filtrocat))
+                    if (consumo.Nombre is not null && consumo.Nombre.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
                     break;
                 case "categoria":
-                    if (consumo.CategoriaActividad is not null && consumo.CategoriaActividad.Contains(filtrocat))
+                    if (consumo.CategoriaActividad is not null && consumo.CategoriaActividad.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }

@@ -1,0 +1,115 @@
+﻿@inject NavigationManager Navigation
+@page "/agregar/electricidad"
+@using API.Models;
+@using Web.Helpers;
+@using Web.Services;
+@layout AgregarDispositivo
+@using Microsoft.AspNetCore.Components.Forms
+@inject IJSRuntime JsRuntime
+@inject HttpClient Http
+
+
+<PageTitle>Agregar Dispositivo Eléctrico</PageTitle>
+
+<style>
+    #Agregar {
+        margin-bottom: 2%;
+        float: left;
+    }
+
+    #labelnew {
+        font-size: 24px;
+        margin-bottom: 3%;
+    }
+
+    .iniciarbtn {
+        background-color: #ec8f2f;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+        .iniciarbtn:hover {
+            opacity: 1;
+        }
+
+    .input {
+        width: 100%;
+        padding: 15px 0px;
+        margin: 5px 0 22px 0px;
+        border: none;
+        background: #f1f1f1;
+    }
+
+        .input:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .errormsg {
+        color: red;
+        margin-top: -20px;
+        margin-bottom: 25px;
+    }
+
+    .login {
+        margin: 0 35% 0 35%;
+    }
+</style>
+
+<body>
+    <div id="Agregar"></div>
+    <div id="labelnew"><label><b>Nuevo Electricidad:</b></label></div>
+    <div id="container">
+        <EditForm Model="@electricidad" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <label for="edificio"><b>Edificio/Sede</b></label>
+            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="electricidad.Edificio" />
+            <ValidationMessage For="@(() => electricidad.Edificio)" class="errormsg" />
+
+            <label for="categoria"><b>Nombre del Dispositivo</b></label>
+            <InputText class="input" id="Dispositivo" placeholder="  Nombre del Dispositivo" @bind-Value="electricidad.Dispositivo" />
+            <ValidationMessage For="@(() => electricidad.Dispositivo)" class="errormsg" />
+
+            <label for="categoria"><b>Descripción del Dispositivo</b></label>
+            <InputText class="input" id="Descripcion" placeholder="  Descripción del Dispositivo" @bind-Value="electricidad.Descripcion" />
+            <ValidationMessage For="@(() => electricidad.Descripcion)" class="errormsg" />
+
+            <button class="iniciarbtn" type="submit">Añadir Dispositivo Eléctrico</button>
+        </EditForm>
+    </div>
+</body>
+
+@code {
+    private ElectricidadCreateDTO electricidad = new ElectricidadCreateDTO();
+    string result;
+    [Inject]
+    public IElectricidadServices ElectricidadServices { get; set; }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            result = await ElectricidadServices.PostElectricidad(electricidad);
+        }
+        catch (Exception e)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            return;
+        }
+        await JsRuntime.InvokeVoidAsync("alert", result);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (Storage.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        ElectricidadServices = new ElectricidadServices(Http);
+    }
+}
