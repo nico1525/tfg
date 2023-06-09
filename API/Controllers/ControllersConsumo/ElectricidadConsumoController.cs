@@ -187,7 +187,7 @@ namespace API.Controllers.ControllersConsumo
 
                 return Ok("Consumo de electricidad eliminado correctamente");
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 return BadRequest("El id no corresponde a ningún consumo de electricidad");
             }

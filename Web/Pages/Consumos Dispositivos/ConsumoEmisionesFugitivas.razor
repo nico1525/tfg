@@ -225,7 +225,7 @@
                     }
                     break;
                 case "tipogas":
-                    if (consumo.Gas.Contains(filtrocat))
+                    if (consumo.Gas.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }
