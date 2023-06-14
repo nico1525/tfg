@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Web.Helpers;
 using Web.Services;
 using Web.Services.ConsumoServices;
+using Web.Services.InformesServices;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IMaquinariaConsumoServices, MaquinariaConsumoServices
 builder.Services.AddScoped<IInstalacionesFijasConsumoServices, InstalacionesFijasConsumoServices>();
 builder.Services.AddScoped<IEmisionesFugitivasConsumoServices, EmisionesFugitivasConsumoServices>();
 builder.Services.AddScoped<IElectricidadConsumoServices, ElectricidadConsumoServices>();
+builder.Services.AddScoped<IInformeVehiculoService, InformeVehiculoService>();
 
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<Storage>();
