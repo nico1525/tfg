@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Diagnostics.Metrics;
 using static API.Controllers.InformesControllers.InformesVehiculoController;
+using System.Linq.Expressions;
 
 namespace API.Controllers.InformesControllers
 {
@@ -26,21 +27,27 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet]
-        public ConsumoVehiculoId AllVehiculoFechas(DateTime fechaini, DateTime fechafin)
+        public async Task<ActionResult<ConsumoVehiculoId>> AllVehiculoFechas(DateTime fechaini, DateTime fechafin)
         {
             //El consumo total de todos los vehiculos entre dos fechas
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-
-            ConsumoVehiculoId query = (from c in _context.VehiculoConsumo
-                                       join v in _context.Vehiculo
-                                       on c.VehiculoId equals v.Id
-                                       where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.OrganizacionId == currentUser.OrganizacionId
-                                       group c by v.OrganizacionId into g
-                                       select new ConsumoVehiculoId()
-                                       {
-                                           Total_consumido = g.Sum(r => r.Consumo),
-                                           Total_combustible = g.Sum(r => r.CantidadCombustible)
-                                       }).Single();
+            ConsumoVehiculoId query = new();
+            try
+            {
+                query = (from c in _context.VehiculoConsumo
+                                           join v in _context.Vehiculo
+                                           on c.VehiculoId equals v.Id
+                                           where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.OrganizacionId == currentUser.OrganizacionId
+                                           group c by v.OrganizacionId into g
+                                           select new ConsumoVehiculoId()
+                                           {
+                                               Total_consumido = g.Sum(r => r.Consumo),
+                                               Total_combustible = g.Sum(r => r.CantidadCombustible)
+                                           }).Single();
+            } catch(Exception e)
+            {
+                return BadRequest("No existen consumos para este dispositivo entre estas fechas");
+            }
             return query;
         }
 
@@ -50,22 +57,30 @@ namespace API.Controllers.InformesControllers
             //El consumo total de 1 vehiculo entre dos fechas
 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
+            ConsumoVehiculoId query = new();
 
-            var vehiculo = await _context.Vehiculo.FindAsync(id);
-            if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
+            try
+            { 
+                var vehiculo = await _context.Vehiculo.FindAsync(id);
+                if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
+                {
+                    return BadRequest("Este vehiculo no existe o no pertenece a esta organización");
+                }
+                query = (from c in _context.VehiculoConsumo
+                                           join v in _context.Vehiculo
+                                           on c.VehiculoId equals v.Id
+                                           where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
+                                           group c by c.VehiculoId into g
+                                           select new ConsumoVehiculoId()
+                                           {
+                                               Total_consumido = g.Sum(r => r.Consumo),
+                                               Total_combustible = g.Sum(r => r.CantidadCombustible),
+                                           }).Single();
+            } 
+            catch(Exception e)
             {
-                return BadRequest("Este vehiculo no existe o no pertenece a esta organización");
+                return BadRequest($"No existen consumos para el dispositivo con id: {id} entre estas fechas");
             }
-            ConsumoVehiculoId query = (from c in _context.VehiculoConsumo
-                                       join v in _context.Vehiculo
-                                       on c.VehiculoId equals v.Id
-                                       where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
-                                       group c by c.VehiculoId into g
-                                       select new ConsumoVehiculoId()
-                                       {
-                                           Total_consumido = g.Sum(r => r.Consumo),
-                                           Total_combustible = g.Sum(r => r.CantidadCombustible),
-                                       }).Single();
             return query;
         }
 
@@ -85,6 +100,7 @@ namespace API.Controllers.InformesControllers
                                       on c.VehiculoId equals v.Id
                                       where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                       group c by c.FechaInicio.Month into g
+                                      orderby g.Key
                                       select new ConsumoMes()
                                       {
                                           Consumo_mes = g.Sum(r => r.Consumo),

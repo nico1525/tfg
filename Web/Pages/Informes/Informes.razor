@@ -1,0 +1,159 @@
+﻿@page "/informes"
+@using API.Helpers;
+@using API.Models;
+@using API.Models.Query_Models;
+@using Web.Helpers;
+@using Web.Services;
+@using Web.Services.InformesServices;
+@using static API.Controllers.InformesControllers.InformesVehiculoController;
+@layout NavBarLogged
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@using ChartJs.Blazor.PieChart
+@inject SweetAlertService Swal;
+@inherits LayoutComponentBase
+
+<PageTitle>Informes</PageTitle>
+
+<style>
+    #glabel {
+        font-size: 18px;
+    }
+
+    #inilabel {
+        font-size: 36px;
+    }
+    #navbar {
+        margin-bottom: 2%;
+    }
+
+    #text {
+        text-align: center;
+    }
+    #label{
+        font-size: 1px;
+    }
+    #filtro{
+        
+    }
+</style>
+
+
+<CascadingValue Value="@this" IsFixed="true">
+<body>
+    <div id="navbar">
+    </div>
+    <div id="text"> <label id="inilabel">Generación de Informes</label></div>
+    <label id="glabel">Generar Informe de: </label>
+            <select @bind="dispositivo" id="select">
+                <option value="vehiculo">Vehiculo</option>
+                <option value="transporte">Transporte</option>
+                <option value="maquinaria">Maquinaria</option>
+                <option value="emisionfugitiva">Emisiones Fugitivas</option>
+                <option value="instalacionfija">Instalaciones Fijas</option>
+                <option value="electricidad">Dispositivo eléctrico</option>
+                <option value="todos">Todos los Dispositivos</option>
+            </select>
+    @if (filtroid2.Equals("sinid"))
+    {
+        <label id="glabel">para todos los dispositivos: </label>
+        <InputText readonly="@true" @bind-Value="id" />
+    }
+    else
+    {
+        <label id="glabel">Con id: </label>
+        <InputText placeholder="Id del Dispositivo" @bind-Value="id" />
+    }
+    
+
+   <label id="glabel"> entre las fechas</label>
+
+    <InputDate  @bind-Value="fechaini" />
+    
+    <label id="glabel"> y</label>
+    
+    <InputDate  @bind-Value="fechafin" />
+   
+    <button class="alta" @onclick="generar">Generar Informe</button>
+    
+    <div id="filtro"> <label id="glabel"> Flitrar por :</label>
+        <select @bind="filtromes" id="select">
+            <option value="no">Sin filtro</option>
+            <option value="meses">meses</option>
+        </select>
+
+        <select @bind="filtroid" id="select">
+            <option value="sinid">Todos</option>
+            <option value="conid">Por id</option>
+        </select>
+    </div>
+    <div id="dispositivo">
+        @Body
+    </div>
+</body>
+</CascadingValue>
+@code {
+    public ConsumoVehiculoId consumo = new();
+
+    public List<ConsumoMes> consumoMes = new();
+
+    private string dispositivo = "vehiculo";
+    private string filtromes = "no";
+    private string id = "Todos";
+
+    private DateTime fechaini = DateTime.Now;
+    private DateTime fechafin = DateTime.Now;
+
+    [Inject]
+    public IInformeVehiculoService informeServices { get; set; }
+
+    private string? filtroid2 = "sinid";
+    private string? filtroid { get { return filtroid2; } set { filtroid2 = value; VerId(); } }
+    public void VerId()
+    {
+        if (filtroid2.Equals("sinid")) { id = "Todos"; }
+        else { id = ""; }
+        StateHasChanged();
+    }
+    public async void generar()
+    {
+        try
+        {
+            if (filtromes.Equals("no"))
+            {
+                switch (dispositivo, filtroid2)
+                {
+                    case ("vehiculo", "sinid"):
+                        consumo = await informeServices.AllVehiculoFechas(fechaini, fechafin);
+                        Navigation.NavigateTo("informes/vehiculo/0");
+                        break;
+                    case ("vehiculo", "conid"):
+                        consumo = await informeServices.VehiculosFechaByID(fechaini, fechafin, int.Parse(id));
+                        Navigation.NavigateTo("informes/vehiculo/1");
+                        break;
+
+                }
+            }
+            else
+            {
+                switch ((dispositivo))
+                {
+                    case ("vehiculo"):
+                        consumoMes = await informeServices.VehiculosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Navigation.NavigateTo("informes/vehiculo/2");
+                        break;
+
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            await Swal.FireAsync("Ha habido un problema", e.Message, "error");
+
+        }
+    }
+    protected override void OnInitialized()
+    {
+       
+    }
+}

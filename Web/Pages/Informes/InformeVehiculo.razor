@@ -1,0 +1,36 @@
+﻿@page "/informes/vehiculo/{id:int}"
+@using API.Helpers;
+@using API.Models;
+@using API.Models.Query_Models;
+@using Web.Helpers;
+@using Web.Services;
+@using Web.Services.InformesServices;
+@layout Informes
+@using static API.Controllers.InformesControllers.InformesVehiculoController;
+
+
+<style></style>
+
+<body></body>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    [CascadingParameter]
+    protected Informes context { get; set; }
+
+    [Inject]
+    public IInformeVehiculoService informeServices { get; set; }
+
+    protected async override void OnInitialized()
+    {
+        float test = 0;
+        switch (id)
+        {
+            case 0: test = context.consumo.Total_consumido; break;
+            case 1: test = context.consumo.Total_consumido; break;
+            case 2: test = context.consumoMes.First().Combustible_mes; break;
+        }
+    }
+}
