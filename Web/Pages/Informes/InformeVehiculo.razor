@@ -17,20 +17,18 @@
     [Parameter]
     public int id { get; set; }
 
-    [CascadingParameter]
-    protected Informes context { get; set; }
-
     [Inject]
     public IInformeVehiculoService informeServices { get; set; }
 
     protected async override void OnInitialized()
     {
-        float test = 0;
+        ConsumoVehiculoId test;
+        List<ConsumoMes> consumoMes;
         switch (id)
         {
-            case 0: test = context.consumo.Total_consumido; break;
-            case 1: test = context.consumo.Total_consumido; break;
-            case 2: test = context.consumoMes.First().Combustible_mes; break;
+            case 0: test = Storage.consumoVehiculoId; break;
+            case 1: test = Storage.consumoVehiculoId; break;
+            case 2: consumoMes = Storage.consumoMes; break;
         }
     }
 }

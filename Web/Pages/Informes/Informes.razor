@@ -57,7 +57,6 @@
     @if (filtroid2.Equals("sinid"))
     {
         <label id="glabel">para todos los dispositivos: </label>
-        <InputText readonly="@true" @bind-Value="id" />
     }
     else
     {
@@ -76,7 +75,7 @@
    
     <button class="alta" @onclick="generar">Generar Informe</button>
     
-    <div id="filtro"> <label id="glabel"> Flitrar por :</label>
+    <div id="filtro"> <label id="glabel"> Filtrar por :</label>
         <select @bind="filtromes" id="select">
             <option value="no">Sin filtro</option>
             <option value="meses">meses</option>
@@ -125,13 +124,14 @@
                 {
                     case ("vehiculo", "sinid"):
                         consumo = await informeServices.AllVehiculoFechas(fechaini, fechafin);
+                        Storage.consumoVehiculoId = consumo;
                         Navigation.NavigateTo("informes/vehiculo/0");
                         break;
                     case ("vehiculo", "conid"):
                         consumo = await informeServices.VehiculosFechaByID(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoVehiculoId = consumo;
                         Navigation.NavigateTo("informes/vehiculo/1");
                         break;
-
                 }
             }
             else
@@ -142,7 +142,6 @@
                         consumoMes = await informeServices.VehiculosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Navigation.NavigateTo("informes/vehiculo/2");
                         break;
-
                 }
             }
         }
