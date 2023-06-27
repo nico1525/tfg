@@ -68,10 +68,6 @@
             <label><b>Id de la Instalación Fija</b></label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
-            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="instalacionesFijas.Edificio" />
-            <ValidationMessage For="@(() => instalacionesFijas.Edificio)" class="errormsg" />
-
             <label for="matricula"><b>Cantidad de Combustible</b></label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="instalacionesFijas.CantidadCombustible" />
             <ValidationMessage For="@(() => instalacionesFijas.CantidadCombustible)" class="errormsg" />
@@ -145,7 +141,6 @@
     {
         int idint = int.Parse(id);
         originalinstalacionesFijas = await InstalacionesFijasServices.GetConsumoByID(idint);
-        instalacionesFijas.Edificio = originalinstalacionesFijas.Edificio;
         instalacionesFijas.FechaInicio = originalinstalacionesFijas.FechaInicio;
         instalacionesFijas.FechaFin = originalinstalacionesFijas.FechaFin;
         instalacionesFijas.CantidadCombustible = originalinstalacionesFijas.CantidadCombustible;

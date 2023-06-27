@@ -68,10 +68,6 @@
             <label><b>Id del emisionesFugitivas</b></label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
-            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="emisionesFugitivas.Edificio" />
-            <ValidationMessage For="@(() => emisionesFugitivas.Edificio)" class="errormsg" />
-
             <label for="matricula"><b>Cantidad de Recarga</b></label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  Recarga" @bind-Value="emisionesFugitivas.Recarga" />
             <ValidationMessage For="@(() => emisionesFugitivas.Recarga)" class="errormsg" />a
@@ -135,7 +131,6 @@
     {
         int idint = int.Parse(id);
         originalemisionesFugitivas = await EmisionesFugitivasServices.GetConsumoByID(idint);
-        emisionesFugitivas.Edificio = originalemisionesFugitivas.Edificio;
         emisionesFugitivas.FechaInicio = originalemisionesFugitivas.FechaInicio;
         emisionesFugitivas.FechaFin = originalemisionesFugitivas.FechaFin;
         emisionesFugitivas.Recarga = originalemisionesFugitivas.Recarga;

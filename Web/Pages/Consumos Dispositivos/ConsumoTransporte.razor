@@ -98,7 +98,6 @@
         <select @bind="tipofiltro" id="select">
             <option value="id">ID</option>
             <option value="consumo">Consumo</option>
-            <option value="edificio">Edificio / Sede</option>
             <option value="idtransporte">ID del Transporte</option>
 
         </select>
@@ -118,7 +117,6 @@
                     <th>Fecha de Inicio</th>
                     <th>Fecha Fin</th>
                     <th>Cantidad de Combustible</th>
-                    <th>Edificio/Sede</th>
                     <th>Id del Transporte</th>
                     @if (Storage.role == API.Helpers.Role.OrgAdmin)
                     {
@@ -136,7 +134,6 @@
                         <td>@consumo.FechaInicio</td>
                         <td>@consumo.FechaFin</td>
                         <td>@consumo.CantidadCombustible</td>
-                        <td>@consumo.Edificio</td>
                         <td>@consumo.TransporteId</td>
                         @if (Storage.role == API.Helpers.Role.OrgAdmin)
                         {
@@ -212,12 +209,6 @@
                     break;
                 case "idtransporte":
                     if (consumo.TransporteId.ToString().Contains(filtrocat))
-                    {
-                        listashow.Add(consumo);
-                    }
-                    break;
-                case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }

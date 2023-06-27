@@ -100,7 +100,6 @@
             <option value="consumo">Consumo</option>
             <option value="tipogas">Tipo de Gas</option>
             <option value="cantidad">Cantidad de Recarga</option>
-            <option value="edificio">Edificio / Sede</option>
             <option value="idemisionesfugitivas">ID del Gas</option>
 
         </select>
@@ -121,7 +120,6 @@
                     <th>Fecha Fin</th>
                     <th>Gas</th>
                     <th>Cantidad de Recarga</th>
-                    <th>Edificio/Sede</th>
                     <th>Id del Gas</th>
                     @if (Storage.role == API.Helpers.Role.OrgAdmin)
                     {
@@ -139,7 +137,6 @@
                         <td>@consumo.FechaFin</td>
                         <td>@consumo.Gas</td>
                         <td>@consumo.Recarga</td>
-                        <td>@consumo.Edificio</td>
                         <td>@consumo.EmisionesFugitivasId</td>
                         @if(Storage.role == API.Helpers.Role.OrgAdmin){
                         <td><button class="botones" @onclick="(() => Modificar(consumo.Id))">M</button></td>
@@ -214,12 +211,6 @@
                     break;
                 case "idemisionesfugitivas":
                     if (consumo.EmisionesFugitivasId.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
-                    {
-                        listashow.Add(consumo);
-                    }
-                    break;
-                case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }

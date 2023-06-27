@@ -99,7 +99,6 @@
             <option value="id">ID</option>
             <option value="consumo">Consumo</option>
             <option value="tipo">Tipo de Combustible</option>
-            <option value="edificio">Edificio / Sede</option>
             <option value="idvehiculo">ID del Vehículo</option>
 
         </select>
@@ -120,7 +119,6 @@
                     <th>Fecha Fin</th>
                     <th>Tipo de Combustible</th>
                     <th>Cantidad de Combustible</th>
-                    <th>Edificio/Sede</th>
                     <th>Id del Vehículo</th>
                     @if (Storage.role == API.Helpers.Role.OrgAdmin)
                     {
@@ -140,7 +138,6 @@
                         <td>@consumo.FechaFin</td>
                         <td>@consumo.TipoCombustible</td>
                         <td>@consumo.CantidadCombustible</td>
-                        <td>@consumo.Edificio</td>
                         <td>@consumo.VehiculoId</td>
                         @if (Storage.role == API.Helpers.Role.OrgAdmin)
                         {
@@ -216,12 +213,6 @@
                     break;
                 case "idvehiculo":
                     if (consumo.VehiculoId.ToString().Contains(filtrocat))
-                    {
-                        listashow.Add(consumo);
-                    }
-                    break;
-                case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }

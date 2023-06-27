@@ -68,10 +68,6 @@
             <label><b>Id del maquinaria</b></label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
-            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="maquinaria.Edificio" />
-            <ValidationMessage For="@(() => maquinaria.Edificio)" class="errormsg" />
-
             <label for="matricula"><b>Cantidad de Combustible</b></label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="maquinaria.CantidadCombustible" />
             <ValidationMessage For="@(() => maquinaria.CantidadCombustible)" class="errormsg" />
@@ -134,7 +130,6 @@
     {
         int idint = int.Parse(id);
         originalmaquinaria = await MaquinariaServices.GetConsumoByID(idint);
-        maquinaria.Edificio = originalmaquinaria.Edificio;
         maquinaria.FechaInicio = originalmaquinaria.FechaInicio;
         maquinaria.FechaFin = originalmaquinaria.FechaFin;
         maquinaria.CantidadCombustible = originalmaquinaria.CantidadCombustible;

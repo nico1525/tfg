@@ -68,10 +68,6 @@
             <label><b>Id del electricidad</b></label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
-            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="electricidad.Edificio" />
-            <ValidationMessage For="@(() => electricidad.Edificio)" class="errormsg" />
-
             <label for="matricula"><b>Kilovatios (kWh)</b></label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  Kilovatios (kWh)" @bind-Value="electricidad.Kwh" />
             <ValidationMessage For="@(() => electricidad.Kwh)" class="errormsg" />
@@ -122,7 +118,6 @@
     {
         int idint = int.Parse(id);
         originalelectricidad = await ElectricidadServices.GetConsumoByID(idint);
-        electricidad.Edificio = originalelectricidad.Edificio;
         electricidad.FechaInicio = originalelectricidad.FechaInicio;
         electricidad.FechaFin = originalelectricidad.FechaFin;
         electricidad.Kwh = originalelectricidad.Kwh;

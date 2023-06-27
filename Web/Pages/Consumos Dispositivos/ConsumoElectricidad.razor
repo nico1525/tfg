@@ -99,7 +99,6 @@
             <option value="id">ID</option>
             <option value="consumo">Consumo</option>
             <option value="comercializadora">Comercializadora</option>
-            <option value="edificio">Edificio / Sede</option>
             <option value="idelectricidad">ID del Dispositivo</option>
 
         </select>
@@ -120,7 +119,6 @@
                     <th>Fecha Fin</th>
                     <th>Kilovatios consumidos</th>
                     <th>Comercializadora</th>
-                    <th>Edificio/Sede</th>
                     <th>Id del Dispositivo</th>
                     @if (Storage.role == API.Helpers.Role.OrgAdmin)
                     {
@@ -139,7 +137,6 @@
                         <td>@consumo.FechaFin</td>
                         <td>@consumo.Kwh</td>
                         <td>@consumo.Comercializadora</td>
-                        <td>@consumo.Edificio</td>
                         <td>@consumo.ElectricidadId</td>
                         @if (Storage.role == API.Helpers.Role.OrgAdmin)
                         {
@@ -215,12 +212,6 @@
                     break;
                 case "idelectricidad":
                     if (consumo.ElectricidadId.ToString().Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
-                    {
-                        listashow.Add(consumo);
-                    }
-                    break; 
-                case "edificio":
-                    if (consumo.Edificio is not null && consumo.Edificio.Contains(filtrocat, StringComparison.OrdinalIgnoreCase))
                     {
                         listashow.Add(consumo);
                     }

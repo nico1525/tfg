@@ -68,10 +68,6 @@
             <label><b>Id del transporte</b></label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
-            <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="transporte.Edificio" />
-            <ValidationMessage For="@(() => transporte.Edificio)" class="errormsg" />
-
             <label for="matricula"><b>Cantidad de Combustible</b></label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="transporte.CantidadCombustible" />
             <ValidationMessage For="@(() => transporte.CantidadCombustible)" class="errormsg" />
@@ -118,7 +114,6 @@
     {
         int idint = int.Parse(id);
         originaltransporte = await TransporteServices.GetConsumoByID(idint);
-        transporte.Edificio = originaltransporte.Edificio;
         transporte.FechaInicio = originaltransporte.FechaInicio;
         transporte.FechaFin = originaltransporte.FechaFin;
         transporte.CantidadCombustible = originaltransporte.CantidadCombustible;
