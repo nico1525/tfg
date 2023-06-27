@@ -8,19 +8,18 @@ namespace API.Models.Consumos
     {
         [Key]
         public int Id { get; set; }
-        public string? Edificio { get; set; }
         public int CantidadCombustible { get; set; }
         public string? TipoCombustible { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public float Consumo { get; set; }
-        [ForeignKey("Vehiculo")]
         public int VehiculoId { get; set; }
+        [ForeignKey("VehiculoId")]
+        public Vehiculo Vehiculo { get; set; }
 
     }
     public class VehiculoConsumoCreateDTO
     { 
-        public string? Edificio { get; set; }
 
         [Required(ErrorMessage = "La cantidad de combustible es obligatoria")]
         public int CantidadCombustible { get; set; }
@@ -41,7 +40,6 @@ namespace API.Models.Consumos
     public class VehiculoConsumoDTO
     {
         public int Id { get; set; }
-        public string? Edificio { get; set; }
         public int CantidadCombustible { get; set; }
         public string? TipoCombustible { get; set; }
         public DateTime FechaInicio { get; set; }
@@ -51,7 +49,6 @@ namespace API.Models.Consumos
     }
     public class VehiculoConsumoModifyDTO
     {
-        public string? Edificio { get; set; }
         public int CantidadCombustible { get; set; }
         [RegularExpression("E5|E85|E100|B7|B20|B30|B100|LPG|CNG|E10|B10", ErrorMessage = "El Tipo de combustible es incorrecto")]
         public string? TipoCombustible { get; set; }

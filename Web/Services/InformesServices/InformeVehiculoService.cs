@@ -1,8 +1,8 @@
-﻿using API.Models;
+﻿using API.Helpers;
+using API.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Web.Helpers;
-using static API.Controllers.InformesControllers.InformesVehiculoController;
 
 namespace Web.Services.InformesServices
 {

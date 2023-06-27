@@ -14,8 +14,9 @@ namespace API.Models
         [EmailAddress]
         public string? Email { get; set; }
         public string? Contraseña { get; set; }
-        [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
+        [ForeignKey("OrganizacionId")]
+        public Organizacion Organizacion { get; set; }
         public Role Role { get; set; } = Role.User;
     }
 

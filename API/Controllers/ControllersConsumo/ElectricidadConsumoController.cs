@@ -105,7 +105,6 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("Este consumo de electricidad de dispositivo no pertenece a esta organización");
                 }
-                if (electricidadConsumo.Edificio != null && electricidadConsumo.Edificio != "") electricidadChange.Edificio = electricidadConsumo.Edificio;
                 if (electricidadConsumo.ComercializadoraId > 0) electricidadChange.ComercializadoraId = electricidadConsumo.ComercializadoraId;
                 if (electricidadConsumo.Kwh > 0) electricidadChange.Kwh = electricidadConsumo.Kwh;
                 if (electricidadConsumo.FechaInicio != test) electricidadChange.FechaInicio = electricidadConsumo.FechaInicio;

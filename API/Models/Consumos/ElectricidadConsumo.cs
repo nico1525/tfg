@@ -7,21 +7,20 @@ namespace API.Models.Consumos
     {
         [Key]
         public int Id { get; set; }
-        public string? Edificio { get; set; }
-        public string? Dispositivo { get; set; }
         public int Kwh { get; set; }
         public int ComercializadoraId { get; set; }
         public string? Comercializadora { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public float Consumo { get; set; }
-        [ForeignKey("Electricidad")]
         public int ElectricidadId { get; set; }
+        [ForeignKey("ElectricidadId")]
+        public Electricidad Electricidad { get; set; }
+
     }
 
     public class ElectricidadConsumoCreateDTO
     {
-        public string? Edificio { get; set; }
 
         [Required(ErrorMessage = "La cantidad de Kilovatios es obligatoria")]
         public int Kwh { get; set; }
@@ -41,7 +40,6 @@ namespace API.Models.Consumos
     public class ElectricidadConsumoDTO
     {
         public int Id { get; set; }
-        public string? Edificio { get; set; }
         public int Kwh { get; set; }
         public int ComercializadoraId { get; set; }
         public string? Comercializadora { get; set; }
@@ -53,7 +51,6 @@ namespace API.Models.Consumos
 
     public class ElectricidadConsumoModifyDTO
     {
-        public string? Edificio { get; set; }
         public int Kwh { get; set; }
         public int ComercializadoraId { get; set; }
         public DateTime FechaInicio { get; set; }

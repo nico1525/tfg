@@ -105,7 +105,6 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("Este consumo de instalación fija no pertenece a esta organización");
                 }
-                if (instalacionesFijaConsumo.Edificio != null && instalacionesFijaConsumo.Edificio != "") instalacionesFijaChange.Edificio = instalacionesFijaConsumo.Edificio;
                 if (instalacionesFijaConsumo.TipoCombustible != null && instalacionesFijaConsumo.TipoCombustible != "") instalacionesFijaChange.TipoCombustible = instalacionesFijaConsumo.TipoCombustible;
                 if (instalacionesFijaConsumo.CantidadCombustible > 0) instalacionesFijaChange.CantidadCombustible = instalacionesFijaConsumo.CantidadCombustible;
                 if (instalacionesFijaConsumo.FechaInicio != test) instalacionesFijaChange.FechaInicio = instalacionesFijaConsumo.FechaInicio;

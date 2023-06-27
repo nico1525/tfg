@@ -9,9 +9,9 @@ namespace API.Models
         public int Id { get; set; }
         public string? Edificio { get; set; }
         public string? NombreEquipo { get; set; }
-
-        [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
+        [ForeignKey("OrganizacionId")]
+        public Organizacion Organizacion { get; set; }
     }
 
     public class EmisionesFugitivasCreateDTO

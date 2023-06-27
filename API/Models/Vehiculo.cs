@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.Models.Consumos;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -12,8 +13,10 @@ namespace API.Models
         public string? Matricula { get; set; }
         public string? CategoriaVehiculo { get; set; }
 
-        [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
+        [ForeignKey("OrganizacionId")]
+        public Organizacion Organizacion { get; set; }
+
     }
 
     public class VehiculoDTO

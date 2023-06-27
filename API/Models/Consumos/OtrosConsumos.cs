@@ -15,8 +15,10 @@ namespace API.Models.Consumos
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public float Consumo { get; set; }
-        [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
+        [ForeignKey("OrganizacionId")]
+        public Organizacion Organizacion { get; set; }
+
     }
 
     public class OtrosConsumosDTO

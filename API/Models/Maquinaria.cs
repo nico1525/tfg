@@ -10,8 +10,9 @@ namespace API.Models
         public string? Edificio { get; set; }
         public string? Nombre { get; set; }
         public string? TipoMaquinaria { get; set; }
-        [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
+        [ForeignKey("OrganizacionId")]
+        public Organizacion Organizacion { get; set; }
     }
 
     public class MaquinariaDTO

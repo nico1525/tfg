@@ -8,18 +8,17 @@ namespace API.Models.Consumos
     {
         [Key]
         public int Id { get; set; }
-        public string? Edificio { get; set; }
         public int CantidadCombustible { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public float Consumo { get; set; }
-        [ForeignKey("Transporte")]
         public int TransporteId { get; set; }
+        [ForeignKey("TransporteId")] 
+        public Transporte Tranporte { get; set; }
     }
 
     public class TransporteConsumoCreateDTO
     {
-        public string? Edificio { get; set; }
         [Required(ErrorMessage = "La cantidad de combustible es obligatoria")]
         public int CantidadCombustible { get; set; }
         [Required(ErrorMessage = "La fecha de inicio es obligatoria")]
@@ -33,7 +32,6 @@ namespace API.Models.Consumos
     public class TransporteConsumoDTO
     {
         public int Id { get; set; }
-        public string? Edificio { get; set; }
         public int CantidadCombustible { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
@@ -42,7 +40,6 @@ namespace API.Models.Consumos
     }
     public class TransporteConsumoModifyDTO
     {
-        public string? Edificio { get; set; }
         public int CantidadCombustible { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }

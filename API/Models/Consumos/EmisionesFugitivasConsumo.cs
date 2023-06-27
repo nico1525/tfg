@@ -8,19 +8,19 @@ namespace API.Models.Consumos
     {
         [Key]
         public int Id { get; set; }
-        public string? Edificio { get; set; }
         public string? Gas { get; set; }
         public int Recarga { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public float Consumo { get; set; }
-        [ForeignKey("EmisionesFugitivas")]
         public int EmisionesFugitivasId { get; set; }
+        [ForeignKey("EmisionesFugitivasId")]
+        public EmisionesFugitivas EmisionesFugitivas { get; set; }
+
     }
 
     public class EmisionesFugitivasConsumoCreateDTO
     {
-        public string? Edificio { get; set; }
 
         [Required(ErrorMessage = "El nombre o fórmula del gas es obligatorio")]
         public string? Gas { get; set; }
@@ -41,7 +41,6 @@ namespace API.Models.Consumos
     public class EmisionesFugitivasConsumoDTO
     {
         public int Id { get; set; }
-        public string? Edificio { get; set; }
         public string? Gas { get; set; }
         public int Recarga { get; set; }
         public DateTime FechaInicio { get; set; }
@@ -52,7 +51,6 @@ namespace API.Models.Consumos
 
     public class EmisionesFugitivasConsumoModifyDTO
     {
-        public string? Edificio { get; set; }
         public int Recarga { get; set; }
         public string? Gas { get; set; }
         public DateTime FechaInicio { get; set; }

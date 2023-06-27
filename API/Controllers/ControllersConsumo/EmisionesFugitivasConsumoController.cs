@@ -101,7 +101,6 @@ namespace API.Controllers.ControllersConsumo
                 {
                     return BadRequest("Este consumo de equipo o fuga no pertenece a esta organización");
                 }
-                if (emisionesConsumo.Edificio != null && emisionesConsumo.Edificio != "") emisionesChange.Edificio = emisionesConsumo.Edificio;
                 if (emisionesConsumo.Gas != null && emisionesConsumo.Gas != "") emisionesChange.Gas = emisionesConsumo.Gas;
                 if (emisionesConsumo.Recarga > 0) emisionesChange.Recarga = emisionesConsumo.Recarga;
                 if (emisionesConsumo.FechaInicio != test) emisionesChange.FechaInicio = emisionesConsumo.FechaInicio;
