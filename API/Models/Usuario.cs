@@ -1,5 +1,6 @@
 ﻿using API.Helpers;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace API.Models
@@ -13,6 +14,7 @@ namespace API.Models
         [EmailAddress]
         public string? Email { get; set; }
         public string? Contraseña { get; set; }
+        [ForeignKey("Organizacion")]
         public int OrganizacionId { get; set; }
         public Role Role { get; set; } = Role.User;
     }

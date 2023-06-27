@@ -11,36 +11,36 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Diagnostics;
 using System.Net;
 using System.Diagnostics.Metrics;
-using static API.Controllers.InformesControllers.InformesVehiculoController;
+using static API.Controllers.InformesControllers.InformesTransporteController;
 using System.Linq.Expressions;
 using API.Helpers;
 
 namespace API.Controllers.InformesControllers
 {
-    [Route("api/Informes/Vehiculo")]
+    [Route("api/Informes/Transporte")]
     [ApiController]
-    public class InformesVehiculoController : ControllerBase
+    public class InformesTransporteController : ControllerBase
     {
         private readonly DatabaseContext _context;
-        public InformesVehiculoController(DatabaseContext context)
+        public InformesTransporteController(DatabaseContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<ConsumoVehiculoId>> AllVehiculoFechas(DateTime fechaini, DateTime fechafin)
+        public async Task<ActionResult<ConsumoTransporteId>> AllTransporteFechas(DateTime fechaini, DateTime fechafin)
         {
-            //El consumo total de todos los vehiculos entre dos fechas
+            //El consumo total de todos los Transportes entre dos fechas
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoVehiculoId query = new();
+            ConsumoTransporteId query = new();
             try
             {
-                query = (from c in _context.VehiculoConsumo
-                                           join v in _context.Vehiculo
-                                           on c.VehiculoId equals v.Id
+                query = (from c in _context.TransporteConsumo
+                                           join v in _context.Transporte
+                                           on c.TransporteId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.OrganizacionId == currentUser.OrganizacionId
                                            group c by v.OrganizacionId into g
-                                           select new ConsumoVehiculoId()
+                                           select new ConsumoTransporteId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible)
@@ -53,26 +53,26 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumoVehiculoId>> VehiculosFechaByID(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<ConsumoTransporteId>> TransportesFechaByID(DateTime fechaini, DateTime fechafin, int id)
         {
-            //El consumo total de 1 vehiculo entre dos fechas
+            //El consumo total de 1 Transporte entre dos fechas
 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoVehiculoId query = new();
+            ConsumoTransporteId query = new();
 
             try
             { 
-                var vehiculo = await _context.Vehiculo.FindAsync(id);
-                if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
+                var Transporte = await _context.Transporte.FindAsync(id);
+                if (currentUser.OrganizacionId != Transporte.OrganizacionId)
                 {
-                    return BadRequest("Este vehiculo no existe o no pertenece a esta organización");
+                    return BadRequest("Este Transporte no existe o no pertenece a esta organización");
                 }
-                query = (from c in _context.VehiculoConsumo
-                                           join v in _context.Vehiculo
-                                           on c.VehiculoId equals v.Id
+                query = (from c in _context.TransporteConsumo
+                                           join v in _context.Transporte
+                                           on c.TransporteId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
-                                           group c by c.VehiculoId into g
-                                           select new ConsumoVehiculoId()
+                                           group c by c.TransporteId into g
+                                           select new ConsumoTransporteId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible),
@@ -86,19 +86,19 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}/mes")]
-        public async Task<ActionResult<List<ConsumoMes>>> VehiculosFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<List<ConsumoMes>>> TransportesFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
-            var vehiculo = await _context.Vehiculo.FindAsync(id);
-            if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
+            var Transporte = await _context.Transporte.FindAsync(id);
+            if (currentUser.OrganizacionId != Transporte.OrganizacionId)
             {
-                return BadRequest("Este vehiculo no existe o no pertenece a esta organización");
+                return BadRequest("Este Transporte no existe o no pertenece a esta organización");
             }
-            //El consumo total de 1 vehiculo entre dos fechas agrupado por meses
-            List<ConsumoMes> query = (from c in _context.VehiculoConsumo
-                                      join v in _context.Vehiculo
-                                      on c.VehiculoId equals v.Id
+            //El consumo total de 1 Transporte entre dos fechas agrupado por meses
+            List<ConsumoMes> query = (from c in _context.TransporteConsumo
+                                      join v in _context.Transporte
+                                      on c.TransporteId equals v.Id
                                       where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                       group c by c.FechaInicio.Month into g
                                       orderby g.Key

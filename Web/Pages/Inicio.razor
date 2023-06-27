@@ -1,6 +1,12 @@
 ﻿@using API.Models;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@using Web.Helpers;
 @using Web.Services;
 @page "/"
+@inject NavigationManager Navigation
+@inject ProtectedLocalStorage BrowserStorage
+@inject HttpClient Http
+
 <PageTitle>Cálculo Huella de Carbono</PageTitle>
 
 <div> <NavBarNotLogged /></div>
@@ -8,5 +14,41 @@
 
 
 @code{
+    [Inject]
+    public IUsuarioServices UsuarioServices { get; set; }
+    Timer _updateTimer;
 
+    async void log()
+    {
+        var result = await BrowserStorage.GetAsync<string>("token");
+        var currentInputValue = result.Success ? result.Value : "";
+        Storage.token = currentInputValue;
+        if (Storage.token == null)
+        {
+            Storage.token = null;
+            return;
+        }
+        else
+        {
+            try
+            {
+                UsuarioServices = new UsuarioServices(Http);
+                var response = await UsuarioServices.GetUsuario();
+
+            }
+            catch (Exception e)
+            {
+                Storage.token = null;
+                return;
+            }
+            Navigation.NavigateTo("inicio");
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            log();
+        }
+    }
 }
