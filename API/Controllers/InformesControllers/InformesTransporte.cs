@@ -28,11 +28,11 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ConsumoTransporteId>> AllTransporteFechas(DateTime fechaini, DateTime fechafin)
+        public async Task<ActionResult<ConsumoCombustibleId>> AllTransporteFechas(DateTime fechaini, DateTime fechafin)
         {
             //El consumo total de todos los Transportes entre dos fechas
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoTransporteId query = new();
+            ConsumoCombustibleId query = new();
             try
             {
                 query = (from c in _context.TransporteConsumo
@@ -40,7 +40,7 @@ namespace API.Controllers.InformesControllers
                                            on c.TransporteId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.OrganizacionId == currentUser.OrganizacionId
                                            group c by v.OrganizacionId into g
-                                           select new ConsumoTransporteId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible)
@@ -53,12 +53,12 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumoTransporteId>> TransportesFechaByID(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<ConsumoCombustibleId>> TransportesFechaByID(DateTime fechaini, DateTime fechafin, int id)
         {
             //El consumo total de 1 Transporte entre dos fechas
 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoTransporteId query = new();
+            ConsumoCombustibleId query = new();
 
             try
             { 
@@ -72,7 +72,7 @@ namespace API.Controllers.InformesControllers
                                            on c.TransporteId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                            group c by c.TransporteId into g
-                                           select new ConsumoTransporteId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible),
@@ -93,7 +93,7 @@ namespace API.Controllers.InformesControllers
             var Transporte = await _context.Transporte.FindAsync(id);
             if (currentUser.OrganizacionId != Transporte.OrganizacionId)
             {
-                return BadRequest("Este Transporte no existe o no pertenece a esta organización");
+                return BadRequest("Este Transporte no  existe o no pertenece a esta organización");
             }
             //El consumo total de 1 Transporte entre dos fechas agrupado por meses
             List<ConsumoMes> query = (from c in _context.TransporteConsumo

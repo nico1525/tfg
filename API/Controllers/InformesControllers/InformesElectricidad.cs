@@ -43,6 +43,7 @@ namespace API.Controllers.InformesControllers
                                            select new ConsumoElectricidadId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
+                                               Total_Kilovatios = g.Sum(r => r.Kwh),
                                            }).Single();
             } catch(Exception e)
             {
@@ -64,7 +65,7 @@ namespace API.Controllers.InformesControllers
                 var Electricidad = await _context.Electricidad.FindAsync(id);
                 if (currentUser.OrganizacionId != Electricidad.OrganizacionId)
                 {
-                    return BadRequest("Este Electricidad no existe o no pertenece a esta organización");
+                    return BadRequest("Este dispositivo eléctrico no existe o no pertenece a esta organización");
                 }
                 query = (from c in _context.ElectricidadConsumo
                                            join v in _context.Electricidad
@@ -74,6 +75,7 @@ namespace API.Controllers.InformesControllers
                                            select new ConsumoElectricidadId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
+                                               Total_Kilovatios = g.Sum(r => r.Kwh),
                                            }).Single();
             } 
             catch(Exception e)
@@ -84,25 +86,26 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}/mes")]
-        public async Task<ActionResult<List<ConsumoMes>>> ElectricidadsFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<List<ConsumoMesElectricidad>>> ElectricidadsFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var Electricidad = await _context.Electricidad.FindAsync(id);
             if (currentUser.OrganizacionId != Electricidad.OrganizacionId)
             {
-                return BadRequest("Este Electricidad no existe o no pertenece a esta organización");
+                return BadRequest("Este dispositivo eléctrico no existe o no pertenece a esta organización");
             }
             //El consumo total de 1 Electricidad entre dos fechas agrupado por meses
-            List<ConsumoMes> query = (from c in _context.ElectricidadConsumo
+            List<ConsumoMesElectricidad> query = (from c in _context.ElectricidadConsumo
                                       join v in _context.Electricidad
                                       on c.ElectricidadId equals v.Id
                                       where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                       group c by c.FechaInicio.Month into g
                                       orderby g.Key
-                                      select new ConsumoMes()
+                                      select new ConsumoMesElectricidad()
                                       {
                                           Consumo_mes = g.Sum(r => r.Consumo),
+                                          Kilovatios_mes = g.Sum(r => r.Kwh),
                                           Mes = g.Key
                                       }).ToList();
             return query;

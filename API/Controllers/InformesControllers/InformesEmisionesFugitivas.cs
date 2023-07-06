@@ -36,6 +36,7 @@ namespace API.Controllers.InformesControllers
                                            select new ConsumoEmisionesFugitivasId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
+                                               Total_gases = g.Sum(r => r.Recarga),
                                            }).Single();
             } catch(Exception e)
             {
@@ -57,7 +58,7 @@ namespace API.Controllers.InformesControllers
                 var EmisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(id);
                 if (currentUser.OrganizacionId != EmisionesFugitivas.OrganizacionId)
                 {
-                    return BadRequest("Este EmisionesFugitivas no existe o no pertenece a esta organización");
+                    return BadRequest("Esta Emisión Fugitiva no existe o no pertenece a esta organización");
                 }
                 query = (from c in _context.EmisionesFugitivasConsumo
                                            join v in _context.EmisionesFugitivas
@@ -67,6 +68,7 @@ namespace API.Controllers.InformesControllers
                                            select new ConsumoEmisionesFugitivasId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
+                                               Total_gases = g.Sum(r => r.Recarga),
                                            }).Single();
             } 
             catch(Exception e)
@@ -77,25 +79,26 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}/mes")]
-        public async Task<ActionResult<List<ConsumoMes>>> EmisionesFugitivassFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<List<ConsumoMesEmisionesFugitivas>>> EmisionesFugitivassFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var EmisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(id);
             if (currentUser.OrganizacionId != EmisionesFugitivas.OrganizacionId)
             {
-                return BadRequest("Este EmisionesFugitivas no existe o no pertenece a esta organización");
+                return BadRequest("Esta Emisión Fugitiva no existe o no pertenece a esta organización");
             }
             //El consumo total de 1 EmisionesFugitivas entre dos fechas agrupado por meses
-            List<ConsumoMes> query = (from c in _context.EmisionesFugitivasConsumo
+            List<ConsumoMesEmisionesFugitivas> query = (from c in _context.EmisionesFugitivasConsumo
                                       join v in _context.EmisionesFugitivas
                                       on c.EmisionesFugitivasId equals v.Id
                                       where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                       group c by c.FechaInicio.Month into g
                                       orderby g.Key
-                                      select new ConsumoMes()
+                                      select new ConsumoMesEmisionesFugitivas()
                                       {
                                           Consumo_mes = g.Sum(r => r.Consumo),
+                                          Gases_mes = g.Sum(r => r.Recarga),
                                           Mes = g.Key
                                       }).ToList();
             return query;

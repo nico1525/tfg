@@ -8,7 +8,7 @@ namespace Web.Helpers
     {
         public static string? token { get; set; }
         public static Role? role { get; set; }
-        public static ConsumoVehiculoId consumoVehiculoId { get; set; }
+        public static ConsumoCombustibleId consumoVehiculoId { get; set; }
         public static List<ConsumoMes> consumoMes { get; set; }
     }
 }

@@ -28,11 +28,11 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ConsumoInstalacionesFijasId>> AllInstalacionesFijasFechas(DateTime fechaini, DateTime fechafin)
+        public async Task<ActionResult<ConsumoCombustibleId>> AllInstalacionesFijasFechas(DateTime fechaini, DateTime fechafin)
         {
             //El consumo total de todos los InstalacionesFijass entre dos fechas
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoInstalacionesFijasId query = new();
+            ConsumoCombustibleId query = new();
             try
             {
                 query = (from c in _context.InstalacionesFijasConsumo
@@ -40,7 +40,7 @@ namespace API.Controllers.InformesControllers
                                            on c.InstalacionesFijasId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.OrganizacionId == currentUser.OrganizacionId
                                            group c by v.OrganizacionId into g
-                                           select new ConsumoInstalacionesFijasId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible)
@@ -53,26 +53,26 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumoInstalacionesFijasId>> InstalacionesFijassFechaByID(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<ConsumoCombustibleId>> InstalacionesFijassFechaByID(DateTime fechaini, DateTime fechafin, int id)
         {
             //El consumo total de 1 InstalacionesFijas entre dos fechas
 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoInstalacionesFijasId query = new();
+            ConsumoCombustibleId query = new();
 
             try
             { 
                 var InstalacionesFijas = await _context.InstalacionesFijas.FindAsync(id);
                 if (currentUser.OrganizacionId != InstalacionesFijas.OrganizacionId)
                 {
-                    return BadRequest("Este InstalacionesFijas no existe o no pertenece a esta organización");
+                    return BadRequest("Esta Instalación Fija no existe o no pertenece a esta organización");
                 }
                 query = (from c in _context.InstalacionesFijasConsumo
                                            join v in _context.InstalacionesFijas
                                            on c.InstalacionesFijasId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                            group c by c.InstalacionesFijasId into g
-                                           select new ConsumoInstalacionesFijasId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible),
@@ -93,7 +93,7 @@ namespace API.Controllers.InformesControllers
             var InstalacionesFijas = await _context.InstalacionesFijas.FindAsync(id);
             if (currentUser.OrganizacionId != InstalacionesFijas.OrganizacionId)
             {
-                return BadRequest("Este InstalacionesFijas no existe o no pertenece a esta organización");
+                return BadRequest("Esta Instalación Fija no existe o no pertenece a esta organización");
             }
             //El consumo total de 1 InstalacionesFijas entre dos fechas agrupado por meses
             List<ConsumoMes> query = (from c in _context.InstalacionesFijasConsumo

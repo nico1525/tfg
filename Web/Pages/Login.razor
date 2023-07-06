@@ -25,13 +25,13 @@
     }
 
     hr {
-        border: 1px solid #f1f1f1;
+        border: 1px solid #000;
         margin-bottom: 25px;
         width: 100%;
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -52,18 +52,20 @@
 
     .input {
         width: 100%;
-        padding: 15px;
+        padding: 15px 0px;
         margin: 5px 0 22px 0px;
-        display: inline-block;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
     .input:focus {
-        background-color: #ddd;
+        background-color: #AFADAD;
         outline: none;
     }
 
+    .input:hover {
+        background-color: #AFADAD;
+    }
     .container {
         margin: 0% 20% 20px 20%;
     }
@@ -89,11 +91,11 @@
             <DataAnnotationsValidator />
 
             <label for="email"><b>Email</b></label>
-            <InputText class="input" id="email" placeholder="Email" @bind-Value="login.Email" />
+            <InputText  class="input" id="email" placeholder="Email" @bind-Value="login.Email" />
             <ValidationMessage For="@(() => login.Email)" class="errormsg" />
 
             <label for="password"><b>Contraseña</b></label>
-            <InputText class="input" id="password" placeholder="Contraseña" @bind-Value="login.Contraseña" />
+            <InputText  class="input" id="password" placeholder="Contraseña" @bind-Value="login.Contraseña" />
             <ValidationMessage For="@(() => login.Contraseña)" class="errormsg" />
 
             <hr>

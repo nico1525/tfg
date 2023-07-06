@@ -28,11 +28,11 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ConsumoVehiculoId>> AllVehiculoFechas(DateTime fechaini, DateTime fechafin)
+        public async Task<ActionResult<ConsumoCombustibleId>> AllVehiculoFechas(DateTime fechaini, DateTime fechafin)
         {
             //El consumo total de todos los vehiculos entre dos fechas
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoVehiculoId query = new();
+            ConsumoCombustibleId query = new();
             try
             {
                 query = (from c in _context.VehiculoConsumo
@@ -40,7 +40,7 @@ namespace API.Controllers.InformesControllers
                                            on c.VehiculoId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.OrganizacionId == currentUser.OrganizacionId
                                            group c by v.OrganizacionId into g
-                                           select new ConsumoVehiculoId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible)
@@ -53,12 +53,12 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumoVehiculoId>> VehiculosFechaByID(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<ConsumoCombustibleId>> VehiculosFechaByID(DateTime fechaini, DateTime fechafin, int id)
         {
             //El consumo total de 1 vehiculo entre dos fechas
 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoVehiculoId query = new();
+            ConsumoCombustibleId query = new();
 
             try
             { 
@@ -72,7 +72,7 @@ namespace API.Controllers.InformesControllers
                                            on c.VehiculoId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                            group c by c.VehiculoId into g
-                                           select new ConsumoVehiculoId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible),

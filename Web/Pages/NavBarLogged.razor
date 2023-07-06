@@ -2,11 +2,14 @@
 @using Web.Helpers;
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject SweetAlertService Swal;
+@inject ProtectedLocalStorage BrowserStorage
 
 <style>
     body {
         margin: 0;
-        background-color: #7b7b7b;
+        background-color: #E2DADB;
     }
 
     ul {
@@ -14,8 +17,8 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background: -webkit-linear-gradient(left, #FFDD00, #FBB034);
-        background: linear-gradient(to right, #FFDD00, #FBB034);
+        background: -webkit-linear-gradient(left, #A37897, #916B86);
+        background: linear-gradient(to right, #A37897, #916B86);
         border-bottom: 1px solid #000;
         top: 0;
         width: 100%;
@@ -66,7 +69,7 @@
     }
 
     .dropdown:hover {
-        background-color: cornflowerblue;
+            background-color: #8A5E7E;
     }
 
     .dropdown-content {
@@ -102,10 +105,10 @@
         cursor: pointer;
     }
     li a:hover {
-        background-color: cornflowerblue;
+        background-color: #8A5E7E;
     }
     li a:active{
-        background-color: royalblue;
+        background-color: #8A5E7E;
     }
 
 </style>
@@ -161,13 +164,20 @@
             <li><a id="idcuenta" href="cuenta">Cuenta</a></li>
         }
 
-        <li><a href="">Cerrar Sesión</a></li>
+        <li><a @onclick="cerrarsesion">Cerrar Sesión</a></li>
 
     </ul>
     @Body
 </body>
 
 @code {
+    public async void cerrarsesion()
+    {
+        Storage.token = null;
+        await BrowserStorage.SetAsync("token", null);
+        await Swal.FireAsync("Sesión cerrada correctamente", null, "success");
+        Navigation.NavigateTo("/");
+    }
     public void navigate()
     {
         Navigation.NavigateTo("inicio");

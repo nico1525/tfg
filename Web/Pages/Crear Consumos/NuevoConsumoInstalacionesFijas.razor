@@ -25,7 +25,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -44,11 +44,11 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
         }
 
@@ -74,7 +74,7 @@
             <InputNumber class="input" id="InstalacionesFijasId" placeholder="  InstalacionesFijasId" @bind-Value="instalacionesFijas.InstalacionesFijasId" />
             <ValidationMessage For="@(() => instalacionesFijas.InstalacionesFijasId)" class="errormsg" />
 
-            <label for="matricula"><b>Cantidad de Combustible</b></label>
+            <label for="matricula"><b>Cantidad de Combustible (en Litros)</b></label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="instalacionesFijas.CantidadCombustible" />
             <ValidationMessage For="@(() => instalacionesFijas.CantidadCombustible)" class="errormsg" />
 
@@ -94,7 +94,7 @@
                 <option value="fueloleo">Fuelóleo</option>
                 <option value="LPG">LPG</option>
                 <option value="queroseno">Queroseno</option>
-                <option value="gaspropano">Gasp ropano</option>
+                <option value="gaspropano">Gasp propano</option>
                 <option value="gasbutano">Gas butano</option>
                 <option value="gasmanufacturado">Gas manufacturado</option>
                 <option value="biogas">Biogás</option>

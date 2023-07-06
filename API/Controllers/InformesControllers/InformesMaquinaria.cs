@@ -28,11 +28,11 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ConsumoMaquinariaId>> AllMaquinariaFechas(DateTime fechaini, DateTime fechafin)
+        public async Task<ActionResult<ConsumoCombustibleId>> AllMaquinariaFechas(DateTime fechaini, DateTime fechafin)
         {
             //El consumo total de todos los Maquinarias entre dos fechas
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoMaquinariaId query = new();
+            ConsumoCombustibleId query = new();
             try
             {
                 query = (from c in _context.MaquinariaConsumo
@@ -40,7 +40,7 @@ namespace API.Controllers.InformesControllers
                                            on c.MaquinariaId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.OrganizacionId == currentUser.OrganizacionId
                                            group c by v.OrganizacionId into g
-                                           select new ConsumoMaquinariaId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible)
@@ -53,26 +53,26 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumoMaquinariaId>> MaquinariasFechaByID(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<ConsumoCombustibleId>> MaquinariasFechaByID(DateTime fechaini, DateTime fechafin, int id)
         {
             //El consumo total de 1 Maquinaria entre dos fechas
 
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
-            ConsumoMaquinariaId query = new();
+            ConsumoCombustibleId query = new();
 
             try
             { 
                 var Maquinaria = await _context.Maquinaria.FindAsync(id);
                 if (currentUser.OrganizacionId != Maquinaria.OrganizacionId)
                 {
-                    return BadRequest("Este Maquinaria no existe o no pertenece a esta organización");
+                    return BadRequest("Esta Maquinaria no existe o no pertenece a esta organización");
                 }
                 query = (from c in _context.MaquinariaConsumo
                                            join v in _context.Maquinaria
                                            on c.MaquinariaId equals v.Id
                                            where c.FechaInicio >= fechaini && c.FechaInicio <= fechafin && v.Id == id
                                            group c by c.MaquinariaId into g
-                                           select new ConsumoMaquinariaId()
+                                           select new ConsumoCombustibleId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
                                                Total_combustible = g.Sum(r => r.CantidadCombustible),
@@ -93,7 +93,7 @@ namespace API.Controllers.InformesControllers
             var Maquinaria = await _context.Maquinaria.FindAsync(id);
             if (currentUser.OrganizacionId != Maquinaria.OrganizacionId)
             {
-                return BadRequest("Este Maquinaria no existe o no pertenece a esta organización");
+                return BadRequest("Esta Maquinaria no existe o no pertenece a esta organización");
             }
             //El consumo total de 1 Maquinaria entre dos fechas agrupado por meses
             List<ConsumoMes> query = (from c in _context.MaquinariaConsumo
