@@ -88,17 +88,59 @@
 
             <label for="categoria"><b>Tipo de Gas</b></label>
             <InputSelect class="input" id="categoria" @bind-Value="emisionesFugitivas.Gas">
-                @*<option value="E5">E5</option>
-                <option value="E10">E10</option>
-                <option value="E85">E85</option>
-                <option value="E100">E100</option>
-                <option value="B7">B7</option>
-                <option value="B10">B10</option>
-                <option value="B20">B20</option>
-                <option value="B30">B30</option>
-                <option value="B100">B100</option>
-                <option value="LPG">LPG</option>
-                <option value="CNG">CNG</option>*@
+                <option value="HFC-23">HFC-23</option>
+                <option value="HFC-32">HFC-32</option>
+                <option value="HFC-41">HFC-41</option>
+                <option value="HFC-125">HFC-125</option>
+                <option value="HFC-134">HFC-134</option>
+                <option value="CH2FCF3">HFC-134a (CH2FCF3)</option>
+                <option value="HFC-143">HFC-143 (C2H3F3)</option>
+                <option value="C2H3F3">HFC-143a</option>
+                <option value="HFC-152">HFC-152</option>
+                <option value="HFC-152a">HFC-152a</option>
+                <option value="HFC-161">HFC-161</option>
+                <option value="HFC-227ea">HFC-227ea</option>
+                <option value="HFC-236cb">HFC-236cb</option>
+                <option value="HFC-236ea">HFC-236ea</option>
+                <option value="HFC-236fa">HFC-236fa</option>
+                <option value="HFC-245ca">HFC-245ca</option>
+                <option value="HFC-245fa">HFC-245fa</option>
+                <option value="HFC-365mfc">HFC-365mfc</option>
+                <option value="HFC-43-10mee">HFC-43-10mee</option>
+                <option value="R-404A">R-404A</option>
+                <option value="R-407A">R-407A</option>
+                <option value="R-407B">R-407B</option>
+                <option value="R-407C">R-407C</option>
+                <option value="R-407F">R-407F</option>
+                <option value="R-410A">R-410A</option>
+                <option value="R-410B">R-410B</option>
+                <option value="R-413A">R-413A</option>
+                <option value="R-417A">R-417A</option>
+                <option value="R-417B">R-417B</option>
+                <option value="R-422A">R-422A</option>
+                <option value="R-422D">R-422D</option>
+                <option value="R-424A">R-424A</option>
+                <option value="R-426A">R-426A</option>
+                <option value="R-427A">R-427A</option>
+                <option value="R-428A">R-428A</option>
+                <option value="R-434A">R-434A</option>
+                <option value="R-437A">R-437A</option>
+                <option value="R-438A">R-438A</option>
+                <option value="R-442A">R-442A</option>
+                <option value="R-449A">R-449A</option>
+                <option value="R-452A">R-452A</option>
+                <option value="R-453A">R-453A</option>
+                <option value="R-507A">R-507A</option>
+                <option value="dioxidodecarbono">Dióxido de Carbono</option>
+                <option value="metano">Metano</option>
+                <option value="oxidonitroso">Óxido Nitroso</option>
+                <option value="hexafluorurodeazufre">Hexafluoruro de Azufre</option>
+                <option value="trifluorurodenitrogeno">Trifluoruro de Nitrógeno</option>
+                <option value="isoflurano">Isoflurano</option>
+                <option value="desflurano">Desflurano</option>
+                <option value="sevoflurano">Sevoflurano</option>
+                <option value="hexafluoroetano">Hexafluoroetano</option>
+
 
             </InputSelect>
             <ValidationMessage For="@(() => emisionesFugitivas.Gas)" class="errormsg" />

@@ -10,12 +10,12 @@ using API.Helpers;
 
 namespace API.Controllers.InformesControllers
 {
-    [Route("api/Informes/EmisionesFijas")]
+    [Route("api/Informes/EmisionesFugitivas")]
     [ApiController]
-    public class InformesEmisionesFijasController : ControllerBase
+    public class InformesEmisionesFugitivasController : ControllerBase
     {
         private readonly DatabaseContext _context;
-        public InformesEmisionesFijasController(DatabaseContext context)
+        public InformesEmisionesFugitivasController(DatabaseContext context)
         {
             _context = context;
         }
@@ -46,7 +46,7 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConsumoEmisionesFugitivasId>> EmisionesFugitivassFechaByID(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<ConsumoEmisionesFugitivasId>> EmisionesFugitivasFechaByID(DateTime fechaini, DateTime fechafin, int id)
         {
             //El consumo total de 1 EmisionesFugitivas entre dos fechas
 
@@ -79,7 +79,7 @@ namespace API.Controllers.InformesControllers
         }
 
         [HttpGet("{id}/mes")]
-        public async Task<ActionResult<List<ConsumoMesEmisionesFugitivas>>> EmisionesFugitivassFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ActionResult<List<ConsumoMesEmisionesFugitivas>>> EmisionesFugitivasFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
         {
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 

@@ -81,12 +81,82 @@ namespace API.Controllers
             return tr;
 
         }
+        [HttpGet("gasesemisionesfugitivas")]
+        public GasesEmisionesFugitivas GetTipoGasesEmisionesFugitivas()
+        {
+            GasesEmisionesFugitivas tr = new()
+            {
+                tipo = "Emisiones Fugitivas",
+                NombreGas = new List<string?>() { 
+                                            "HFC-23",
+	                                        "HFC-32",
+	                                        "HFC-41",
+	                                        "HFC-125",
+	                                        "HFC-134",
+	                                        "HFC-134a",
+	                                        "HFC-143",
+	                                        "HFC-143a",
+	                                        "HFC-152",
+	                                        "HFC-152a",
+	                                        "HFC-161",
+	                                        "HFC-227ea",
+	                                        "HFC-236cb",
+	                                        "HFC-236ea",
+	                                        "HFC-236fa",
+	                                        "HFC-245ca",
+	                                        "HFC-245fa",
+	                                        "HFC-365mfc",
+	                                        "HFC-43-10mee",
+	                                        "R-404A",
+	                                        "R-407A",
+	                                        "R-407B",
+	                                        "R-407C",
+	                                        "R-407F",
+	                                        "R-410A",
+	                                        "R-410B",
+	                                        "R-413A",
+	                                        "R-417A",
+	                                        "R-417B",
+	                                        "R-422A",
+	                                        "R-422D",
+	                                        "R-424A",
+	                                        "R-426A",
+	                                        "R-427A",
+	                                        "R-428A",
+	                                        "R-434A",
+	                                        "R-437A",
+	                                        "R-438A",
+	                                        "R-442A",
+	                                        "R-449A",
+	                                        "R-452A",
+	                                        "R-453A",
+	                                        "R-507A",
+	                                        "dioxidodecarbono",
+	                                        "metano",
+	                                        "oxidonitroso",
+	                                        "hexafluorurodeazufre",
+	                                        "trifluorurodenitrogeno",
+	                                        "isoflurano",
+	                                        "desflurano",
+	                                        "sevoflurano",
+	                                        "hexafluoroetano"
+                }
+            };
+            return tr;
+
+        }
     }
 
     public class CombustibleFijas
     {
         public string? tipo { get; set; }
         public List<string?>? TipoCombustible { get; set; }
+
+    }
+    public class GasesEmisionesFugitivas
+    {
+        public string? tipo { get; set; }
+        public List<string?>? NombreGas { get; set; }
 
     }
 

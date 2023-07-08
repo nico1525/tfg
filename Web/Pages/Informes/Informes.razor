@@ -91,6 +91,7 @@
     </div>
 </body>
 </CascadingValue>
+
 @code {
     public ConsumoCombustibleId consumo = new();
 
@@ -98,10 +99,10 @@
 
     private string dispositivo = "vehiculo";
     private string filtromes = "no";
-    private string id = "Todos";
+    private string id = "0";
 
-    private DateTime fechaini = DateTime.Now;
-    private DateTime fechafin = DateTime.Now;
+    private DateTime fechaini = DateTime.Now.AddMonths(-2);
+    private DateTime fechafin = DateTime.Now.AddMonths(2);
 
     [Inject]
     public IInformeVehiculoService informeServices { get; set; }
@@ -110,7 +111,7 @@
     private string? filtroid { get { return filtroid2; } set { filtroid2 = value; VerId(); } }
     public void VerId()
     {
-        if (filtroid2.Equals("sinid")) { id = "Todos"; }
+        if (filtroid2.Equals("sinid")) { id = "0"; }
         else { id = ""; }
         StateHasChanged();
     }
@@ -140,6 +141,7 @@
                 {
                     case ("vehiculo"):
                         consumoMes = await informeServices.VehiculosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoMes = consumoMes;
                         Navigation.NavigateTo("informes/vehiculo/2");
                         break;
                 }
@@ -153,6 +155,11 @@
     }
     protected override void OnInitialized()
     {
-       
+        if (Storage.token == null)
+        {
+            Navigation.NavigateTo("");
+            return;
+        }
+        informeServices = new InformeVehiculoService(Http);
     }
 }
