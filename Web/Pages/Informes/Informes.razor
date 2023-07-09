@@ -52,6 +52,7 @@
                 <option value="emisionfugitiva">Emisiones Fugitivas</option>
                 <option value="instalacionfija">Instalaciones Fijas</option>
                 <option value="electricidad">Dispositivo eléctrico</option>
+                <option value="otros">Consumos de otras fuentes</option>
                 <option value="todos">Todos los Dispositivos</option>
             </select>
     @if (filtroid2.Equals("sinid"))
@@ -94,8 +95,14 @@
 
 @code {
     public ConsumoCombustibleId consumo = new();
+    public ConsumoElectricidadId consumoElectricidad = new();
+    public ConsumoEmisionesFugitivasId ConsumoEmisionesFugitivas = new();
+    public ConsumoOtrosConsumosId ConsumoOtrosConsumos = new();
 
     public List<ConsumoMes> consumoMes = new();
+    public List<ConsumoMesEmisionesFugitivas> ConsumoMesEmisionesFugitivas = new();
+    public List<ConsumoMesElectricidad> ConsumoMesElectricidad = new();
+    public List<ConsumoMesOtrosConsumos> ConsumoMesOtrosConsumos = new();
 
     private string dispositivo = "vehiculo";
     private string filtromes = "no";
@@ -106,6 +113,18 @@
 
     [Inject]
     public IInformeVehiculoService informeServices { get; set; }
+    [Inject]
+    public IInformeTransporteService informeTransporteServices { get; set; }
+    [Inject]
+    public IInformeMaquinariaService informemaquinariaServices { get; set; }
+    [Inject]
+    public IInformeInstalacionesFijasService informeInstalacionesFijasServices { get; set; }
+    [Inject]
+    public IInformeEmisionesFugitivasService informeEmisionesFugitivasServices { get; set; }
+    [Inject]
+    public IInformeElectricidadService informeElectricidadServices { get; set; }
+    [Inject]
+    public IInformeOtrosConsumosService informeOtrosConsumosServices { get; set; }
 
     private string? filtroid2 = "sinid";
     private string? filtroid { get { return filtroid2; } set { filtroid2 = value; VerId(); } }
@@ -133,6 +152,66 @@
                         Storage.consumoVehiculoId = consumo;
                         Navigation.NavigateTo("informes/vehiculo/1");
                         break;
+                    case ("transporte", "sinid"):
+                        consumo = await informeTransporteServices.AllTransporteFechas(fechaini, fechafin);
+                        Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes/transporte/0");
+                        break;
+                    case ("transporte", "conid"):
+                        consumo = await informeTransporteServices.TransportesFechaByID(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes/transporte/1");
+                        break;
+                    case ("maquinaria", "sinid"):
+                        consumo = await informemaquinariaServices.AllMaquinariaFechas(fechaini, fechafin);
+                        Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes/maquinaria/0");
+                        break;
+                    case ("maquinaria", "conid"):
+                        consumo = await informemaquinariaServices.MaquinariasFechaByID(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes/maquinaria/1");
+                        break;
+                    case ("emisionfugitiva", "sinid"):
+                        ConsumoEmisionesFugitivas = await informeEmisionesFugitivasServices.AllEmisionesFugitivasFechas(fechaini, fechafin);
+                        Storage.ConsumoEmisionesFugitivas = ConsumoEmisionesFugitivas;
+                        Navigation.NavigateTo("informes/emisionfugitiva/0");
+                        break;
+                    case ("emisionfugitiva", "conid"):
+                        ConsumoEmisionesFugitivas = await informeEmisionesFugitivasServices.EmisionesFugitivasFechaByID(fechaini, fechafin, int.Parse(id));
+                        Storage.ConsumoEmisionesFugitivas = ConsumoEmisionesFugitivas;
+                        Navigation.NavigateTo("informes/emisionfugitiva/1");
+                        break;
+                    case ("instalacionfija", "sinid"):
+                        consumo = await informeInstalacionesFijasServices.AllInstalacionesFijasFechas(fechaini, fechafin);
+                        Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes/instalacionfija/0");
+                        break;
+                    case ("instalacionfija", "conid"):
+                        consumo = await informeInstalacionesFijasServices.InstalacionesFijasFechaByID(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes/instalacionfija/1");
+                        break;
+                    case ("electricidad", "sinid"):
+                        consumoElectricidad = await informeElectricidadServices.AllElecricidadFechas(fechaini, fechafin);
+                        Storage.ConsumoElectricidad = consumoElectricidad;
+                        Navigation.NavigateTo("informes/electricidad/0");
+                        break;
+                    case ("electricidad", "conid"):
+                        consumoElectricidad = await informeElectricidadServices.ElecricidadFechaByID(fechaini, fechafin, int.Parse(id));
+                        Storage.ConsumoElectricidad = consumoElectricidad;
+                        Navigation.NavigateTo("informes/electricidad/1");
+                        break;
+                    case ("otros", "sinid"):
+                        ConsumoOtrosConsumos = await informeOtrosConsumosServices.AllOtrosConsumosFechas(fechaini, fechafin);
+                        Storage.ConsumoOtrosConsumos = ConsumoOtrosConsumos;
+                        Navigation.NavigateTo("informes/otros/0");
+                        break;
+                    case ("otros", "conid"):
+                        ConsumoOtrosConsumos = await informeOtrosConsumosServices.OtrosConsumosFechaByID(fechaini, fechafin, int.Parse(id));
+                        Storage.ConsumoOtrosConsumos = ConsumoOtrosConsumos;
+                        Navigation.NavigateTo("informes/otros/1");
+                        break;
                 }
             }
             else
@@ -143,6 +222,36 @@
                         consumoMes = await informeServices.VehiculosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.consumoMes = consumoMes;
                         Navigation.NavigateTo("informes/vehiculo/2");
+                        break;
+                    case ("transporte"):
+                        consumoMes = await informeTransporteServices.TransportesFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoMes = consumoMes;
+                        Navigation.NavigateTo("informes/transporte/2");
+                        break;
+                    case ("maquinaria"):
+                        consumoMes = await informemaquinariaServices.MaquinariasFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoMes = consumoMes;
+                        Navigation.NavigateTo("informes/maquinaria/2");
+                        break;
+                    case ("emisionfugitiva"):
+                        ConsumoMesEmisionesFugitivas = await informeEmisionesFugitivasServices.EmisionesFugitivasFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Storage.ConsumoMesEmisionesFugitivas = ConsumoMesEmisionesFugitivas;
+                        Navigation.NavigateTo("informes/emisionfugitiva/2");
+                        break;
+                    case ("instalacionfija"):
+                        consumoMes = await informeInstalacionesFijasServices.InstalacionesFijasFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Storage.consumoMes = consumoMes;
+                        Navigation.NavigateTo("informes/instalacionfija/2");
+                        break;
+                    case ("electricidad"):
+                        ConsumoMesElectricidad = await informeElectricidadServices.ElecricidadFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Storage.ConsumoMesElectricidad = ConsumoMesElectricidad;
+                        Navigation.NavigateTo("informes/electricidad/2");
+                        break;
+                    case ("otros"):
+                        ConsumoMesOtrosConsumos = await informeOtrosConsumosServices.OtrosConsumosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
+                        Storage.ConsumoMesOtrosConsumos = ConsumoMesOtrosConsumos;
+                        Navigation.NavigateTo("informes/otros/2");
                         break;
                 }
             }

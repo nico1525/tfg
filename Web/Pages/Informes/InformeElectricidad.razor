@@ -6,7 +6,6 @@
 @using Web.Services;
 @using Web.Services.InformesServices;
 @layout Informes
-@using static API.Controllers.InformesControllers.InformesVehiculoController;
 @inject NavigationManager Navigation
 @inject HttpClient Http
 
@@ -19,18 +18,15 @@
     [Parameter]
     public int id { get; set; }
 
-    [Inject]
-    public IInformeVehiculoService informeServices { get; set; }
-
     protected async override void OnInitialized()
     {
-        ConsumoCombustibleId test;
-        List<ConsumoMes> consumoMes;
+        ConsumoElectricidadId consumo;
+        List<ConsumoMesElectricidad> consumoMes;
         switch (id)
         {
-            case 0: test = Storage.consumoVehiculoId; break;
-            case 1: test = Storage.consumoVehiculoId; break;
-            case 2: consumoMes = Storage.consumoMes; break;
+            case 0: consumo = Storage.ConsumoElectricidad; break;
+            case 1: consumo = Storage.ConsumoElectricidad; break;
+            case 2: consumoMes = Storage.ConsumoMesElectricidad; break;
         }
     }
 }

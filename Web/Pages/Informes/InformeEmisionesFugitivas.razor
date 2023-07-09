@@ -1,4 +1,4 @@
-﻿@page "/informes/vehiculo/{id:int}"
+﻿@page "/informes/emisionfugitiva/{id:int}"
 @using API.Helpers;
 @using API.Models;
 @using API.Models.Query_Models;
@@ -6,7 +6,6 @@
 @using Web.Services;
 @using Web.Services.InformesServices;
 @layout Informes
-@using static API.Controllers.InformesControllers.InformesVehiculoController;
 @inject NavigationManager Navigation
 @inject HttpClient Http
 
@@ -19,18 +18,15 @@
     [Parameter]
     public int id { get; set; }
 
-    [Inject]
-    public IInformeVehiculoService informeServices { get; set; }
-
     protected async override void OnInitialized()
     {
-        ConsumoCombustibleId test;
-        List<ConsumoMes> consumoMes;
+        ConsumoEmisionesFugitivasId consumo;
+        List<ConsumoMesEmisionesFugitivas> consumoMes;
         switch (id)
         {
-            case 0: test = Storage.consumoVehiculoId; break;
-            case 1: test = Storage.consumoVehiculoId; break;
-            case 2: consumoMes = Storage.consumoMes; break;
+            case 0: consumo = Storage.ConsumoEmisionesFugitivas; break;
+            case 1: consumo = Storage.ConsumoEmisionesFugitivas; break;
+            case 2: consumoMes = Storage.ConsumoMesEmisionesFugitivas; break;
         }
     }
 }

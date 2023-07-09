@@ -6,14 +6,14 @@ using Web.Helpers;
 
 namespace Web.Services.InformesServices
 {
-    public interface IInformeElecricidadService
+    public interface IInformeElectricidadService
     {
         public Task<ConsumoElectricidadId> AllElecricidadFechas(DateTime fechaini, DateTime fechafin);
         public Task<ConsumoElectricidadId> ElecricidadFechaByID(DateTime fechaini, DateTime fechafin, int id);
         public Task<List<ConsumoMesElectricidad>> ElecricidadFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id);
 
     }
-    public class InformeElecricidadService : IInformeElecricidadService
+    public class InformeElecricidadService : IInformeElectricidadService
     {
         private readonly HttpClient _httpClient;
         private static readonly string baseUrl = "https://localhost:7011/";
