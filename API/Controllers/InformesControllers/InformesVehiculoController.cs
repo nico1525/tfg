@@ -63,9 +63,9 @@ namespace API.Controllers.InformesControllers
             try
             { 
                 var vehiculo = await _context.Vehiculo.FindAsync(id);
-                if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
+                if (vehiculo == null || currentUser.OrganizacionId != vehiculo.OrganizacionId)
                 {
-                    return BadRequest("Este vehiculo no existe o no pertenece a esta organización");
+                    return BadRequest("Este vehículo no existe o no pertenece a esta organización");
                 }
                 query = (from c in _context.VehiculoConsumo
                                            join v in _context.Vehiculo
@@ -91,7 +91,7 @@ namespace API.Controllers.InformesControllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var vehiculo = await _context.Vehiculo.FindAsync(id);
-            if (currentUser.OrganizacionId != vehiculo.OrganizacionId)
+            if (vehiculo == null || currentUser.OrganizacionId != vehiculo.OrganizacionId)
             {
                 return BadRequest("Este vehiculo no existe o no pertenece a esta organización");
             }

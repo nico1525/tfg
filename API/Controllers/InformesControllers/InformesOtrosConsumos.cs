@@ -62,7 +62,7 @@ namespace API.Controllers.InformesControllers
             try
             {
                 var consumo = await _context.OtrosConsumos.FindAsync(id);
-                if (currentUser.OrganizacionId != consumo.OrganizacionId)
+                if (consumo == null || currentUser.OrganizacionId != consumo.OrganizacionId)
                 {
                     return BadRequest("Este consumo de otras fuentes no existe o no pertenece a esta organización");
                 }
@@ -88,7 +88,7 @@ namespace API.Controllers.InformesControllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var consumo = await _context.OtrosConsumos.FindAsync(id);
-            if (currentUser.OrganizacionId != consumo.OrganizacionId)
+            if (consumo == null || currentUser.OrganizacionId != consumo.OrganizacionId)
             {
                 return BadRequest("Este consumo de otras fuentes no existe o no pertenece a esta organización");
             }

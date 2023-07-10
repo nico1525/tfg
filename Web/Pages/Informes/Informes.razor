@@ -57,7 +57,7 @@
             </select>
     @if (filtroid2.Equals("sinid"))
     {
-        <label id="glabel">para todos los dispositivos: </label>
+        <label id="glabel">para todos los dispositivos </label>
     }
     else
     {
@@ -78,15 +78,19 @@
     
     <div id="filtro"> <label id="glabel"> Filtrar por :</label>
         <select @bind="filtromes" id="select">
-            <option value="no">Sin filtro</option>
-            <option value="meses">meses</option>
+            <option value="no">Consumo Total</option>
+            <option value="meses">Consumo por Meses</option>
         </select>
 
-        <select @bind="filtroid" id="select">
-            <option value="sinid">Todos</option>
-            <option value="conid">Por id</option>
-        </select>
+    @if (filtromes2.Equals("no"))
+    {
+            <select @bind="filtroid" id="select">
+                <option value="sinid">Todos los dispositivos</option>
+                <option value="conid">Dispositivo por Id</option>
+            </select>
+    }
     </div>
+    
     <div id="dispositivo">
         @Body
     </div>
@@ -105,7 +109,6 @@
     public List<ConsumoMesOtrosConsumos> ConsumoMesOtrosConsumos = new();
 
     private string dispositivo = "vehiculo";
-    private string filtromes = "no";
     private string id = "0";
 
     private DateTime fechaini = DateTime.Now.AddMonths(-2);
@@ -128,6 +131,14 @@
 
     private string? filtroid2 = "sinid";
     private string? filtroid { get { return filtroid2; } set { filtroid2 = value; VerId(); } }
+
+    private string? filtromes2 = "no";
+    private string? filtromes { get { return filtromes2; } set { filtromes2 = value; VerMes(); } }
+    public void VerMes()
+    {
+        filtroid2 = "conid";
+        StateHasChanged();
+    }
     public void VerId()
     {
         if (filtroid2.Equals("sinid")) { id = "0"; }
@@ -145,12 +156,12 @@
                     case ("vehiculo", "sinid"):
                         consumo = await informeServices.AllVehiculoFechas(fechaini, fechafin);
                         Storage.consumoVehiculoId = consumo;
-                        Navigation.NavigateTo("informes/vehiculo/0");
+                        Navigation.NavigateTo("informes/vehiculo/0/0");
                         break;
                     case ("vehiculo", "conid"):
                         consumo = await informeServices.VehiculosFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.consumoVehiculoId = consumo;
-                        Navigation.NavigateTo("informes/vehiculo/1");
+                        Navigation.NavigateTo($"informes/vehiculo/1/{id}");
                         break;
                     case ("transporte", "sinid"):
                         consumo = await informeTransporteServices.AllTransporteFechas(fechaini, fechafin);
@@ -221,7 +232,7 @@
                     case ("vehiculo"):
                         consumoMes = await informeServices.VehiculosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.consumoMes = consumoMes;
-                        Navigation.NavigateTo("informes/vehiculo/2");
+                        Navigation.NavigateTo($"informes/vehiculo/2/{id}");
                         break;
                     case ("transporte"):
                         consumoMes = await informeTransporteServices.TransportesFechaByIDporMes(fechaini, fechafin, int.Parse(id));
@@ -262,6 +273,7 @@
 
         }
     }
+
     protected override void OnInitialized()
     {
         if (Storage.token == null)

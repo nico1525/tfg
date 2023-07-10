@@ -13,12 +13,12 @@ namespace Web.Services.InformesServices
         public Task<List<ConsumoMesElectricidad>> ElecricidadFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id);
 
     }
-    public class InformeElecricidadService : IInformeElectricidadService
+    public class InformeElectricidadService : IInformeElectricidadService
     {
         private readonly HttpClient _httpClient;
         private static readonly string baseUrl = "https://localhost:7011/";
 
-        public InformeElecricidadService(HttpClient httpClient)
+        public InformeElectricidadService(HttpClient httpClient)
         {
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Clear();

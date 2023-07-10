@@ -63,7 +63,7 @@ namespace API.Controllers.InformesControllers
             try
             { 
                 var Electricidad = await _context.Electricidad.FindAsync(id);
-                if (currentUser.OrganizacionId != Electricidad.OrganizacionId)
+                if (Electricidad == null || currentUser.OrganizacionId != Electricidad.OrganizacionId)
                 {
                     return BadRequest("Este dispositivo eléctrico no existe o no pertenece a esta organización");
                 }
@@ -91,7 +91,7 @@ namespace API.Controllers.InformesControllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var Electricidad = await _context.Electricidad.FindAsync(id);
-            if (currentUser.OrganizacionId != Electricidad.OrganizacionId)
+            if (Electricidad == null || currentUser.OrganizacionId != Electricidad.OrganizacionId)
             {
                 return BadRequest("Este dispositivo eléctrico no existe o no pertenece a esta organización");
             }

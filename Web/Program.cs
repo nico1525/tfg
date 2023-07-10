@@ -29,7 +29,14 @@ builder.Services.AddScoped<IMaquinariaConsumoServices, MaquinariaConsumoServices
 builder.Services.AddScoped<IInstalacionesFijasConsumoServices, InstalacionesFijasConsumoServices>();
 builder.Services.AddScoped<IEmisionesFugitivasConsumoServices, EmisionesFugitivasConsumoServices>();
 builder.Services.AddScoped<IElectricidadConsumoServices, ElectricidadConsumoServices>();
+
 builder.Services.AddScoped<IInformeVehiculoService, InformeVehiculoService>();
+builder.Services.AddScoped<IInformeTransporteService, InformeTransporteService>();
+builder.Services.AddScoped<IInformeMaquinariaService, InformeMaquinariaService>();
+builder.Services.AddScoped<IInformeEmisionesFugitivasService, InformeEmisionesFugitivasService>();
+builder.Services.AddScoped<IInformeInstalacionesFijasService, InformeInstalacionesFijasService>();
+builder.Services.AddScoped<IInformeElectricidadService, InformeElectricidadService>();
+builder.Services.AddScoped<IInformeOtrosConsumosService, InformeOtrosConsumosService>();
 
 builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<Storage>();

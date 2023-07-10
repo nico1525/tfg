@@ -63,7 +63,7 @@ namespace API.Controllers.InformesControllers
             try
             { 
                 var InstalacionesFijas = await _context.InstalacionesFijas.FindAsync(id);
-                if (currentUser.OrganizacionId != InstalacionesFijas.OrganizacionId)
+                if (InstalacionesFijas == null || currentUser.OrganizacionId != InstalacionesFijas.OrganizacionId)
                 {
                     return BadRequest("Esta Instalación Fija no existe o no pertenece a esta organización");
                 }
@@ -91,7 +91,7 @@ namespace API.Controllers.InformesControllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var InstalacionesFijas = await _context.InstalacionesFijas.FindAsync(id);
-            if (currentUser.OrganizacionId != InstalacionesFijas.OrganizacionId)
+            if (InstalacionesFijas == null || currentUser.OrganizacionId != InstalacionesFijas.OrganizacionId)
             {
                 return BadRequest("Esta Instalación Fija no existe o no pertenece a esta organización");
             }

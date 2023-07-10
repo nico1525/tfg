@@ -63,7 +63,7 @@ namespace API.Controllers.InformesControllers
             try
             { 
                 var Maquinaria = await _context.Maquinaria.FindAsync(id);
-                if (currentUser.OrganizacionId != Maquinaria.OrganizacionId)
+                if (Maquinaria == null || currentUser.OrganizacionId != Maquinaria.OrganizacionId)
                 {
                     return BadRequest("Esta Maquinaria no existe o no pertenece a esta organización");
                 }
@@ -91,7 +91,7 @@ namespace API.Controllers.InformesControllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var Maquinaria = await _context.Maquinaria.FindAsync(id);
-            if (currentUser.OrganizacionId != Maquinaria.OrganizacionId)
+            if (Maquinaria == null || currentUser.OrganizacionId != Maquinaria.OrganizacionId)
             {
                 return BadRequest("Esta Maquinaria no existe o no pertenece a esta organización");
             }

@@ -63,7 +63,7 @@ namespace API.Controllers.InformesControllers
             try
             { 
                 var Transporte = await _context.Transporte.FindAsync(id);
-                if (currentUser.OrganizacionId != Transporte.OrganizacionId)
+                if (Transporte == null || currentUser.OrganizacionId != Transporte.OrganizacionId)
                 {
                     return BadRequest("Este Transporte no existe o no pertenece a esta organización");
                 }
@@ -91,7 +91,7 @@ namespace API.Controllers.InformesControllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var Transporte = await _context.Transporte.FindAsync(id);
-            if (currentUser.OrganizacionId != Transporte.OrganizacionId)
+            if (Transporte == null || currentUser.OrganizacionId != Transporte.OrganizacionId)
             {
                 return BadRequest("Este Transporte no  existe o no pertenece a esta organización");
             }

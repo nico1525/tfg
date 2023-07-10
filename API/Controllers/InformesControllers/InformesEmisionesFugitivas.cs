@@ -56,7 +56,7 @@ namespace API.Controllers.InformesControllers
             try
             { 
                 var EmisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(id);
-                if (currentUser.OrganizacionId != EmisionesFugitivas.OrganizacionId)
+                if (EmisionesFugitivas == null || currentUser.OrganizacionId != EmisionesFugitivas.OrganizacionId)
                 {
                     return BadRequest("Esta Emisión Fugitiva no existe o no pertenece a esta organización");
                 }
@@ -84,7 +84,7 @@ namespace API.Controllers.InformesControllers
             var currentUser = (Usuario)HttpContext.Items["Usuario"];
 
             var EmisionesFugitivas = await _context.EmisionesFugitivas.FindAsync(id);
-            if (currentUser.OrganizacionId != EmisionesFugitivas.OrganizacionId)
+            if (EmisionesFugitivas == null || currentUser.OrganizacionId != EmisionesFugitivas.OrganizacionId)
             {
                 return BadRequest("Esta Emisión Fugitiva no existe o no pertenece a esta organización");
             }

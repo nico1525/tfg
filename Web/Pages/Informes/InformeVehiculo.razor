@@ -1,4 +1,4 @@
-﻿@page "/informes/vehiculo/{id:int}"
+﻿@page "/informes/vehiculo/{id:int}/{vehiculo:int}"
 @using API.Helpers;
 @using API.Models;
 @using API.Models.Query_Models;
@@ -10,23 +10,92 @@
 @inject HttpClient Http
 
 
-<style></style>
+<style>
+    #container{
+        margin: 3% 27% 0 27%;
+    }
 
-<body></body>
+    #title{
+        text-align: center;
+        margin-bottom: 3%;
+        font-size: 36px;
+    }
+
+    #titlediv {
+        margin-bottom: 3%;
+        margin-top:2%;
+        text-align:center;
+    }
+    .data{
+        float:right;
+    }
+    #cantidad{
+        margin-top:1%;
+    }
+</style>
+
+<body>
+    @if (id == 0)
+    {
+        <div id="titlediv">
+            <label id="title">Consumo de todos los Vehículos entre las dos fechas seleccionadas</label>
+        </div>
+        <div id="container">
+            <div>
+                <label>Consumo Total (en kg CO2e): </label> <label class="data">@consumoTotal</label>
+            </div>
+            <div id="cantidad">
+                <label>Combustible Total consumido (en Litros): </label> <label class="data">@combustibleTotal</label>
+            </div>
+        </div>
+    }
+    @if (id == 1)
+    {
+        <div id="titlediv">
+            <label id="title">Consumo de el Vehículo con id: @vehiculo entre las dos fechas seleccionadas</label>
+        </div>
+        <div id="container">
+            <div>
+                <label>Consumo Total (en kg CO2e): </label> <label class="data">@consumoTotal</label>
+            </div>
+            <div id="cantidad">
+                <label>Combustible Total consumido (en Litros): </label> <label class="data">@combustibleTotal</label>
+            </div>
+        </div>
+    }
+    @if (id == 2)
+    {
+    }
+</body>
 
 @code {
     [Parameter]
     public int id { get; set; }
 
-    protected async override void OnInitialized()
+    [Parameter]
+    public int vehiculo { get; set; }
+
+    ConsumoCombustibleId consumo;
+    List<ConsumoMes> consumoMes;
+    float combustibleTotal = 0;
+    float consumoTotal = 0;
+    public void ConsumoVehiculo()
     {
-        ConsumoCombustibleId consumo;
-        List<ConsumoMes> consumoMes;
+        combustibleTotal = consumo.Total_combustible;
+        consumoTotal = consumo.Total_consumido;
+    }
+    public void ConsumoIdFechasVehiculo()
+    {
+    }
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
         switch (id)
         {
-            case 0: consumo = Storage.consumoVehiculoId; break;
-            case 1: consumo = Storage.consumoVehiculoId; break;
-            case 2: consumoMes = Storage.consumoMes; break;
+            case 0:
+            case 1: consumo = Storage.consumoVehiculoId; ConsumoVehiculo(); break;
+
+            case 2: consumoMes = Storage.consumoMes; ConsumoIdFechasVehiculo(); break;
         }
+        StateHasChanged();
     }
 }
