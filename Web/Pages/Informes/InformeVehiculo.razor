@@ -15,6 +15,17 @@
         margin: 3% 27% 0 27%;
     }
 
+    #container2{
+        width: 46%;
+        display: inline-block;
+        float: left;
+        margin:0 5% 0 2%;
+    }
+
+    #container3 {
+        width: 45%;
+        display: inline-block;
+    }
     #title{
         text-align: center;
         margin-bottom: 3%;
@@ -65,10 +76,22 @@
     }
     @if (id == 2)
     {
+        <div id="titlediv">
+            <label id="title">Consumo de el Vehículo con id: @vehiculo entre las dos fechas seleccionadas por Meses</label>
+        </div>
+        <div id="container2">
+            <Chart @ref="barChart" Type="ChartType.Bar" TItem="float"/>
+        </div>
+        <div id="container3">
+            <Chart @ref="barChart2" Type="ChartType.Bar" TItem="float" />
+        </div>
     }
 </body>
 
 @code {
+    Chart<float> barChart;
+    Chart<float> barChart2;
+
     [Parameter]
     public int id { get; set; }
 
@@ -79,23 +102,82 @@
     List<ConsumoMes> consumoMes;
     float combustibleTotal = 0;
     float consumoTotal = 0;
+
     public void ConsumoVehiculo()
     {
         combustibleTotal = consumo.Total_combustible;
         consumoTotal = consumo.Total_consumido;
+        StateHasChanged();
     }
-    public void ConsumoIdFechasVehiculo()
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f) };
+   
+    List<string> backgroundColors2 = new List<string> { ChartColor.FromRgba(54, 162, 235, 0.2f) };
+    List<string> borderColors2 = new List<string> {  ChartColor.FromRgba(54, 162, 235, 1f)};
+
+    public List<string> ListaMeses()
     {
+        List<string> nombremes = new();
+        foreach(var mes in consumoMes)
+        {
+            nombremes.Add(mes.Meses);
+        }
+        return nombremes;
+    }
+
+    public List<float> GetDataConsumo()
+    {
+        List<float> nombremes = new();
+        foreach (var mes in consumoMes)
+        {
+            nombremes.Add(mes.Consumo_mes);
+        }
+        return nombremes;
+    }
+    private BarChartDataset<float> GetBarChartDataset()
+    {
+        return new()
+            {
+                Label = "Consumo por Meses (en kg CO2e)",
+                Data = GetDataConsumo(),
+                BackgroundColor = backgroundColors,
+                BorderColor = borderColors,
+                BorderWidth = 1,
+                
+            };
+    }
+    private BarChartDataset<float> GetBarChartDataset2()
+    {
+        return new()
+            {
+                Label = "Combustible por Meses (en Litros)",
+                Data = GetDataCombustible(),
+                BackgroundColor = backgroundColors2,
+                BorderColor = borderColors2,
+                BorderWidth = 1
+            };
+    }
+    public List<float> GetDataCombustible()
+    {
+        List<float> nombremes = new();
+        foreach (var mes in consumoMes)
+        {
+            nombremes.Add(mes.Combustible_mes);
+        }
+        return nombremes;
     }
     protected override async Task OnAfterRenderAsync(bool first)
     {
         switch (id)
         {
-            case 0:
+            case 0: 
             case 1: consumo = Storage.consumoVehiculoId; ConsumoVehiculo(); break;
 
-            case 2: consumoMes = Storage.consumoMes; ConsumoIdFechasVehiculo(); break;
+            case 2: consumoMes = Storage.consumoMes; 
+                await barChart.Clear();
+                await barChart2.Clear();
+                await barChart.AddLabelsDatasetsAndUpdate(ListaMeses(), GetBarChartDataset());
+                await barChart2.AddLabelsDatasetsAndUpdate(ListaMeses(), GetBarChartDataset2()); break;
         }
-        StateHasChanged();
     }
 }

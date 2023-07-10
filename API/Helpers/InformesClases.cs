@@ -5,6 +5,7 @@
         public int Mes { get; set; }
         public float Consumo_mes { get; set; }
         public float Combustible_mes { get; set; }
+        public string Meses { get; set; }
     }
     public class ConsumoCombustibleId
     {

@@ -1,13 +1,13 @@
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Charts;
+using Blazorise.Icons.FontAwesome;
 using CurrieTechnologies.Razor.SweetAlert2;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.AspNetCore.Components.Web;
 using Web.Helpers;
 using Web.Services;
 using Web.Services.ConsumoServices;
 using Web.Services.InformesServices;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
@@ -42,7 +42,12 @@ builder.Services.AddScoped<ProtectedLocalStorage>();
 builder.Services.AddSingleton<Storage>();
 builder.Services.AddSweetAlert2();
 
-
+builder.Services
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    })
+    .AddBootstrap5Providers();
 
 var app = builder.Build();
 
