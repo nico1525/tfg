@@ -107,7 +107,7 @@
     float combustibleTotal = 0;
     float consumoTotal = 0;
 
-    public void ConsumoVehiculo()
+    public void Consumo()
     {
         combustibleTotal = consumo.Total_combustible;
         consumoTotal = consumo.Total_consumido;
@@ -142,7 +142,7 @@
     {
         return new()
             {
-                Label = "Consumo por Meses (en kg CO2e)",
+                Label = "Consumo del Vehículo (en kg CO2e)",
                 Data = GetDataConsumo(),
                 BackgroundColor = backgroundColors,
                 BorderColor = borderColors,
@@ -175,7 +175,7 @@
         switch (id)
         {
             case 0: 
-            case 1: consumo = Storage.consumoVehiculoId; ConsumoVehiculo(); break;
+            case 1: consumo = Storage.consumoVehiculoId; Consumo(); break;
 
             case 2: consumoMes = Storage.consumoMes; 
                 await barChart.Clear();

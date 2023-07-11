@@ -4,7 +4,7 @@
 @using Web.Helpers;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
-@inject IJSRuntime JsRuntime
+@inject SweetAlertService Swal;
 @layout NavBarLogged
 @inject HttpClient Http
 
@@ -62,6 +62,7 @@
         margin-bottom: 3%;
         text-align:center;
         font-size: 35px;
+        font-weight: bold;
     }
 </style>
 
@@ -126,10 +127,10 @@
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            await Swal.FireAsync("Ha habido un problema", e.Message, "error");
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", result);
+        await Swal.FireAsync("Usuario modificado correctamente", null, "success");
         Navigation.NavigateTo("/gestion/usuario");
     }
     async void Getusuario()

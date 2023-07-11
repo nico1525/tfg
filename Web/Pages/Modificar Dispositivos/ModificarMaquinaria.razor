@@ -4,7 +4,7 @@
 @using Web.Helpers;
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
-@inject IJSRuntime JsRuntime
+@inject SweetAlertService Swal;
 @layout Modificar
 @inject HttpClient Http
 
@@ -100,10 +100,10 @@
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            await Swal.FireAsync("Ha habido un problema", e.Message, "error");
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", result);
+        await Swal.FireAsync(result, null, "success");
         Navigation.NavigateTo("/gestion/maquinaria");
     }
     async void GetMaquinaria()

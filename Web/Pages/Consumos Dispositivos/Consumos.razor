@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager Navigation
-@page "/consumo"
+@page "/consumo/{link:int}"
 @using Web.Helpers;
 @layout NavBarLogged
 @inherits LayoutComponentBase
@@ -46,6 +46,7 @@
 
     #inilabel {
         font-size: 35px;
+        font-weight: bold;
     }
 </style>
 
@@ -64,23 +65,28 @@
             <option value="electricidad">Dispositivo eléctrico</option>
         </select>
     </div>
-    <button id="button" @onclick="SelectDispositivo">Elegir tipo Dispositivo</button>
+    <label id="button"></label>
+
     <div id="dispositivo">
         @Body
     </div>
 </body>
 
 @code {
-    private string? dispositivo = "vehiculo";
+    [Parameter]
+    public int link { get; set; }
+
+    private string? dispositivo2;
+    private string? dispositivo { get { return dispositivo2; } set { dispositivo2 = value; SelectDispositivo(); } }
 
     public void SelectDispositivo()
     {
-        if (dispositivo.Equals("otrosconsumos"))
+        if (dispositivo2.Equals("otrosconsumos"))
         {
-            Navigation.NavigateTo("consumo/otrosconsumos");
+            Navigation.NavigateTo("consumo/" + dispositivo2);
             return;
         }
-        Navigation.NavigateTo("consumo/" + dispositivo + "/0");
+        Navigation.NavigateTo("consumo/" + dispositivo2 + "/0");
     }
     protected override async Task OnInitializedAsync()
     {
@@ -89,5 +95,10 @@
             Navigation.NavigateTo("");
             return;
         }
+        if (link == 10)
+        {
+            Navigation.NavigateTo("consumo/vehiculo/0");
+        }
+
     }
 }

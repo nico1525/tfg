@@ -1,5 +1,5 @@
 ﻿@page "/cuenta"
-@inject IJSRuntime JsRuntime
+@inject SweetAlertService Swal;
 @using API.Helpers;
 @using API.Models;
 @using API.Models.Query_Models;
@@ -15,6 +15,7 @@
 <style>
     #inilabel {
        font-size: 35px;
+        font-weight: bold;
     }
 
     #navbar {
@@ -121,7 +122,7 @@
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            await Swal.FireAsync("Ha habido un problema", e.Message, "error");
             return;
         }
         StateHasChanged();

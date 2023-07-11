@@ -6,7 +6,7 @@
 @using Web.Services;
 @using Microsoft.AspNetCore.Components.Forms
 @using Web.Services.ConsumoServices;
-@inject IJSRuntime JsRuntime
+@inject SweetAlertService Swal;
 @layout ModificarConsumo
 @inject HttpClient Http
 
@@ -125,10 +125,10 @@
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+            await Swal.FireAsync("Ha habido un problema", e.Message, "error");
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", result);
+        await Swal.FireAsync("Consumo de Emisiones Fugitivas modificado correctamente", null, "success");
         Navigation.NavigateTo("/consumo/emisionesfugitivas/" + originalemisionesFugitivas.EmisionesFugitivasId);
     }
     async void GetEmisionesFugitivas()

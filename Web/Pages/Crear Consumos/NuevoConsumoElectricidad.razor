@@ -4,10 +4,10 @@
 @using API.Models.Consumos;
 @using Web.Helpers;
 @using Web.Services;
-@layout NuevoConsumo;
+@layout NuevoConsumo
 @using Microsoft.AspNetCore.Components.Forms
 @using Web.Services.ConsumoServices;
-@inject IJSRuntime JsRuntime
+@inject SweetAlertService Swal;
 @inject HttpClient Http
 
 
@@ -114,10 +114,10 @@
         }
         catch (Exception e)
         {
-            await JsRuntime.InvokeVoidAsync("alert", e.Message);
+                        await Swal.FireAsync("Ha habido un problema", e.Message, "error");
             return;
         }
-        await JsRuntime.InvokeVoidAsync("alert", result);
+        await Swal.FireAsync(result, null, "success");
     }
     protected override async Task OnInitializedAsync()
     {
