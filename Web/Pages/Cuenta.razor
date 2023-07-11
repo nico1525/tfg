@@ -24,17 +24,36 @@
         text-align: center;
     }
     .info{
+        font-family:Arial;
+        font-weight:bold;
         font-size: 20px;
     }
     .datos{
         font-size: 20px;
     }
     #container{
-        background-color:dimgray;
+        background-color: #DDC8E2;
         margin: 4% 20% 0 20%;
     }
     .box{
         margin-bottom: 2%;
+    }
+
+    .boton {
+        background-color: #78586F;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+    }
+
+        .boton:hover {
+            opacity: 1;
+        }
+        #button{
+        text-align: center;
     }
 </style>
 
@@ -44,35 +63,36 @@
     <div id="text"> <label id="inilabel">Información del Usuario</label></div>
     <div id="container">
         <div class="box">
-            <label class="info"><b>Id: </b></label>
+            <label class="info">Id: </label>
             <label class="datos">@usuario.Id</label>
         </div>
         <div class="box">
-            <label class="info"><b>Nombre y Apellidos: </b></label>
+            <label class="info">Nombre y Apellidos: </label>
             <label class="datos">@usuario.NombreApellidos</label>
         </div>
         
         <div class="box">
-            <label class="info"><b>Email: </b></label>
+            <label class="info">Email: </label>
             <label class="datos">@usuario.Email</label>
         </div>
         <div class="box">
-            <label class="info"><b>Contraseña: </b></label>
+            <label class="info">Contraseña: </label>
             <label class="datos">@usuario.Contraseña</label>
         </div>
         <div class="box">
-            <label class="info"><b>Nombre de la Organización: </b></label>
+            <label class="info">Nombre de la Organización: </label>
             <label class="datos">@usuario.NombreOrg</label>
         </div>
         <div class="box">
-            <label class="info"><b>Dirección de la Organización: </b></label>
+            <label class="info">Dirección de la Organización: </label>
             <label class="datos">@usuario.Dirección</label>
         </div>
         <div class="box">
-            <label class="info"><b>Rol: </b></label>
+            <label class="info">Rol: </label>
             <label class="datos">@rol</label>
         </div>
     </div>
+
 </body>
 
 
@@ -82,6 +102,11 @@
     string rol;
     [Inject]
     public IUsuarioServices UsuarioServices { get; set; }
+    public void modificar()
+    {
+        Navigation.NavigateTo("modificar/organizacion");
+    }
+
     async void GetInfoUser()
     {
         try

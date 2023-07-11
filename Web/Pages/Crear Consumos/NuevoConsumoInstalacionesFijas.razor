@@ -47,6 +47,10 @@
         background: #C6C6C6;
     }
 
+        .input:hover {
+            background-color: #AFADAD;
+        }
+
         .input:focus {
             background-color: #AFADAD;
             outline: none;
@@ -65,28 +69,28 @@
 
 <body>
     <div id="Agregar"></div>
-    <div id="labelnew"><label><b>Nuevo Consumo de Instalación Fija:</b></label></div>
+    <div id="labelnew"><label>Nuevo Consumo de Instalación Fija:</label></div>
     <div id="container">
         <EditForm Model="@instalacionesFijas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="matricula"><b>Id del Instalación Fija</b></label>
+            <label for="matricula">Id del Instalación Fija</label>
             <InputNumber class="input" id="InstalacionesFijasId" placeholder="  InstalacionesFijasId" @bind-Value="instalacionesFijas.InstalacionesFijasId" />
             <ValidationMessage For="@(() => instalacionesFijas.InstalacionesFijasId)" class="errormsg" />
 
-            <label for="matricula"><b>Cantidad de Combustible (en Litros)</b></label>
+            <label for="matricula">Cantidad de Combustible (Litros)</label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="instalacionesFijas.CantidadCombustible" />
             <ValidationMessage For="@(() => instalacionesFijas.CantidadCombustible)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <label for="matricula">Fecha de Inicio</label>
             <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="instalacionesFijas.FechaInicio" />
             <ValidationMessage For="@(() => instalacionesFijas.FechaInicio)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha Fin</b></label>
+            <label for="matricula">Fecha Fin</label>
             <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="instalacionesFijas.FechaFin" />
             <ValidationMessage For="@(() => instalacionesFijas.FechaFin)" class="errormsg" />
 
-            <label for="categoria"><b>Tipo de Combustible</b></label>
+            <label for="categoria">Tipo de Combustible</label>
             <InputSelect class="input" id="categoria" @bind-Value="instalacionesFijas.TipoCombustible">
                 <option value="gasoleoc">Gasóleo C</option>
                 <option value="gasoleob">Gasóleo B</option>

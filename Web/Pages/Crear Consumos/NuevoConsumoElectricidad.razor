@@ -25,7 +25,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -44,12 +44,16 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .errormsg {
@@ -65,28 +69,28 @@
 
 <body>
     <div id="Agregar"></div>
-    <div id="labelnew"><label><b>Nuevo Consumo Eléctrico:</b></label></div>
+    <div id="labelnew"><label>Nuevo Consumo Eléctrico:</label></div>
     <div id="container">
         <EditForm Model="@electricidad" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="matricula"><b>Id del Electricidad</b></label>
+            <label for="matricula">Id del Electricidad</label>
             <InputNumber class="input" id="ElectricidadId" placeholder="  ElectricidadId" @bind-Value="electricidad.ElectricidadId" />
             <ValidationMessage For="@(() => electricidad.ElectricidadId)" class="errormsg" />
 
-            <label for="matricula"><b>Kilovatios (kWh)</b></label>
+            <label for="matricula">Kilovatios (kWh)</label> 
             <InputNumber class="input" id="CantidadCombustible" placeholder="  Kilovatios (kWh)" @bind-Value="electricidad.Kwh" />
             <ValidationMessage For="@(() => electricidad.Kwh)" class="errormsg" />
 
-            <label for="matricula"><b>Id de la Comercializadora</b></label>
+            <label for="matricula">Id de la Comercializadora</label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  Id de la Comercializadora" @bind-Value="electricidad.ComercializadoraId" />
             <ValidationMessage For="@(() => electricidad.ComercializadoraId)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <label for="matricula">Fecha de Inicio</label>
             <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="electricidad.FechaInicio" />
             <ValidationMessage For="@(() => electricidad.FechaInicio)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha Fin</b></label>
+            <label for="matricula">Fecha Fin</label>
             <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="electricidad.FechaFin" />
             <ValidationMessage For="@(() => electricidad.FechaFin)" class="errormsg" />
 

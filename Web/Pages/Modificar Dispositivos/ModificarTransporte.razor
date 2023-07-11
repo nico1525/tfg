@@ -17,7 +17,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -36,12 +36,16 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .errormsg {
@@ -61,10 +65,10 @@
         <EditForm Model="@transporte" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id del transporte</b></label>
+            <label>Id del transporte</label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
+            <label for="edificio">Edificio/Sede</label>
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="transporte.Edificio" />
             <ValidationMessage For="@(() => transporte.Edificio)" class="errormsg" />
 

@@ -107,20 +107,11 @@ namespace API.Controllers.InformesControllers
                                           Consumo_mes = g.Sum(r => r.Consumo),
                                           Combustible_mes = g.Sum(r => r.CantidadCombustible),
                                           Mes = g.Key,
-                                          Meses = ObtenerNombreMes(g.Key)
+                                          Meses = Metodos.ObtenerNombreMes(g.Key)
                                       }).ToList();
             return query;
         }
 
-        public static string ObtenerNombreMes(int numeroMes)
-        {
-            string[] nombresMeses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
-
-            if (numeroMes >= 1 && numeroMes <= 12)
-            {
-                return nombresMeses[numeroMes - 1];
-            }
-            else { return "mes inválido"; }
-        }
+       
     }
 }

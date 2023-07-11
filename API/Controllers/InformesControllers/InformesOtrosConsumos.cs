@@ -100,7 +100,8 @@ namespace API.Controllers.InformesControllers
                                                    select new ConsumoMesOtrosConsumos()
                                                    {
                                                        Consumo_mes = g.Sum(r => r.Consumo),
-                                                       Cantidad_consumida_mes = g.Sum(r => r.CantidadConsumo)
+                                                       Cantidad_consumida_mes = g.Sum(r => r.CantidadConsumo),
+                                                       Meses = Metodos.ObtenerNombreMes(g.Key)
                                                    }).ToList();
             return query;
 

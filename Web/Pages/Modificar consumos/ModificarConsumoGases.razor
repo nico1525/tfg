@@ -21,7 +21,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -40,11 +40,15 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
+        .input:hover {
+            background-color: #AFADAD;
+        }
+
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
         }
 
@@ -65,22 +69,22 @@
         <EditForm Model="@emisionesFugitivas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id del emisionesFugitivas</b></label>
+            <label>Id del emisionesFugitivas</label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="matricula"><b>Cantidad de Recarga</b></label>
+            <label for="matricula">Cantidad de Recarga (kg)</label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  Recarga" @bind-Value="emisionesFugitivas.Recarga" />
             <ValidationMessage For="@(() => emisionesFugitivas.Recarga)" class="errormsg" />a
 
-            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <label for="matricula">Fecha de Inicio</label>
             <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="emisionesFugitivas.FechaInicio" />
             <ValidationMessage For="@(() => emisionesFugitivas.FechaInicio)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha Fin</b></label>
+            <label for="matricula">Fecha Fin</label>
             <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="emisionesFugitivas.FechaFin" />
             <ValidationMessage For="@(() => emisionesFugitivas.FechaFin)" class="errormsg" />
 
-            <label for="categoria"><b>Tipo de Gas</b></label>
+            <label for="categoria">Tipo de Gas</label>
             <InputSelect class="input" id="categoria" @bind-Value="emisionesFugitivas.Gas">
                 @*<option value="E5">E5</option>
                 <option value="E10">E10</option>

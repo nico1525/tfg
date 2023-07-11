@@ -68,7 +68,7 @@ namespace API.Controllers.InformesControllers
                                            select new ConsumoEmisionesFugitivasId()
                                            {
                                                Total_consumido = g.Sum(r => r.Consumo),
-                                               Total_gases = g.Sum(r => r.Recarga),
+                                               Total_gases = g.Sum(r => r.Recarga)
                                            }).Single();
             } 
             catch(Exception e)
@@ -99,7 +99,8 @@ namespace API.Controllers.InformesControllers
                                       {
                                           Consumo_mes = g.Sum(r => r.Consumo),
                                           Gases_mes = g.Sum(r => r.Recarga),
-                                          Mes = g.Key
+                                          Mes = g.Key,
+                                          Meses = Metodos.ObtenerNombreMes(g.Key)
                                       }).ToList();
             return query;
         }

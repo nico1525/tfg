@@ -66,19 +66,19 @@
 
 <body>
     <div id="Agregar"></div>
-    <div id="labelnew"><label><b>Nuevo Vehículo:</b></label></div>
+    <div id="labelnew"><label>Nuevo Vehículo:</label></div>
     <div id="container">
     <EditForm Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
 
-        <label for="edificio"><b>Edificio/Sede</b></label>
+        <label for="edificio">Edificio/Sede</label>
         <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="vehiculo.Edificio" />
         <ValidationMessage For="@(() => vehiculo.Edificio)" class="errormsg" />
 
-            <label for="matricula"><b>Matrícula</b></label>
+            <label for="matricula">Matrícula</label>
         <InputText class="input" id="matricula" placeholder="  Matricula" @bind-Value="vehiculo.Matricula" />
         <ValidationMessage For="@(() => vehiculo.Matricula)" class="errormsg" />
-        <label for="categoria"><b>Categoría del Vehiculo</b></label>
+        <label for="categoria">Categoría del Vehiculo</label>
             <InputSelect class="input" id="categoria" @bind-Value="vehiculo.CategoriaVehiculo">
                 <option value="M1">Categoría M1</option>
                 <option value="M2">Categoría M2</option>

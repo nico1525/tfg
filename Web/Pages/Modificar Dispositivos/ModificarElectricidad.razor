@@ -17,7 +17,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -36,12 +36,16 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .errormsg {
@@ -61,18 +65,18 @@
         <EditForm Model="@electricidad" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id del electricidad</b></label>
+            <label>Id del electricidad</label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
+            <label for="edificio">Edificio/Sede</label>
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="electricidad.Edificio" />
             <ValidationMessage For="@(() => electricidad.Edificio)" class="errormsg" />
 
-            <label for="categoria"><b>Nombre del Dispositivo</b></label>
+            <label for="categoria">Nombre del Dispositivo</label>
             <InputText class="input" id="Dispositivo" placeholder="  Nombre del Dispositivo" @bind-Value="electricidad.Dispositivo" />
             <ValidationMessage For="@(() => electricidad.Dispositivo)" class="errormsg" />
 
-            <label for="categoria"><b>Descripción del Dispositivo</b></label>
+            <label for="categoria">Descripción del Dispositivo</label>
             <InputText class="input" id="Descripcion" placeholder="  Descripción del Dispositivo" @bind-Value="electricidad.Descripcion" />
             <ValidationMessage For="@(() => electricidad.Descripcion)" class="errormsg" />
 

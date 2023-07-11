@@ -19,7 +19,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -38,11 +38,11 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
         }
 
@@ -63,14 +63,14 @@
         <EditForm Model="@emisionesfugitivas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id de la Emisión Fugitiva</b></label>
+            <label>Id de la Emisión Fugitiva</label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
+            <label for="edificio">Edificio/Sede</label>
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="emisionesfugitivas.Edificio" />
             <ValidationMessage For="@(() => emisionesfugitivas.Edificio)" class="errormsg" />
 
-            <label for="matricula"><b>Nombre del Equipo</b></label>
+            <label for="matricula">Nombre del Equipo</label>
             <InputText class="input" id="matricula" placeholder="  Nombre del Equipo" @bind-Value="emisionesfugitivas.NombreEquipo" />
             <ValidationMessage For="@(() => emisionesfugitivas.NombreEquipo)" class="errormsg" />
 

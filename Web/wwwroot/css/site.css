@@ -26,3 +26,11 @@
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+* {
+    font-family: 'Roboto';
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}

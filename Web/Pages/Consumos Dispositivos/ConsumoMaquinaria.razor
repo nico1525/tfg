@@ -33,7 +33,7 @@
 
     .tbl-content thead th {
         position: sticky;
-        background-color: aqua;
+        background-color: #A37897;
         top: 0px;
         border-bottom: solid 1px black;
     }
@@ -65,13 +65,14 @@
         color: #000;
         border-right: solid 1px black;
         text-align: center;
-        background-color: aquamarine;
+        background-color: #DDC8E2;
     }
 
     #filtro {
         width: 100%;
         padding: 10px 0px;
-        background-color: aqua;
+        background-color: #A37897;
+        border-radius: 10px 10px 0 0;
     }
 
     #input {
@@ -90,10 +91,10 @@
 </style>
 
 <body>
-    <h1><b>Lista de Consumo de Maquinaria</b></h1>
+    <h1>Lista de Consumo de Maquinaria</h1>
 
     <div id="filtro">
-        <label id="tipolabel"><b>Filtrar:</b></label>
+        <label id="tipolabel">Filtrar:</label>
 
         <select @bind="tipofiltro" id="select">
             <option value="id">ID</option>
@@ -114,11 +115,11 @@
             <thead>
                 <tr>
                     <th>Id Consumo</th>
-                    <th>Consumo</th>
+                    <th>Consumo (kg CO2e)</th>
                     <th>Fecha de Inicio</th>
                     <th>Fecha Fin</th>
                     <th>Tipo de Combustible</th>
-                    <th>Cantidad de Combustible</th>
+                    <th>Cantidad de Combustible (litros)</th>
                     <th>Id de la Maquinaria</th>
                     @if (Storage.role == API.Helpers.Role.OrgAdmin)
                     {

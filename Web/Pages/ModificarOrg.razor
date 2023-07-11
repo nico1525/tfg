@@ -13,7 +13,7 @@
 
 <style>
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -32,12 +32,16 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .errormsg {
@@ -68,19 +72,19 @@
             <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
                 <DataAnnotationsValidator />
 
-                <label for="edificio"><b>Nombre de la Organización</b></label>
+                <label for="edificio">Nombre de la Organización</label>
                 <InputText class="input" id="edificio" placeholder="  Nombre de la Organización" @bind-Value="org.NombreOrg" />
                 <ValidationMessage For="@(() => org.NombreOrg)" class="errormsg" />
 
-                <label for="matricula"><b>Dirección</b></label>
+                <label for="matricula">Dirección</label>
                 <InputText class="input" id="matricula" placeholder="  Dirección" @bind-Value="org.Direccion" />
                 <ValidationMessage For="@(() => org.Direccion)" class="errormsg" />
 
-                <label for="matricula"><b>Email</b></label>
+                <label for="matricula">Email</label>
                 <InputText class="input" id="matricula" placeholder="  Email" @bind-Value="org.Email" />
                 <ValidationMessage For="@(() => org.Email)" class="errormsg" />
 
-                <label for="matricula"><b>Contraseña</b></label>
+                <label for="matricula">Contraseña</label>
                 <InputText class="input" id="matricula" placeholder="  Contraseña" @bind-Value="org.Contraseña" />
                 <ValidationMessage For="@(() => org.Contraseña)" class="errormsg" />
 

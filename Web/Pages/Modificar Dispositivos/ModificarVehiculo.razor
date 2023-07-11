@@ -17,7 +17,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -35,13 +35,17 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
     .input:focus {
-        background-color: #ddd;
+            background-color: #AFADAD;
         outline: none;
     }
+
+        .input:hover {
+            background-color: #AFADAD;
+        }
 
     .errormsg {
         color: red;
@@ -60,14 +64,14 @@
     <EditForm Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
 
-            <label><b>Id del vehículo</b></label>
+            <label>Id del vehículo</label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-        <label for="edificio"><b>Edificio/Sede</b></label>
+        <label for="edificio">Edificio/Sede</label>
         <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="vehiculo.Edificio" />
         <ValidationMessage For="@(() => vehiculo.Edificio)" class="errormsg" />
 
-            <label for="matricula"><b>Matrícula</b></label>
+            <label for="matricula">Matrícula</label>
         <InputText class="input" id="matricula" placeholder="  Matricula" @bind-Value="vehiculo.Matricula" />
         <ValidationMessage For="@(() => vehiculo.Matricula)" class="errormsg" />
 

@@ -25,7 +25,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -44,11 +44,15 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
+        .input:hover {
+            background-color: #AFADAD;
+        }
+
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
         }
 
@@ -65,28 +69,28 @@
 
 <body>
     <div id="Agregar"></div>
-    <div id="labelnew"><label><b>Nuevo Consumo de Emisiones Fugitivas:</b></label></div>
+    <div id="labelnew"><label>Nuevo Consumo de Emisiones Fugitivas:</label></div>
     <div id="container">
         <EditForm Model="@emisionesFugitivas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="matricula"><b>Id del EmisionesFugitivas</b></label>
+            <label for="matricula">Id del EmisionesFugitivas</label>
             <InputNumber class="input" id="EmisionesFugitivasId" placeholder="  EmisionesFugitivasId" @bind-Value="emisionesFugitivas.EmisionesFugitivasId" />
             <ValidationMessage For="@(() => emisionesFugitivas.EmisionesFugitivasId)" class="errormsg" />
 
-            <label for="matricula"><b>Cantidad de la Recarga</b></label>
+            <label for="matricula">Cantidad de la Recarga (kg)</label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  Recarga" @bind-Value="emisionesFugitivas.Recarga" />
             <ValidationMessage For="@(() => emisionesFugitivas.Recarga)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <label for="matricula">Fecha de Inicio</label>
             <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="emisionesFugitivas.FechaInicio" />
             <ValidationMessage For="@(() => emisionesFugitivas.FechaInicio)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha Fin</b></label>
+            <label for="matricula">Fecha Fin</label>
             <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="emisionesFugitivas.FechaFin" />
             <ValidationMessage For="@(() => emisionesFugitivas.FechaFin)" class="errormsg" />
 
-            <label for="categoria"><b>Tipo de Gas</b></label>
+            <label for="categoria">Tipo de Gas</label>
             <InputSelect class="input" id="categoria" @bind-Value="emisionesFugitivas.Gas">
                 <option value="HFC-23">HFC-23</option>
                 <option value="HFC-32">HFC-32</option>

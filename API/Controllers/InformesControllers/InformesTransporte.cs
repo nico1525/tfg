@@ -106,7 +106,8 @@ namespace API.Controllers.InformesControllers
                                       {
                                           Consumo_mes = g.Sum(r => r.Consumo),
                                           Combustible_mes = g.Sum(r => r.CantidadCombustible),
-                                          Mes = g.Key
+                                          Mes = g.Key,                   
+                                          Meses = Metodos.ObtenerNombreMes(g.Key)
                                       }).ToList();
             return query;
         }

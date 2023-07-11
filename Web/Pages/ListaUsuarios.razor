@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager Navigation
 @page "/gestion/usuario"
+@using API.Helpers;
 @using API.Models;
 @using Microsoft.AspNetCore.Components.Web.Virtualization;
 @using Web.Helpers;
@@ -105,10 +106,10 @@
 <body>
     <div id="navbar">
     
-    <h1><b>Lista de Usuarios</b></h1>
+    <h1>Lista de Usuarios</h1>
 
     <div id="filtro">
-        <label id="tipolabel"><b>Filtrar:</b></label>
+        <label id="tipolabel">Filtrar:</label>
 
         <select @bind="tipofiltro" id="select">
             <option value="id">ID</option>
@@ -129,6 +130,7 @@
                 <tr>
                     <th>Id Usuario</th>
                     <th>Nombre y Apellidos</th>
+                        <th>Rol</th>
                     <th>Email</th>
                     <th>Contraseña</th>
                     <th class="headerbuttons">Modificar</th>
@@ -142,7 +144,15 @@
                     <tr>
                         <td>@usuario.Id</td>
                         <td>@usuario.NombreApellidos</td>
-                        <td>@usuario.Email</td>
+                            @if (usuario.Role == Role.OrgAdmin)
+                            {
+                                <td>Administrador</td>
+                            }
+                            else
+                            {
+                                <td>Usuario</td>
+                            }
+                            <td>@usuario.Email</td>
                         <td>@usuario.Contraseña</td>
                         <td><button class="botones" @onclick="(() => Modificar(usuario.Id))">M</button></td>
                         <td><button class="botones" @onclick="(() => Eliminar(usuario.Id, usuario))">X</button></td>

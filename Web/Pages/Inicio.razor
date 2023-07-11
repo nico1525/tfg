@@ -34,7 +34,7 @@
             {
                 UsuarioServices = new UsuarioServices(Http);
                 var response = await UsuarioServices.GetUsuario();
-
+                Storage.role = response.Rol;
             }
             catch (Exception e)
             {

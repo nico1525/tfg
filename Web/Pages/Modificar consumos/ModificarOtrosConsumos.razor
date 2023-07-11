@@ -21,7 +21,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -40,12 +40,16 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .errormsg {
@@ -65,34 +69,34 @@
         <EditForm Model="@OtrosConsumos" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id del OtrosConsumos</b></label>
+            <label>Id del OtrosConsumos</label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
+            <label for="edificio">Edificio/Sede</label>
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="OtrosConsumos.Edificio" />
             <ValidationMessage For="@(() => OtrosConsumos.Edificio)" class="errormsg" />
 
-            <label for="edificio"><b>Nombre</b></label>
+            <label for="edificio">Nombre</label>
             <InputText class="input" id="Nombre" placeholder="  Nombre" @bind-Value="OtrosConsumos.Nombre" />
             <ValidationMessage For="@(() => OtrosConsumos.Nombre)" class="errormsg" />
 
-            <label for="edificio"><b>Categoria de la Actividad</b></label>
+            <label for="edificio">Categoria de la Actividad</label>
             <InputText class="input" id="CategoriaActividad" placeholder="Categoria de la Actividad" @bind-Value="OtrosConsumos.CategoriaActividad" />
             <ValidationMessage For="@(() => OtrosConsumos.CategoriaActividad)" class="errormsg" />
 
-            <label for="matricula"><b>Cantidad de Consumo</b></label>
+            <label for="matricula">Cantidad de Consumo</label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  Cantidad de Consumo" @bind-Value="OtrosConsumos.CantidadConsumo" />
             <ValidationMessage For="@(() => OtrosConsumos.CantidadConsumo)" class="errormsg" />
 
-            <label for="matricula"><b>Factor de Emision</b></label>
+            <label for="matricula">Factor de Emision</label>
             <InputNumber class="input" id="FactorEmision" placeholder="Factor de Emision" @bind-Value="OtrosConsumos.FactorEmision" />
             <ValidationMessage For="@(() => OtrosConsumos.FactorEmision)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <label for="matricula">Fecha de Inicio</label>
             <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="OtrosConsumos.FechaInicio" />
             <ValidationMessage For="@(() => OtrosConsumos.FechaInicio)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha Fin</b></label>
+            <label for="matricula">Fecha Fin</label>
             <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="OtrosConsumos.FechaFin" />
             <ValidationMessage For="@(() => OtrosConsumos.FechaFin)" class="errormsg" />
 

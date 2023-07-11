@@ -39,6 +39,10 @@
     }
     .data{
         float:right;
+        font-size: 22px;
+    }
+    .texto{
+        font-size: 22px;
     }
     #cantidad{
         margin-top:1%;
@@ -53,10 +57,10 @@
         </div>
         <div id="container">
             <div>
-                <label>Consumo Total (en kg CO2e): </label> <label class="data">@consumoTotal</label>
+                <label class="texto">Consumo Total (en kg CO2e): </label> <label class="data">@consumoTotal</label>
             </div>
             <div id="cantidad">
-                <label>Combustible Total consumido (en Litros): </label> <label class="data">@combustibleTotal</label>
+                <label class="texto">Combustible Total consumido (en Litros): </label> <label  class="data">@combustibleTotal</label>
             </div>
         </div>
     }
@@ -67,17 +71,17 @@
         </div>
         <div id="container">
             <div>
-                <label>Consumo Total (en kg CO2e): </label> <label class="data">@consumoTotal</label>
+                <label class="texto">Consumo Total (en kg CO2e): </label> <label class="data">@consumoTotal</label>
             </div>
             <div id="cantidad">
-                <label>Combustible Total consumido (en Litros): </label> <label class="data">@combustibleTotal</label>
+                <label class="texto">Combustible Total consumido (en Litros): </label> <label class="data">@combustibleTotal</label>
             </div>
         </div>
     }
     @if (id == 2)
     {
         <div id="titlediv">
-            <label id="title">Consumo de el Vehículo con id: @vehiculo entre las dos fechas seleccionadas por Meses</label>
+            <label id="title">Consumo de el Vehículo con id: @vehiculo entre las dos fechas seleccionadas agrupado por Meses</label>
         </div>
         <div id="container2">
             <Chart @ref="barChart" Type="ChartType.Bar" TItem="float"/>
@@ -109,11 +113,11 @@
         consumoTotal = consumo.Total_consumido;
         StateHasChanged();
     }
-    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f) };
-    List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f) };
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(209, 102, 247, 0.4f) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba(209, 102, 247, 1f) };
    
-    List<string> backgroundColors2 = new List<string> { ChartColor.FromRgba(54, 162, 235, 0.2f) };
-    List<string> borderColors2 = new List<string> {  ChartColor.FromRgba(54, 162, 235, 1f)};
+    List<string> backgroundColors2 = new List<string> { ChartColor.FromRgba(246, 44, 37, 0.4f) };
+    List<string> borderColors2 = new List<string> { ChartColor.FromRgba(246, 44, 37, 1f) };
 
     public List<string> ListaMeses()
     {

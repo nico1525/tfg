@@ -90,11 +90,11 @@
         <EditForm Model="@login" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="email"><b>Email</b></label>
+            <label for="email">Email</label>
             <InputText  class="input" id="email" placeholder="Email" @bind-Value="login.Email" />
             <ValidationMessage For="@(() => login.Email)" class="errormsg" />
 
-            <label for="password"><b>Contraseña</b></label>
+            <label for="password">Contraseña</label>
             <InputText  class="input" id="password" placeholder="Contraseña" @bind-Value="login.Contraseña" />
             <ValidationMessage For="@(() => login.Contraseña)" class="errormsg" />
 

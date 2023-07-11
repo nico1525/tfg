@@ -91,7 +91,7 @@
     }
 
     .dropdown-content a:hover {
-        background-color: #ddd;
+        background-color: #AFADAD;
     }
 
     .dropdown:hover .dropdown-content {
@@ -130,19 +130,8 @@
                 </div>
             </div>
         </li>
-        <li>
-            <div class="dropdown">
-                <a href="/" class="dropbtn">
-                    Informes
-                    <i class="fa fa-caret-down"></i>
-                </a>
-                <div class="dropdown-content">
-                    <a href="informes">Generar Informe</a>
-                    <a href="#">Gráficas</a>
-                    <a href="#">Historial informes</a>
-                </div>
-            </div>
-        </li>
+        <li><a id="alta" @onclick="navigateinforme">Informes</a></li>
+
             @if (Storage.role == Role.OrgAdmin)
             {
             <li>
@@ -194,5 +183,10 @@
     {
         Navigation.NavigateTo("inicio");
         Navigation.NavigateTo("nuevoconsumo");
+    }
+    public void navigateinforme()
+    {
+        Navigation.NavigateTo("inicio");
+        Navigation.NavigateTo("informes");
     }
 }

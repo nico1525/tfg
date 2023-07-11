@@ -23,7 +23,7 @@
     }
 
     .registerbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -50,12 +50,16 @@
         margin: 5px 0 22px 0px;
         display: inline-block;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .container {
@@ -82,15 +86,15 @@
         <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="name"><b>Nombre del Usuario</b></label>
+            <label for="name">Nombre del Usuario</label>
             <InputText class="input" id="name" placeholder="  Nombre del ususario" @bind-Value="org.NombreApellidos" />
             <ValidationMessage For="@(() => org.NombreApellidos)" class="errormsg" />
 
-            <label for="email"><b>Email</b></label>
+            <label for="email">Email</label>
             <InputText class="input" id="email" placeholder="  Email" @bind-Value="org.Email" />
             <ValidationMessage For="@(() => org.Email)" class="errormsg" />
 
-            <label for="password"><b>Contraseña</b></label>
+            <label for="password">Contraseña</label>
             <InputText class="input" id="password" placeholder="  Contraseña" @bind-Value="org.Contraseña" />
             <ValidationMessage For="@(() => org.Contraseña)" class="errormsg" />
 

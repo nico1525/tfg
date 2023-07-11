@@ -23,7 +23,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -42,12 +42,16 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .errormsg {
@@ -63,16 +67,16 @@
 
 <body>
     <div id="Agregar"></div>
-    <div id="labelnew"><label><b>Nuevo Transporte:</b></label></div>
+    <div id="labelnew"><label>Nuevo Transporte:</label></div>
     <div id="container">
         <EditForm Model="@transporte" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label for="edificio"><b>Edificio/Sede</b></label>
+            <label for="edificio">Edificio/Sede</label>
             <InputText class="input" id="edificio" placeholder="  Edificio/Sede" @bind-Value="transporte.Edificio" />
             <ValidationMessage For="@(() => transporte.Edificio)" class="errormsg" />
 
-            <label for="categoria"><b>Tipo de Transporte</b></label>
+            <label for="categoria">Tipo de Transporte</label>
             <InputSelect class="input" id="TipoTransporte" @bind-Value="transporte.TipoTransporte">
                 <option value="ferrocarril">Ferrocarril</option>
                 <option value="maritimo">Marítimo</option>
@@ -80,7 +84,7 @@
             </InputSelect>
             <ValidationMessage For="@(() => transporte.TipoTransporte)" class="errormsg" />
 
-            <label for="categoria"><b>Combustible del Transporte</b></label>
+            <label for="categoria">Combustible del Transporte</label>
             <InputSelect class="input" id="CombustibleTransporte" @bind-Value="transporte.CombustibleTransporte">
                 <option value="gasoleo">Gasóleo</option>
                 <option value="fueloleo">Fuelóleo</option>

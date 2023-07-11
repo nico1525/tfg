@@ -21,7 +21,7 @@
     }
 
     .iniciarbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -40,12 +40,16 @@
         padding: 15px 0px;
         margin: 5px 0 22px 0px;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
         .input:focus {
-            background-color: #ddd;
+            background-color: #AFADAD;
             outline: none;
+        }
+
+        .input:hover {
+            background-color: #AFADAD;
         }
 
     .errormsg {
@@ -65,22 +69,22 @@
         <EditForm Model="@maquinaria" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <label><b>Id del maquinaria</b></label>
+            <label>Id del maquinaria</label>
             <InputText class="input" id="edificio" readonly="@true" @bind-Value="@id" />
 
-            <label for="matricula"><b>Cantidad de Combustible</b></label>
+            <label for="matricula">Cantidad de Combustible (Litros)</label>
             <InputNumber class="input" id="CantidadCombustible" placeholder="  CantidadCombustible" @bind-Value="maquinaria.CantidadCombustible" />
             <ValidationMessage For="@(() => maquinaria.CantidadCombustible)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha de Inicio</b></label>
+            <label for="matricula">Fecha de Inicio</label>
             <InputDate class="input" id="FechaInicio" placeholder="  FechaInicio" @bind-Value="maquinaria.FechaInicio" />
             <ValidationMessage For="@(() => maquinaria.FechaInicio)" class="errormsg" />
 
-            <label for="matricula"><b>Fecha Fin</b></label>
+            <label for="matricula">Fecha Fin</label>
             <InputDate class="input" id="FechaFin" placeholder="  FechaFin" @bind-Value="maquinaria.FechaFin" />
             <ValidationMessage For="@(() => maquinaria.FechaFin)" class="errormsg" />
 
-            <label for="categoria"><b>Tipo de Combustible</b></label>
+            <label for="categoria">Tipo de Combustible</label>
             <InputSelect class="input" id="categoria" @bind-Value="maquinaria.TipoCombustible">
                 <option value="E5">E5</option>
                 <option value="E10">E10</option>

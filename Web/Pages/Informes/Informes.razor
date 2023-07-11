@@ -16,8 +16,12 @@
 <PageTitle>Informes</PageTitle>
 
 <style>
-    #glabel {
+    .glabel {
         font-size: 18px;
+    }
+    #tipo{
+        margin-left: 3%;
+        margin-top:1%;
     }
 
     #inilabel {
@@ -35,7 +39,28 @@
         font-size: 1px;
     }
     #filtro{
-        
+        margin-left: 3%;
+    }
+    #id{
+        margin-left:3%;
+    }
+    #button{
+        margin-top:1%;
+        text-align:center;
+    }
+    .boton{
+        background-color: #78586F;
+        color: white;
+        padding: 16px 20px;
+        margin: 10px 0;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        margin-left:16%;
+    }
+
+        .boton:hover {
+        opacity: 1;
     }
 </style>
 
@@ -45,9 +70,9 @@
     <div id="navbar">
     </div>
     <div id="text"> <label id="inilabel">Generación de Informes</label></div>
-    <label id="glabel">Generar Informe de: </label>
+        <label id="tipo" class="glabel">Tipo de dispositivo: </label>
             <select @bind="dispositivo" id="select">
-                <option value="vehiculo">Vehiculo</option>
+                <option value="vehiculo">Vehículo</option>
                 <option value="transporte">Transporte</option>
                 <option value="maquinaria">Maquinaria</option>
                 <option value="emisionfugitiva">Emisiones Fugitivas</option>
@@ -56,42 +81,42 @@
                 <option value="otros">Consumos de otras fuentes</option>
                 <option value="todos">Todos los Dispositivos</option>
             </select>
-    @if (filtroid2.Equals("sinid"))
-    {
-        <label id="glabel">para todos los dispositivos </label>
-    }
-    else
-    {
-        <label id="glabel">Con id: </label>
-        <InputText placeholder="Id del Dispositivo" @bind-Value="id" />
-    }
+        @if (filtromes2.Equals("no"))
+        {
+            <label id="tipo" class="glabel">Elegir dispositivo: </label>
+
+            <select @bind="filtroid" id="select">
+                <option value="sinid">Todos los dispositivos</option>
+                <option value="conid">Dispositivo por su Id</option>
+            </select>
+        }
+        @if (filtroid2.Equals("conid"))
+        {
+            <label id="id" class="glabel"> Id del Dispositivo: </label>
+            <InputText placeholder="Id del Dispositivo" @bind-Value="id" />
+        }
     
 
-   <label id="glabel"> entre las fechas</label>
+        <div id="tipo">
+            <label class="glabel"> Seleccionar consumos entre las fechas</label>
 
-    <InputDate  @bind-Value="fechaini" />
+            <InputDate  @bind-Value="fechaini" />
     
-    <label id="glabel"> y</label>
+            <label class="glabel"> y</label>
     
-    <InputDate  @bind-Value="fechafin" />
-   
-    <button class="alta" @onclick="generar">Generar Informe</button>
-    
-    <div id="filtro"> <label id="glabel"> Filtrar por :</label>
+            <InputDate  @bind-Value="fechafin" />
+        
+
+        
+        <label id="filtro"  class="glabel"> Filtrar por :</label>
         <select @bind="filtromes" id="select">
             <option value="no">Consumo Total</option>
             <option value="meses">Consumo por Meses</option>
         </select>
+            <button class="boton" @onclick="generar">Obtener Informe Consumo</button>
 
-    @if (filtromes2.Equals("no"))
-    {
-            <select @bind="filtroid" id="select">
-                <option value="sinid">Todos los dispositivos</option>
-                <option value="conid">Dispositivo por Id</option>
-            </select>
-    }
-    </div>
-    
+        </div>
+
     <div id="dispositivo">
         @Body
     </div>
@@ -143,7 +168,7 @@
     public void VerId()
     {
         if (filtroid2.Equals("sinid")) { id = "0"; }
-        else { id = ""; }
+        else { id = "0"; }
         StateHasChanged();
     }
     public async void generar()
@@ -157,71 +182,85 @@
                     case ("vehiculo", "sinid"):
                         consumo = await informeServices.AllVehiculoFechas(fechaini, fechafin);
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/vehiculo/0/0");
                         break;
                     case ("vehiculo", "conid"):
                         consumo = await informeServices.VehiculosFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo($"informes/vehiculo/1/{id}");
                         break;
                     case ("transporte", "sinid"):
                         consumo = await informeTransporteServices.AllTransporteFechas(fechaini, fechafin);
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/transporte/0");
                         break;
                     case ("transporte", "conid"):
                         consumo = await informeTransporteServices.TransportesFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/transporte/1");
                         break;
                     case ("maquinaria", "sinid"):
                         consumo = await informemaquinariaServices.AllMaquinariaFechas(fechaini, fechafin);
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/maquinaria/0");
                         break;
                     case ("maquinaria", "conid"):
                         consumo = await informemaquinariaServices.MaquinariasFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/maquinaria/1");
                         break;
                     case ("emisionfugitiva", "sinid"):
                         ConsumoEmisionesFugitivas = await informeEmisionesFugitivasServices.AllEmisionesFugitivasFechas(fechaini, fechafin);
                         Storage.ConsumoEmisionesFugitivas = ConsumoEmisionesFugitivas;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/emisionfugitiva/0");
                         break;
                     case ("emisionfugitiva", "conid"):
                         ConsumoEmisionesFugitivas = await informeEmisionesFugitivasServices.EmisionesFugitivasFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.ConsumoEmisionesFugitivas = ConsumoEmisionesFugitivas;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/emisionfugitiva/1");
                         break;
                     case ("instalacionfija", "sinid"):
                         consumo = await informeInstalacionesFijasServices.AllInstalacionesFijasFechas(fechaini, fechafin);
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/instalacionfija/0");
                         break;
                     case ("instalacionfija", "conid"):
                         consumo = await informeInstalacionesFijasServices.InstalacionesFijasFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.consumoVehiculoId = consumo;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/instalacionfija/1");
                         break;
                     case ("electricidad", "sinid"):
                         consumoElectricidad = await informeElectricidadServices.AllElecricidadFechas(fechaini, fechafin);
                         Storage.ConsumoElectricidad = consumoElectricidad;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/electricidad/0");
                         break;
                     case ("electricidad", "conid"):
                         consumoElectricidad = await informeElectricidadServices.ElecricidadFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.ConsumoElectricidad = consumoElectricidad;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/electricidad/1");
                         break;
                     case ("otros", "sinid"):
                         ConsumoOtrosConsumos = await informeOtrosConsumosServices.AllOtrosConsumosFechas(fechaini, fechafin);
                         Storage.ConsumoOtrosConsumos = ConsumoOtrosConsumos;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/otros/0");
                         break;
                     case ("otros", "conid"):
                         ConsumoOtrosConsumos = await informeOtrosConsumosServices.OtrosConsumosFechaByID(fechaini, fechafin, int.Parse(id));
                         Storage.ConsumoOtrosConsumos = ConsumoOtrosConsumos;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/otros/1");
                         break;
                 }
@@ -233,26 +272,31 @@
                     case ("vehiculo"):
                         consumoMes = await informeServices.VehiculosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.consumoMes = consumoMes;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo($"informes/vehiculo/2/{id}");
                         break;
                     case ("transporte"):
                         consumoMes = await informeTransporteServices.TransportesFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.consumoMes = consumoMes;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/transporte/2");
                         break;
                     case ("maquinaria"):
                         consumoMes = await informemaquinariaServices.MaquinariasFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.consumoMes = consumoMes;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/maquinaria/2");
                         break;
                     case ("emisionfugitiva"):
                         ConsumoMesEmisionesFugitivas = await informeEmisionesFugitivasServices.EmisionesFugitivasFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.ConsumoMesEmisionesFugitivas = ConsumoMesEmisionesFugitivas;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/emisionfugitiva/2");
                         break;
                     case ("instalacionfija"):
                         consumoMes = await informeInstalacionesFijasServices.InstalacionesFijasFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.consumoMes = consumoMes;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/instalacionfija/2");
                         break;
                     case ("electricidad"):
@@ -263,6 +307,7 @@
                     case ("otros"):
                         ConsumoMesOtrosConsumos = await informeOtrosConsumosServices.OtrosConsumosFechaByIDporMes(fechaini, fechafin, int.Parse(id));
                         Storage.ConsumoMesOtrosConsumos = ConsumoMesOtrosConsumos;
+                        Navigation.NavigateTo("informes");
                         Navigation.NavigateTo("informes/otros/2");
                         break;
                 }

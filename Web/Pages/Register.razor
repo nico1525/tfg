@@ -19,13 +19,13 @@
     }
 
     hr {
-        border: 1px solid #f1f1f1;
+        border: 1px solid #C6C6C6;
         margin-bottom: 25px;
         width: 100%;
     }
 
     .registerbtn {
-        background-color: #ec8f2f;
+        background-color: #78586F;
         color: white;
         padding: 16px 20px;
         margin: 10px 0;
@@ -50,11 +50,11 @@
         margin: 5px 0 22px 0px;
         display: inline-block;
         border: none;
-        background: #f1f1f1;
+        background: #C6C6C6;
     }
 
     .input:focus {
-        background-color: #ddd;
+        background-color: #AFADAD;
         outline: none;
     }
     .container{
@@ -80,19 +80,19 @@
             <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
                 <DataAnnotationsValidator />
 
-                <label for="name"><b>Nombre de la Organización</b></label>
+                <label for="name">Nombre de la Organización</label>
                 <InputText class="input" id="name" placeholder="  Nombre de la organización" @bind-Value="org.NombreOrg" />
                 <ValidationMessage For="@(() => org.NombreOrg)" class="errormsg" />
            
-                <label for="email"><b>Email</b></label>
+                <label for="email">Email</label>
                 <InputText class="input"  id="email" placeholder="  Email" @bind-Value="org.Email" />
                 <ValidationMessage For="@(() => org.Email)" class="errormsg" />
 
-                <label for="dir"><b>Dirección</b></label>
+                <label for="dir">Dirección</label>
                 <InputText class="input" id="dir" placeholder="  Dirección" @bind-Value="org.Direccion"/>
                 <ValidationMessage For="@(() => org.Direccion)" class="errormsg" />
 
-                <label for="password"><b>Contraseña</b></label>
+                <label for="password">Contraseña</label>
                 <InputText class="input" id="password" placeholder="  Contraseña" @bind-Value="org.Contraseña" />
                 <ValidationMessage For="@(() => org.Contraseña)" class="errormsg" />
          
