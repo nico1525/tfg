@@ -71,7 +71,7 @@
     <div id="Agregar"></div>
     <div id="labelnew"><label>Nuevo Consumo de Vehículo:</label></div>
     <div id="container">
-        <EditForm Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="matricula">Id del Vehículo</label>

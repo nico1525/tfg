@@ -103,8 +103,12 @@ namespace API.Controllers.InformesControllers
                                                        Cantidad_consumida_mes = g.Sum(r => r.CantidadConsumo),
                                                        Meses = Metodos.ObtenerNombreMes(g.Key)
                                                    }).ToList();
-            return query;
+            if (query.Count > 0)
+            {
+                return query;
 
+            }
+            else return BadRequest($"No existen consumos para el dispositivo con id: {id} entre estas fechas");
         }
     }
 }

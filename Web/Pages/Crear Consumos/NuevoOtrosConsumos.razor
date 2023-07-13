@@ -70,7 +70,7 @@
     <div id="Agregar"></div>
     <div id="labelnew"><label>Nuevo Consumo de Otras fuentes:</label></div>
     <div id="container">
-        <EditForm Model="@otrosConsumos" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@otrosConsumos" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="edificio">Edificio/Sede</label>

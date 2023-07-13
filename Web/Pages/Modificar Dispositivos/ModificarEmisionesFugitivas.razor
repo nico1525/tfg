@@ -60,7 +60,7 @@
 <body>
     <div id="Agregar"></div>
     <div id="container">
-        <EditForm Model="@emisionesfugitivas" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@emisionesfugitivas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label>Id de la Emisión Fugitiva</label>

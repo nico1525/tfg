@@ -84,7 +84,7 @@
     <div id="text"> <label id="reglabel">Registrar Nuevo Usuario</label></div>
 
     <div class="container">
-        <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@org" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="name">Nombre del Usuario</label>

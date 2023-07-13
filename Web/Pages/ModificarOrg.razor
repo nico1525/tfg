@@ -70,7 +70,7 @@
     <div id="navbar">
         <h1>Modificar Organización</h1>
         <div id="container">
-            <EditForm Model="@org" OnValidSubmit="@HandleValidSubmit">
+            <EditForm autocomplete="off" Model="@org" OnValidSubmit="@HandleValidSubmit">
                 <DataAnnotationsValidator />
 
                 <label for="edificio">Nombre de la Organización</label>

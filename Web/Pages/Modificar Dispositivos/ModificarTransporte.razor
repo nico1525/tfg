@@ -62,7 +62,7 @@
 <body>
     <div id="Agregar"></div>
     <div id="container">
-        <EditForm Model="@transporte" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@transporte" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label>Id del transporte</label>

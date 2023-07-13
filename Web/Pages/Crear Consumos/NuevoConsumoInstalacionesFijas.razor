@@ -71,7 +71,7 @@
     <div id="Agregar"></div>
     <div id="labelnew"><label>Nuevo Consumo de Instalación Fija:</label></div>
     <div id="container">
-        <EditForm Model="@instalacionesFijas" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@instalacionesFijas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="matricula">Id del Instalación Fija</label>

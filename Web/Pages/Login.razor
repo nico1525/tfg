@@ -88,7 +88,7 @@
 
     <div class="container">
         <hr>
-        <EditForm Model="@login" OnValidSubmit="@HandleValidSubmit">
+        <EditForm  autocomplete="off" Model="@login" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="email">Email</label>

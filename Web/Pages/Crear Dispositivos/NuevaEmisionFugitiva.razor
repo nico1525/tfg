@@ -69,7 +69,7 @@
     <div id="Agregar"></div>
     <div id="labelnew"><label>Nueva Emisión Fugitiva:</label></div>
     <div id="container">
-        <EditForm Model="@emisionFugitiva" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@emisionFugitiva" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="edificio">Edificio/Sede</label>

@@ -68,7 +68,7 @@
     <div id="Agregar"></div>
     <div id="labelnew"><label>Nuevo Vehículo:</label></div>
     <div id="container">
-    <EditForm Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@vehiculo" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
 
         <label for="edificio">Edificio/Sede</label>

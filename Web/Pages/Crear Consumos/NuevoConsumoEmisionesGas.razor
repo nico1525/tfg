@@ -71,7 +71,7 @@
     <div id="Agregar"></div>
     <div id="labelnew"><label>Nuevo Consumo de Emisiones Fugitivas:</label></div>
     <div id="container">
-        <EditForm Model="@emisionesFugitivas" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@emisionesFugitivas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="matricula">Id del EmisionesFugitivas</label>

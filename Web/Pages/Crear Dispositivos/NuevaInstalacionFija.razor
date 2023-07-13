@@ -69,7 +69,7 @@
     <div id="Agregar"></div>
     <div id="labelnew"><label>Nueva Instalación Fija:</label></div>
     <div id="container">
-        <EditForm Model="@InstalacionesFijas" OnValidSubmit="@HandleValidSubmit">
+        <EditForm autocomplete="off" Model="@InstalacionesFijas" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label for="edificio">Edificio/Sede</label>

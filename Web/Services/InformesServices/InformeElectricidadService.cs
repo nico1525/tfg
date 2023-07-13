@@ -8,9 +8,9 @@ namespace Web.Services.InformesServices
 {
     public interface IInformeElectricidadService
     {
-        public Task<ConsumoElectricidadId> AllElecricidadFechas(DateTime fechaini, DateTime fechafin);
-        public Task<ConsumoElectricidadId> ElecricidadFechaByID(DateTime fechaini, DateTime fechafin, int id);
-        public Task<List<ConsumoMesElectricidad>> ElecricidadFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id);
+        public Task<ConsumoElectricidadId> AllElectricidadFechas(DateTime fechaini, DateTime fechafin);
+        public Task<ConsumoElectricidadId> ElectricidadFechaByID(DateTime fechaini, DateTime fechafin, int id);
+        public Task<List<ConsumoMesElectricidad>> ElectricidadFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id);
 
     }
     public class InformeElectricidadService : IInformeElectricidadService
@@ -24,9 +24,9 @@ namespace Web.Services.InformesServices
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {Storage.token}");
         }
-        public async Task<ConsumoElectricidadId> AllElecricidadFechas(DateTime fechaini, DateTime fechafin)
+        public async Task<ConsumoElectricidadId> AllElectricidadFechas(DateTime fechaini, DateTime fechafin)
         {
-            var response = await _httpClient.GetAsync(baseUrl + $"api/Informes/Elecricidad?fechaini={fechaini.Year}-{fechaini.Month}-{fechaini.Day}&fechafin={fechafin.Year}-{fechafin.Month}-{fechafin.Day}");
+            var response = await _httpClient.GetAsync(baseUrl + $"api/Informes/Electricidad?fechaini={fechaini.Year}-{fechaini.Month}-{fechaini.Day}&fechafin={fechafin.Year}-{fechafin.Month}-{fechafin.Day}");
             if (response.IsSuccessStatusCode)
             {
                 var resultString = await response.Content.ReadAsStringAsync();
@@ -39,9 +39,9 @@ namespace Web.Services.InformesServices
             }
             return null;
         }
-        public async Task<ConsumoElectricidadId> ElecricidadFechaByID(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<ConsumoElectricidadId> ElectricidadFechaByID(DateTime fechaini, DateTime fechafin, int id)
         {
-            var response = await _httpClient.GetAsync(baseUrl + $"api/Informes/Elecricidad/{id}?fechaini={fechaini.Year}-{fechaini.Month}-{fechaini.Day}&fechafin={fechafin.Year}-{fechafin.Month}-{fechafin.Day}");
+            var response = await _httpClient.GetAsync(baseUrl + $"api/Informes/Electricidad/{id}?fechaini={fechaini.Year}-{fechaini.Month}-{fechaini.Day}&fechafin={fechafin.Year}-{fechafin.Month}-{fechafin.Day}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -55,9 +55,9 @@ namespace Web.Services.InformesServices
             }
             return null;
         }
-        public async Task<List<ConsumoMesElectricidad>> ElecricidadFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
+        public async Task<List<ConsumoMesElectricidad>> ElectricidadFechaByIDporMes(DateTime fechaini, DateTime fechafin, int id)
         {
-            var response = await _httpClient.GetAsync(baseUrl + $"api/Informes/Elecricidad/{id}/mes?fechaini={fechaini.Year}-{fechaini.Month}-{fechaini.Day}&fechafin={fechafin.Year}-{fechafin.Month}-{fechafin.Day}");
+            var response = await _httpClient.GetAsync(baseUrl + $"api/Informes/Electricidad/{id}/mes?fechaini={fechaini.Year}-{fechaini.Month}-{fechaini.Day}&fechafin={fechafin.Year}-{fechafin.Month}-{fechafin.Day}");
 
             if (response.IsSuccessStatusCode)
             {

@@ -156,7 +156,7 @@ namespace API.Controllers.ControllersConsumo
 
                     _context.MaquinariaConsumo.Add(maquinariaConsumo);
                     await _context.SaveChangesAsync();
-                    return Ok("Consumo para maquinaria con Id: "+ maquinaria.Id +"creado correctamente");
+                    return Ok("Consumo para maquinaria con Id: "+ maquinaria.Id +" creado correctamente");
                 }
 
             }

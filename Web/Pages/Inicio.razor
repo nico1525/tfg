@@ -12,11 +12,35 @@
 <div> <NavBarNotLogged /></div>
 
 
+<style>
+    #nombre {
+        font-size: 26px;
+    }
+
+    #div {
+        text-align: center;
+        margin-top: 2%;
+    }
+    #texto{
+        text-align: center;
+        margin-top: 4%;
+        width:50%;
+        margin-left:25%;
+    }
+</style>
+
+<body>
+    <div id="div"><label id="nombre">Bienvenido a nuestra plataforma de Cálculo de huella de Carbono</label></div>
+    <div id="texto"><Text>Esta plataforma de cálculo de huella de carbono te permitirá tener una gestión de todos los dispositivos de tu empresa, 
+        lo único que debes hacer es registrar aquellos dispositivos que desees monitorizar y agregar sus consumos realizados cada vez que ocurran.
+        De esta manera, podrás tener un control total de los consumos de tus dispositivos, y podrás saber su impacto en la huella de carbono
+        en cualquier momento, existe también un apartado de Informes donde podrás ver el consumo uno o varios dispositivos entre dos fechas cualquiera.
+    </Text></div>
+</body>
 
 @code{
     [Inject]
     public IUsuarioServices UsuarioServices { get; set; }
-    Timer _updateTimer;
 
     async void log()
     {

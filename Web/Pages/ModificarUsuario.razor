@@ -70,7 +70,7 @@
     <div id="navbar">
         <h1>Modificar Usuario</h1>
     <div id="container">
-        <EditForm Model="@usuario" OnValidSubmit="@HandleValidSubmit">
+            <EditForm autocomplete="off" Model="@usuario" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <label>Id del Usuario</label>

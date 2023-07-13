@@ -1,25 +1,43 @@
 ﻿@using API.Models;
+@using API.Models.Query_Models;
 @using Web.Helpers;
 @using Web.Services;
 @inject NavigationManager Navigation
+@inject HttpClient Http
 @page "/inicio"
 <PageTitle>Cálculo Huella de Carbono</PageTitle>
 
 <div> <NavBarLogged /></div>
 
+<style>
+    #nombre{
+        font-size: 26px;
+    }
+    #div{
+        text-align: center;
+        margin-top:2%;
+
+    }
+</style>
+
+<body>
+    <div id="div"><label id="nombre">Bienvenido @nombre</label></div>
+</body>
+
 @code {
-    //[Inject]
-    //public IUsuarioServices UsuarioServices { get; set; }
+    public string nombre;
+    InfoUsuario usuario = new InfoUsuario();
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    if (Storage.token == null)
-    //    {
-    //        Navigation.NavigateTo("");
-    //        return;
-    //    }
-    //    var usuario = await UsuarioServices.GetUsuario();
-    //    Storage.role = usuario.Rol;
-    //}
+    [Inject]
+    public IUsuarioServices usuarioServices { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        usuarioServices = new UsuarioServices(Http);
+
+        usuario = await usuarioServices.GetUsuario();
+        nombre = usuario.NombreApellidos;
+
+        StateHasChanged();
+    }
 }
